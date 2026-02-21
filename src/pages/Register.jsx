@@ -3,6 +3,8 @@ import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { ArrowLeft } from 'lucide-react'
 
+const API_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '')
+
 const Register = () => {
   const navigate = useNavigate()
   const { isAuthenticated, user } = useAuth()
@@ -20,7 +22,7 @@ const Register = () => {
   }, [isAuthenticated, user, navigate])
 
   const handleLineRegister = () => {
-    window.location.href = '/api/auth/line'
+    window.location.href = `${API_URL}/api/auth/line`
   }
 
   return (

@@ -2,6 +2,8 @@ import { useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 
+const API_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '')
+
 const Auth = () => {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
@@ -23,7 +25,7 @@ const Auth = () => {
 
   const handleLineLogin = () => {
     // Redirect to backend LINE login endpoint
-    window.location.href = '/api/auth/line'
+    window.location.href = `${API_URL}/api/auth/line`
   }
 
   return (

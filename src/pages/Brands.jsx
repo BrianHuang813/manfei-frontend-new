@@ -151,7 +151,7 @@ export default function Brands() {
               </span>
             </div>
             <h1 className="font-serif text-4xl md:text-5xl text-white tracking-wider">
-              我們的品牌
+              我們的頂級品牌
             </h1>
             <p className="mt-4 text-white/60 text-sm md:text-base max-w-md tracking-wide">
               嚴選歐洲頂級護膚品牌，為您呈現專業美學的精髓。
