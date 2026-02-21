@@ -124,6 +124,7 @@ export default function CustomerReviews({ reviews = [] }) {
                     <img
                       src={current.avatar_url}
                       alt={current.customer_name}
+                      loading="lazy"
                       className="w-10 h-10 rounded-full object-cover"
                     />
                   ) : (
