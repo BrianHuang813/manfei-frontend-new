@@ -1,10 +1,10 @@
 import { useQueries } from '@tanstack/react-query'
 import { Helmet } from 'react-helmet-async'
-import { fetchServices, fetchNews, fetchPortfolio, fetchTestimonials, fetchProducts } from '../api/public'
+import { fetchNews, fetchPortfolio, fetchTestimonials, fetchProducts } from '../api/public'
 
 import Hero from '../components/home/Hero'
 import LatestNews from '../components/home/LatestNews'
-import SignatureServices from '../components/home/SignatureServices'
+import ServicePreview from '../components/home/ServicePreview'
 import HomeProducts from '../components/home/HomeProducts'
 import FeaturedServices from '../components/home/FeaturedServices'
 import Transformation from '../components/home/Transformation'
@@ -44,11 +44,6 @@ export default function Home() {
   const results = useQueries({
     queries: [
       {
-        queryKey: ['public', 'services'],
-        queryFn: fetchServices,
-        staleTime: 5 * 60 * 1000,
-      },
-      {
         queryKey: ['public', 'news'],
         queryFn: () => fetchNews(5),
         staleTime: 5 * 60 * 1000,
@@ -71,7 +66,7 @@ export default function Home() {
     ],
   })
 
-  const [servicesQ, newsQ, portfolioQ, testimonialsQ, productsQ] = results
+  const [newsQ, portfolioQ, testimonialsQ, productsQ] = results
 
   return (
     <>
@@ -93,8 +88,8 @@ export default function Home() {
       {/* 2. Latest News — Magazine list (auto-hides if empty) */}
       <LatestNews news={newsQ.data ?? []} />
 
-      {/* 3. Signature Services — Editorial Trio (3-col vertical) */}
-      <SignatureServices services={servicesQ.data ?? []} />
+      {/* 3. Service Preview — Category-grouped 3-col (uses useServices hook) */}
+      <ServicePreview />
 
       {/* 4. Home Products — Horizontal scroll gallery */}
       <HomeProducts products={productsQ.data ?? []} />
