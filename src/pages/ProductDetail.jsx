@@ -3,9 +3,11 @@ import { useQuery } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Package } from 'lucide-react'
 import { fetchProductById } from '../api/public'
+import { useSiteSettings } from '../contexts/SiteSettingsContext'
 
 export default function ProductDetail() {
   const { id } = useParams()
+  const settings = useSiteSettings()
 
   const { data: product, isLoading, isError } = useQuery({
     queryKey: ['public', 'product', id],
@@ -152,7 +154,7 @@ export default function ProductDetail() {
             {/* CTA */}
             <div className="pt-4 flex flex-wrap gap-4">
               <a
-                href={import.meta.env.VITE_LINE_URL || 'https://line.me/R/ti/p/PLACEHOLDER'}
+                href={settings.line_url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block px-8 py-3 bg-gold text-white rounded-full text-sm tracking-[0.2em]

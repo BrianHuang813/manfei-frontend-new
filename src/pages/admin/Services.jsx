@@ -117,7 +117,7 @@ const EMPTY_FORM = {
   sort_order: 0,
 }
 
-const ServiceModal = ({ isOpen, mode, initialData, categories, onClose, onSubmit, isSubmitting }) => {
+const ServiceModal = ({ isOpen, mode, initialData, categories, onClose, onSubmit, isSubmitting, nextSortOrder }) => {
   const [form, setForm] = useState(EMPTY_FORM)
 
   // Sync form data when modal opens or initialData changes
@@ -134,9 +134,9 @@ const ServiceModal = ({ isOpen, mode, initialData, categories, onClose, onSubmit
         sort_order: initialData.sort_order ?? 0,
       })
     } else if (isOpen && mode === 'create') {
-      setForm(EMPTY_FORM)
+      setForm({ ...EMPTY_FORM, sort_order: nextSortOrder || 1 })
     }
-  }, [isOpen, mode, initialData])
+  }, [isOpen, mode, initialData, nextSortOrder])
 
   if (!isOpen) return null
 
@@ -460,11 +460,12 @@ const Services = () => {
 
   // ---- Handlers ----
   const openCreateModal = () => {
-    setModal({ isOpen: true, mode: 'create', editingService: null })
+    const maxOrder = services.length > 0 ? Math.max(...services.map(s => s.sort_order || 0)) : 0
+    setModal({ isOpen: true, mode: 'create', editingService: null, nextSortOrder: maxOrder + 1 })
   }
 
   const openEditModal = (service) => {
-    setModal({ isOpen: true, mode: 'edit', editingService: service })
+    setModal({ isOpen: true, mode: 'edit', editingService: service, nextSortOrder: 0 })
   }
 
   const closeModal = () => {
@@ -606,10 +607,11 @@ const Services = () => {
           <>
             {/* Table Header */}
             <div className="hidden md:grid md:grid-cols-12 gap-4 px-6 py-3 bg-gray-50 border-b border-gray-200 text-xs font-medium text-gray-500 uppercase tracking-wider">
-              <div className="col-span-4">服務名稱</div>
+              <div className="col-span-3">服務名稱</div>
               <div className="col-span-2">分類</div>
               <div className="col-span-1 text-right">價格</div>
               <div className="col-span-1 text-center">時長</div>
+              <div className="col-span-1 text-center">排序</div>
               <div className="col-span-1 text-center">狀態</div>
               <div className="col-span-3 text-right">操作</div>
             </div>
@@ -626,7 +628,7 @@ const Services = () => {
                     }`}
                   >
                     {/* Service Name + Description */}
-                    <div className="md:col-span-4 min-w-0">
+                    <div className="md:col-span-3 min-w-0">
                       <div className="flex items-center gap-2">
                         {service.image_url && (
                           <img
@@ -667,6 +669,11 @@ const Services = () => {
                         <Clock size={14} className="text-gray-400" />
                         {service.duration_min}分
                       </span>
+                    </div>
+
+                    {/* Sort Order */}
+                    <div className="md:col-span-1 text-center">
+                      <span className="text-sm text-gray-500 font-mono">{service.sort_order}</span>
                     </div>
 
                     {/* Status Toggle */}
@@ -724,6 +731,7 @@ const Services = () => {
         onClose={closeModal}
         onSubmit={handleModalSubmit}
         isSubmitting={createMutation.isPending || updateMutation.isPending}
+        nextSortOrder={modal.nextSortOrder}
       />
     </div>
   )

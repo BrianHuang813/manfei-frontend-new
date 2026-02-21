@@ -23,7 +23,7 @@ const navigation = [
   { name: '服務項目', path: '/admin/services', icon: Scissors },
   { name: '產品', path: '/admin/products', icon: Package },
   { name: '客戶評價', path: '/admin/testimonials', icon: Star },
-  { name: '作品集', path: '/admin/portfolio', icon: Image },
+  { name: '對比圖管理', path: '/admin/portfolio', icon: Image },
   { name: '員工記錄', path: '/admin/staff-logs', icon: ClipboardList },
   { name: '設定', path: '/admin/settings', icon: Settings },
 ]

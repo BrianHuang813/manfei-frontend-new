@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import { ArrowLeft, Clock, Sparkles } from 'lucide-react'
 import { fetchServicesByCategory } from '../api/public'
 
-const LINE_URL = import.meta.env.VITE_LINE_URL || 'https://line.me/R/ti/p/PLACEHOLDER'
+import { useSiteSettings } from '../contexts/SiteSettingsContext'
 
 const cardVariants = {
   hidden: { opacity: 0, y: 50 },
@@ -17,6 +17,7 @@ const cardVariants = {
 
 /* ── Asymmetric service card (alternating left/right) ────── */
 function ServiceCard({ service, index, mirror }) {
+  const settings = useSiteSettings()
   return (
     <motion.div
       custom={index}
@@ -78,7 +79,7 @@ function ServiceCard({ service, index, mirror }) {
         )}
 
         <a
-          href={LINE_URL}
+          href={settings.line_url}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 text-gold text-sm tracking-wide

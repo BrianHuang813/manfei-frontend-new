@@ -1,6 +1,15 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { ViteImageOptimizer } from 'vite-plugin-image-optimizer'
+import Sitemap from 'vite-plugin-sitemap'
+
+// All public (indexable) routes – exclude auth, admin, staff, and dynamic :id pages
+const dynamicRoutes = [
+  '/about',
+  '/services',
+  '/brands',
+  '/news',
+]
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -11,6 +20,19 @@ export default defineConfig({
       jpeg: { quality: 80 },
       webp: { quality: 80 },
       avif: { quality: 70 },
+    }),
+    Sitemap({
+      hostname: 'https://www.manfeispa.com',
+      dynamicRoutes,
+      exclude: ['/auth', '/auth/callback', '/login', '/register', '/staff', '/admin'],
+      robots: [
+        {
+          userAgent: '*',
+          allow: '/',
+          disallow: ['/admin', '/staff', '/auth'],
+          sitemap: 'https://www.manfeispa.com/sitemap.xml',
+        },
+      ],
     }),
   ],
   server: {

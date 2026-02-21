@@ -82,13 +82,12 @@ const EMPTY_FORM = {
   category: '',
   service_id: null,
   is_active: true,
-  display_order: 0,
   sort_order: 0,
 }
 
 // ==================== Portfolio Modal ====================
 
-const PortfolioModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPending, services }) => {
+const PortfolioModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPending, services, nextSortOrder }) => {
   const [form, setForm] = useState(EMPTY_FORM)
 
   useEffect(() => {
@@ -100,13 +99,12 @@ const PortfolioModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPendin
         category: initialData.category || '',
         service_id: initialData.service_id || null,
         is_active: initialData.is_active ?? true,
-        display_order: initialData.display_order || 0,
-        sort_order: initialData.sort_order || 0,
+        sort_order: initialData.sort_order ?? 0,
       })
     } else {
-      setForm(EMPTY_FORM)
+      setForm({ ...EMPTY_FORM, sort_order: nextSortOrder || 1 })
     }
-  }, [mode, initialData, isOpen])
+  }, [mode, initialData, isOpen, nextSortOrder])
 
   if (!isOpen) return null
 
@@ -116,6 +114,7 @@ const PortfolioModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPendin
       ...form,
       service_id: form.service_id || null,
       image_url: form.image_url || '',
+      display_order: form.sort_order,
     }
     onSubmit(submitData)
   }
@@ -127,7 +126,7 @@ const PortfolioModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPendin
         {/* Header */}
         <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 rounded-t-xl flex items-center justify-between z-10">
           <h3 className="text-lg font-semibold text-gray-900">
-            {mode === 'create' ? '新增作品' : '編輯作品'}
+            {mode === 'create' ? '新增對比圖' : '編輯對比圖'}
           </h3>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
             <X size={20} />
@@ -138,14 +137,14 @@ const PortfolioModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPendin
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
           {/* Title */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">作品標題 *</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">對比圖標題 *</label>
             <input
               type="text"
               required
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-              placeholder="輸入作品標題"
+              placeholder="輸入對比圖標題"
             />
           </div>
 
@@ -185,7 +184,7 @@ const PortfolioModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPendin
           <ImageUploader
             value={form.image_url || null}
             onChange={(url) => setForm({ ...form, image_url: url || '' })}
-            label="作品圖片 *"
+            label="對比圖圖片 *"
             helpText="建議比例 4:3（例如 1200x900px）"
           />
 
@@ -201,7 +200,7 @@ const PortfolioModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPendin
             />
           </div>
 
-          {/* Active & Display Order */}
+          {/* Active & Sort Order */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="flex items-center gap-3">
               <label className="text-sm font-medium text-gray-700">顯示狀態</label>
@@ -216,8 +215,8 @@ const PortfolioModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPendin
               <label className="block text-sm font-medium text-gray-700 mb-1">顯示順序</label>
               <input
                 type="number"
-                value={form.display_order}
-                onChange={(e) => setForm({ ...form, display_order: parseInt(e.target.value) || 0 })}
+                value={form.sort_order}
+                onChange={(e) => setForm({ ...form, sort_order: parseInt(e.target.value) || 0 })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               />
             </div>
@@ -331,8 +330,11 @@ const Portfolios = () => {
   }, [portfolios, search, filterCategory])
 
   // Modal handlers
-  const openCreate = () => setModal({ isOpen: true, mode: 'create', editingItem: null })
-  const openEdit = (item) => setModal({ isOpen: true, mode: 'edit', editingItem: item })
+  const openCreate = () => {
+    const maxOrder = portfolios.length > 0 ? Math.max(...portfolios.map(p => p.sort_order || 0)) : 0
+    setModal({ isOpen: true, mode: 'create', editingItem: null, nextSortOrder: maxOrder + 1 })
+  }
+  const openEdit = (item) => setModal({ isOpen: true, mode: 'edit', editingItem: item, nextSortOrder: 0 })
   const closeModal = () => setModal({ isOpen: false, mode: 'create', editingItem: null })
 
   const handleSubmit = (formData) => {
@@ -365,10 +367,10 @@ const Portfolios = () => {
         <div>
           <h2 className="text-2xl font-serif font-bold text-secondary flex items-center gap-2">
             <ImageIcon size={28} />
-            作品集管理
+            對比圖管理
           </h2>
           <p className="text-sm text-gray-500 mt-1">
-            共 {portfolios.length} 件作品
+            共 {portfolios.length} 筆對比圖
           </p>
         </div>
         <button
@@ -376,7 +378,7 @@ const Portfolios = () => {
           className="inline-flex items-center gap-2 px-4 py-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors text-sm font-medium shadow-sm"
         >
           <Plus size={18} />
-          新增作品
+          新增對比圖
         </button>
       </div>
 
@@ -386,7 +388,7 @@ const Portfolios = () => {
           <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           <input
             type="text"
-            placeholder="搜尋作品標題..."
+            placeholder="搜尋對比圖標題..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
@@ -424,8 +426,8 @@ const Portfolios = () => {
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
           <div className="flex flex-col items-center justify-center py-16 text-gray-400">
             <ImageIcon size={48} className="mb-3 opacity-50" />
-            <p className="text-lg font-medium">尚無作品</p>
-            <p className="text-sm mt-1">點擊「新增作品」開始建立</p>
+            <p className="text-lg font-medium">尚無對比圖</p>
+            <p className="text-sm mt-1">點擊「新增對比圖」開始建立</p>
           </div>
         </div>
       ) : (
@@ -521,6 +523,7 @@ const Portfolios = () => {
         onSubmit={handleSubmit}
         isPending={createMutation.isPending || updateMutation.isPending}
         services={services}
+        nextSortOrder={modal.nextSortOrder}
       />
     </div>
   )

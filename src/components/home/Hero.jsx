@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 
-const LINE_URL = import.meta.env.VITE_LINE_URL || 'https://line.me/R/ti/p/PLACEHOLDER'
+// LINE_URL now provided via SiteSettingsContext (used downstream)
 
 const textVariants = {
   hidden: { opacity: 0, y: 30 },

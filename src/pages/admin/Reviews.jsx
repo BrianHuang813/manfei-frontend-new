@@ -134,7 +134,7 @@ const EMPTY_FORM = {
 
 // ==================== Review Modal ====================
 
-const ReviewModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPending }) => {
+const ReviewModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPending, nextSortOrder }) => {
   const [form, setForm] = useState(EMPTY_FORM)
 
   useEffect(() => {
@@ -145,12 +145,12 @@ const ReviewModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPending }
         rating: initialData.rating ?? 5,
         avatar_url: initialData.avatar_url || null,
         is_active: initialData.is_active ?? true,
-        sort_order: initialData.sort_order || 0,
+        sort_order: initialData.sort_order ?? 0,
       })
     } else {
-      setForm(EMPTY_FORM)
+      setForm({ ...EMPTY_FORM, sort_order: nextSortOrder || 1 })
     }
-  }, [mode, initialData, isOpen])
+  }, [mode, initialData, isOpen, nextSortOrder])
 
   if (!isOpen) return null
 
@@ -341,8 +341,11 @@ const Reviews = () => {
   }, [reviews, search, filterRating])
 
   // Modal handlers
-  const openCreate = () => setModal({ isOpen: true, mode: 'create', editingItem: null })
-  const openEdit = (item) => setModal({ isOpen: true, mode: 'edit', editingItem: item })
+  const openCreate = () => {
+    const maxOrder = reviews.length > 0 ? Math.max(...reviews.map(r => r.sort_order || 0)) : 0
+    setModal({ isOpen: true, mode: 'create', editingItem: null, nextSortOrder: maxOrder + 1 })
+  }
+  const openEdit = (item) => setModal({ isOpen: true, mode: 'edit', editingItem: item, nextSortOrder: 0 })
   const closeModal = () => setModal({ isOpen: false, mode: 'create', editingItem: null })
 
   const handleSubmit = (formData) => {
@@ -433,8 +436,9 @@ const Reviews = () => {
             <div className="hidden md:grid md:grid-cols-12 gap-4 px-4 py-3 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider">
               <div className="col-span-1">頭像</div>
               <div className="col-span-2">客戶</div>
-              <div className="col-span-4">評論</div>
+              <div className="col-span-3">評論</div>
               <div className="col-span-2">評分</div>
+              <div className="col-span-1">排序</div>
               <div className="col-span-1">狀態</div>
               <div className="col-span-2 text-right">操作</div>
             </div>
@@ -454,11 +458,14 @@ const Reviews = () => {
                     <div className="col-span-2">
                       <p className="text-sm font-medium text-gray-900">{item.customer_name}</p>
                     </div>
-                    <div className="col-span-4">
+                    <div className="col-span-3">
                       <p className="text-sm text-gray-600 line-clamp-2">{item.content}</p>
                     </div>
                     <div className="col-span-2">
                       <StarRating rating={item.rating} />
+                    </div>
+                    <div className="col-span-1">
+                      <span className="text-sm text-gray-500 font-mono">{item.sort_order}</span>
                     </div>
                     <div className="col-span-1">
                       <StatusToggle
@@ -538,6 +545,7 @@ const Reviews = () => {
         onClose={closeModal}
         onSubmit={handleSubmit}
         isPending={createMutation.isPending || updateMutation.isPending}
+        nextSortOrder={modal.nextSortOrder}
       />
     </div>
   )

@@ -41,3 +41,8 @@ export const fetchTestimonials = async () => {
   const { data } = await axios.get('/api/public/testimonials')
   return data
 }
+
+export const fetchSiteSettings = async () => {
+  const { data } = await axios.get('/api/public/settings')
+  return data
+}

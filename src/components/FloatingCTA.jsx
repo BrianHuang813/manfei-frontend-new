@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MessageCircle } from 'lucide-react'
-
-const LINE_URL = import.meta.env.VITE_LINE_URL || 'https://line.me/R/ti/p/PLACEHOLDER'
+import { useSiteSettings } from '../contexts/SiteSettingsContext'
 
 /**
  * Mobile-only floating LINE CTA button (bottom-right).
  * Hides when the footer (#contact) is visible in viewport.
  */
 export default function FloatingCTA() {
+  const settings = useSiteSettings()
   const [visible, setVisible] = useState(true)
 
   useEffect(() => {
@@ -27,7 +27,7 @@ export default function FloatingCTA() {
     <AnimatePresence>
       {visible && (
         <motion.a
-          href={LINE_URL}
+          href={settings.line_url}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="LINE 預約諮詢"

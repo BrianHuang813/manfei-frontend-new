@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowLeft, ExternalLink } from 'lucide-react'
 
-const LINE_URL = import.meta.env.VITE_LINE_URL || 'https://line.me/R/ti/p/PLACEHOLDER'
+import { useSiteSettings } from '../contexts/SiteSettingsContext'
 
 /* ── Brand data (mirrors FeaturedServices home component) ── */
 const brands = [
@@ -42,6 +42,7 @@ const cardVariants = {
 
 /* ── Single brand section — overlapping asymmetric layout ── */
 function BrandSection({ brand, index }) {
+  const settings = useSiteSettings()
   const mirror = index % 2 !== 0
 
   return (
@@ -108,7 +109,7 @@ function BrandSection({ brand, index }) {
           </div>
 
           <a
-            href={LINE_URL}
+            href={settings.line_url}
             target="_blank"
             rel="noopener noreferrer"
             className={`inline-flex items-center gap-2 text-gold text-sm tracking-wide
@@ -127,6 +128,7 @@ function BrandSection({ brand, index }) {
 
 /* ── Main Page ───────────────────────────────────────────── */
 export default function Brands() {
+  const settings = useSiteSettings()
   return (
     <section className="min-h-screen bg-background">
       {/* Hero banner */}
@@ -196,7 +198,7 @@ export default function Brands() {
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a
-              href={LINE_URL}
+              href={settings.line_url}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block px-8 py-3 bg-gold text-white rounded-full text-sm tracking-[0.2em]

@@ -147,8 +147,8 @@ const RoleSelector = ({ currentRole, userId, onRoleChange, isLoading }) => {
       {open && (
         <>
           {/* Backdrop for closing */}
-          <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
-          <div className="absolute right-0 mt-1 w-40 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-20">
+          <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
+          <div className="absolute right-0 mt-1 w-40 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
             {ROLE_OPTIONS.map((option) => {
               const Icon = option.icon
               const isSelected = option.value === currentRole
@@ -324,7 +324,7 @@ const Users = () => {
       </div>
 
       {/* Table Card */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200">
         {isLoading ? (
           <TableSkeleton />
         ) : isError ? (
@@ -369,7 +369,7 @@ const Users = () => {
                 return (
                   <div
                     key={u.id}
-                    className={`grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-4 px-4 md:px-6 py-4 items-center transition-colors hover:bg-gray-50 ${
+                    className={`relative grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-4 px-4 md:px-6 py-4 items-center transition-colors hover:bg-gray-50 ${
                       !u.is_active ? 'opacity-60' : ''
                     }`}
                   >

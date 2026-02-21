@@ -105,7 +105,7 @@ const EMPTY_FORM = {
 
 // ==================== News Modal ====================
 
-const NewsModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPending }) => {
+const NewsModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPending, nextSortOrder }) => {
   const [form, setForm] = useState(EMPTY_FORM)
 
   useEffect(() => {
@@ -117,12 +117,12 @@ const NewsModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPending }) 
         category: initialData.category || '公告',
         date: initialData.date || new Date().toISOString().split('T')[0],
         is_active: initialData.is_active ?? true,
-        sort_order: initialData.sort_order || 0,
+        sort_order: initialData.sort_order ?? 0,
       })
     } else {
-      setForm(EMPTY_FORM)
+      setForm({ ...EMPTY_FORM, sort_order: nextSortOrder || 1 })
     }
-  }, [mode, initialData, isOpen])
+  }, [mode, initialData, isOpen, nextSortOrder])
 
   if (!isOpen) return null
 
@@ -332,8 +332,11 @@ const News = () => {
   }, [newsList, search, filterCategory])
 
   // Modal handlers
-  const openCreate = () => setModal({ isOpen: true, mode: 'create', editingItem: null })
-  const openEdit = (item) => setModal({ isOpen: true, mode: 'edit', editingItem: item })
+  const openCreate = () => {
+    const maxOrder = newsList.length > 0 ? Math.max(...newsList.map(n => n.sort_order || 0)) : 0
+    setModal({ isOpen: true, mode: 'create', editingItem: null, nextSortOrder: maxOrder + 1 })
+  }
+  const openEdit = (item) => setModal({ isOpen: true, mode: 'edit', editingItem: item, nextSortOrder: 0 })
   const closeModal = () => setModal({ isOpen: false, mode: 'create', editingItem: null })
 
   const handleSubmit = (formData) => {
@@ -424,9 +427,10 @@ const News = () => {
             {/* Desktop Header */}
             <div className="hidden md:grid md:grid-cols-12 gap-4 px-4 py-3 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider">
               <div className="col-span-1">圖片</div>
-              <div className="col-span-4">標題</div>
+              <div className="col-span-3">標題</div>
               <div className="col-span-2">分類</div>
               <div className="col-span-2">日期</div>
+              <div className="col-span-1">排序</div>
               <div className="col-span-1">狀態</div>
               <div className="col-span-2 text-right">操作</div>
             </div>
@@ -453,7 +457,7 @@ const News = () => {
                         </div>
                       )}
                     </div>
-                    <div className="col-span-4">
+                    <div className="col-span-3">
                       <p className="text-sm font-medium text-gray-900 truncate">{item.title}</p>
                     </div>
                     <div className="col-span-2">
@@ -464,6 +468,9 @@ const News = () => {
                         <Calendar size={14} />
                         {item.date}
                       </span>
+                    </div>
+                    <div className="col-span-1">
+                      <span className="text-sm text-gray-500 font-mono">{item.sort_order}</span>
                     </div>
                     <div className="col-span-1">
                       <StatusToggle
@@ -555,6 +562,7 @@ const News = () => {
         onClose={closeModal}
         onSubmit={handleSubmit}
         isPending={createMutation.isPending || updateMutation.isPending}
+        nextSortOrder={modal.nextSortOrder}
       />
     </div>
   )

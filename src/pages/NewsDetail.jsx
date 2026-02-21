@@ -2,6 +2,7 @@ import { useParams, Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
 import { ChevronRight } from 'lucide-react'
+import DOMPurify from 'dompurify'
 import { fetchNewsById } from '../api/public'
 
 function formatDate(dateStr) {
@@ -128,7 +129,7 @@ export default function NewsDetail() {
                      prose-headings:font-serif prose-headings:text-secondary
                      prose-a:text-gold prose-a:no-underline hover:prose-a:underline
                      prose-img:rounded-lg"
-          dangerouslySetInnerHTML={{ __html: news.content }}
+          dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(news.content) }}
         />
 
         {/* Bottom back link */}

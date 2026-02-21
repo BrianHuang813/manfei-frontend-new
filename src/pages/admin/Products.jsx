@@ -107,7 +107,7 @@ const EMPTY_FORM = {
 
 // ==================== Product Modal ====================
 
-const ProductModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPending }) => {
+const ProductModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPending, nextSortOrder }) => {
   const [form, setForm] = useState(EMPTY_FORM)
 
   useEffect(() => {
@@ -120,12 +120,12 @@ const ProductModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPending 
         category: initialData.category || '',
         image_url: initialData.image_url || null,
         is_stock: initialData.is_stock ?? true,
-        sort_order: initialData.sort_order || 0,
+        sort_order: initialData.sort_order ?? 0,
       })
     } else {
-      setForm(EMPTY_FORM)
+      setForm({ ...EMPTY_FORM, sort_order: nextSortOrder || 1 })
     }
-  }, [mode, initialData, isOpen])
+  }, [mode, initialData, isOpen, nextSortOrder])
 
   if (!isOpen) return null
 
@@ -348,8 +348,11 @@ const Products = () => {
   }, [products, search, filterCategory])
 
   // Modal handlers
-  const openCreate = () => setModal({ isOpen: true, mode: 'create', editingItem: null })
-  const openEdit = (item) => setModal({ isOpen: true, mode: 'edit', editingItem: item })
+  const openCreate = () => {
+    const maxOrder = products.length > 0 ? Math.max(...products.map(p => p.sort_order || 0)) : 0
+    setModal({ isOpen: true, mode: 'create', editingItem: null, nextSortOrder: maxOrder + 1 })
+  }
+  const openEdit = (item) => setModal({ isOpen: true, mode: 'edit', editingItem: item, nextSortOrder: 0 })
   const closeModal = () => setModal({ isOpen: false, mode: 'create', editingItem: null })
 
   const handleSubmit = (formData) => {
@@ -440,11 +443,12 @@ const Products = () => {
             <div className="hidden md:grid md:grid-cols-12 gap-4 px-4 py-3 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider">
               <div className="col-span-1">圖片</div>
               <div className="col-span-3">名稱</div>
-              <div className="col-span-2">分類</div>
+              <div className="col-span-1">分類</div>
               <div className="col-span-1">價格</div>
-              <div className="col-span-2">規格</div>
+              <div className="col-span-1">規格</div>
+              <div className="col-span-1">排序</div>
               <div className="col-span-1">庫存</div>
-              <div className="col-span-2 text-right">操作</div>
+              <div className="col-span-3 text-right">操作</div>
             </div>
 
             {filtered.map((item) => {
@@ -471,7 +475,7 @@ const Products = () => {
                         <p className="text-xs text-gray-500 truncate">{item.description}</p>
                       )}
                     </div>
-                    <div className="col-span-2">
+                    <div className="col-span-1">
                       <CategoryBadge category={item.category} />
                     </div>
                     <div className="col-span-1">
@@ -480,8 +484,11 @@ const Products = () => {
                         {item.price.toLocaleString()}
                       </span>
                     </div>
-                    <div className="col-span-2">
+                    <div className="col-span-1">
                       <span className="text-sm text-gray-600">{item.spec || '-'}</span>
+                    </div>
+                    <div className="col-span-1">
+                      <span className="text-sm text-gray-500 font-mono">{item.sort_order}</span>
                     </div>
                     <div className="col-span-1">
                       <StatusToggle
@@ -494,7 +501,7 @@ const Products = () => {
                         inactiveLabel="無庫存"
                       />
                     </div>
-                    <div className="col-span-2 flex justify-end gap-1">
+                    <div className="col-span-3 flex justify-end gap-1">
                       <button
                         onClick={() => openEdit(item)}
                         className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
@@ -576,6 +583,7 @@ const Products = () => {
         onClose={closeModal}
         onSubmit={handleSubmit}
         isPending={createMutation.isPending || updateMutation.isPending}
+        nextSortOrder={modal.nextSortOrder}
       />
     </div>
   )

@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion'
 import { MapPin, Phone, Clock } from 'lucide-react'
-
-const LINE_URL = import.meta.env.VITE_LINE_URL || 'https://line.me/R/ti/p/PLACEHOLDER'
+import { useSiteSettings } from '../contexts/SiteSettingsContext'
 
 export default function Footer() {
+  const settings = useSiteSettings()
   return (
     <footer id="contact" className="relative overflow-hidden">
       {/* Background image */}
@@ -29,7 +29,7 @@ export default function Footer() {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <h3 className="font-serif text-3xl text-white tracking-widest mb-4">嫚霏 Spa</h3>
+              <h3 className="font-serif text-3xl text-white tracking-widest mb-4">{settings.site_name || '嫚霏 Spa'}</h3>
               <div className="w-10 h-px bg-gold mb-6" />
               <p className="text-white/60 text-sm leading-relaxed tracking-wide">
                 以德系專業護膚為核心，秉持科學與自然兼容的理念，
@@ -71,29 +71,29 @@ export default function Footer() {
                 <li className="flex items-start gap-3">
                   <MapPin size={16} className="text-gold shrink-0 mt-0.5" />
                   <span className="text-white/50 text-sm leading-relaxed">
-                    嘉義市西區北港路 8 號
+                    {settings.address}
                   </span>
                 </li>
                 <li className="flex items-center gap-3">
                   <Phone size={16} className="text-gold shrink-0" />
                   <a
-                    href="tel:+886-5-2273-758"
+                    href={`tel:${settings.phone?.replace(/[^0-9+]/g, '')}`}
                     className="text-white/50 text-sm hover:text-gold transition-colors"
                   >
-                    05-2273758
+                    {settings.phone}
                   </a>
                 </li>
                 <li className="flex items-start gap-3">
                   <Clock size={16} className="text-gold shrink-0 mt-0.5" />
                   <div className="text-white/50 text-sm leading-relaxed">
-                    <p>週一至週日 09:00 - 17:00</p>
+                    <p>{settings.business_hours}</p>
                   </div>
                 </li>
               </ul>
 
               {/* LINE CTA */}
               <a
-                href={LINE_URL}
+                href={settings.line_url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block mt-6 px-6 py-2.5 border border-gold/60 text-gold text-sm 
@@ -110,10 +110,10 @@ export default function Footer() {
         <div className="border-t border-white/10">
           <div className="container-custom py-6 flex flex-col md:flex-row items-center justify-between gap-3">
             <p className="text-white/30 text-xs tracking-wide">
-              © {new Date().getFullYear()} 嫚霏美容. All rights reserved.
+              © {new Date().getFullYear()} {settings.site_name || '嫚霏美容'}. All rights reserved.
             </p>
             <a
-              href="https://www.facebook.com/profile.php?id=100057178131046"
+              href={settings.facebook_url || '#'}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Facebook"

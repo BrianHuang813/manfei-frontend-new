@@ -249,3 +249,22 @@ export const createWorkLog = async (logData) => {
   const { data } = await api.post('/api/staff/logs', logData)
   return data
 }
+
+// ==================== Dashboard ====================
+
+export const fetchDashboardStats = async () => {
+  const { data } = await api.get('/api/admin/dashboard/stats')
+  return data
+}
+
+// ==================== Site Settings ====================
+
+export const fetchSettings = async () => {
+  const { data } = await api.get('/api/admin/settings')
+  return data
+}
+
+export const updateSettings = async (settingsData) => {
+  const { data } = await api.put('/api/admin/settings', settingsData)
+  return data
+}

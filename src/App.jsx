@@ -1,5 +1,7 @@
 import { lazy, Suspense } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
+import { useSiteSettings } from './contexts/SiteSettingsContext'
 import { AnimatePresence } from 'framer-motion'
 import { AuthProvider } from './contexts/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -37,9 +39,19 @@ const Users = lazy(() => import('./pages/admin/Users'))
 
 function App() {
   const location = useLocation()
+  const settings = useSiteSettings()
 
   return (
     <AuthProvider>
+      {/* Global fallback SEO meta — page-level <Helmet> overrides these */}
+      <Helmet>
+        <title>{settings.meta_title || '嬛霁 SPA | 專業美容護理'}</title>
+        <meta
+          name="description"
+          content={settings.meta_description || '嬛霁 SPA - 專業美容護理服務'}
+        />
+      </Helmet>
+
       <AnimatePresence mode="wait">
         <Suspense
           fallback={(
