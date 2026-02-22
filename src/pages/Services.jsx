@@ -5,20 +5,6 @@ import { Helmet } from 'react-helmet-async'
 import { useSiteSettings } from '../contexts/SiteSettingsContext'
 import useServices from '../hooks/useServices'
 
-/* ── Zen-filtered image block ──────────────────────────── */
-function ZenImage({ src, alt }) {
-  return (
-    <div className="relative w-full h-full bg-[#A89070] overflow-hidden rounded-sm">
-      <img
-        src={src || '/images/hero-background.jpg'}
-        alt={alt}
-        loading="lazy"
-        className="w-full h-full object-cover mix-blend-multiply grayscale-[20%] sepia-[30%] brightness-[0.85] contrast-[1.1]"
-      />
-    </div>
-  )
-}
-
 /* ── Single service row ────────────────────────────────── */
 function ServiceRow({ service }) {
   return (
@@ -64,19 +50,24 @@ function CategorySection({ group, index, settings }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
       transition={{ duration: 0.6 }}
-      className={`flex flex-col md:flex-row gap-8 md:gap-12 ${
-        !isEven ? 'md:flex-row-reverse' : ''
-      }`}
+      className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12"
     >
       {/* Image — sticky on desktop */}
-      <div className="w-full md:w-[40%] flex-shrink-0">
-        <div className="md:sticky md:top-24 md:h-[calc(100vh-8rem)]">
-          <ZenImage src={group.image_url} alt={group.category} />
+      <div className={`w-full md:col-span-5 ${!isEven ? 'md:order-2' : ''}`}>
+        {/* FIX: Removed h-full. Applied aspect-[4/3] or aspect-[16/9] to preserve landscape photos without cropping. */}
+        <div className="relative sticky top-28 w-full aspect-[4/3] xl:aspect-[16/9] overflow-hidden rounded-sm group shadow-sm">
+          <img
+            src={group.image_url || '/images/hero-background.jpg'}
+            alt={group.category}
+            loading="lazy"
+            className="w-full h-full object-cover filter brightness-[0.95] contrast-[1.05] saturate-[0.85] transition-transform duration-700 group-hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-[#A89070]/[0.1] pointer-events-none transition-opacity duration-700 group-hover:opacity-0"></div>
         </div>
       </div>
 
       {/* Text / service list */}
-      <div className="w-full md:w-[60%]">
+      <div className={`w-full md:col-span-7 ${!isEven ? 'md:order-1' : ''}`}>
         {/* Category heading */}
         <div className="mb-8">
           <div className="flex items-center gap-4 mb-3">

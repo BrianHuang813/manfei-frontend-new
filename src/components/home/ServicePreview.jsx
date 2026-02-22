@@ -28,13 +28,14 @@ function CategoryCard({ group, index }) {
     >
       <Link to="/services" className="group block">
         {/* Zen-filtered category image */}
-        <div className="relative w-full aspect-[3/4] bg-[#A89070] overflow-hidden rounded-sm">
+        <div className="relative w-full aspect-[4/3] xl:aspect-[16/9] bg-[#A89070] overflow-hidden rounded-sm group shadow-sm">
           <img
             src={group.image_url}
             alt={group.category}
             loading="lazy"
-            className="w-full h-full object-cover mix-blend-multiply grayscale-[20%] sepia-[30%] brightness-[0.85] contrast-[1.1]"
+            className="w-full h-full object-cover filter brightness-[0.95] contrast-[1.05] saturate-[0.85] transition-transform duration-700 group-hover:scale-105"
           />
+          <div className="absolute inset-0 bg-[#A89070]/[0.1] pointer-events-none transition-opacity duration-700 group-hover:opacity-0"></div>
         </div>
 
         {/* Typography */}
@@ -88,7 +89,7 @@ export default function ServicePreview() {
         </motion.div>
 
         {/* 3-column grid — 1 featured service per category */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6 lg:gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 lg:gap-10">
           {preview.map((group, i) => (
             <CategoryCard key={group.category} group={group} index={i} />
           ))}
