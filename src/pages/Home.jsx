@@ -13,7 +13,7 @@ import CustomerReviews from '../components/home/CustomerReviews'
 const localBusinessSchema = {
   "@context": "https://schema.org",
   "@type": "HealthAndBeautyBusiness",
-  "name": "嬛霁美容 SPA (Manfei Spa)",
+  "name": "嫚霏美容 SPA (Manfei Spa)",
   "image": "https://www.manfeispa.com/images/hero-background.jpg",
   "address": {
     "@type": "PostalAddress",
@@ -72,7 +72,7 @@ export default function Home() {
     <>
       {/* SEO: Page-specific meta + JSON-LD structured data */}
       <Helmet>
-        <title>嬛霁美容 SPA｜嘉義頂級做臉、無痛清粉刺與身體舒壓</title>
+        <title>嫚霏SPA｜嘉義頂級美容與身體舒壓</title>
         <meta
           name="description"
           content="位於嘉義的高級 SPA，提供專屬客製化護膚、身心靈精油按摩與高科技抗老療程。在靜謐的空間中，找回身心平衡與肌膚光澤。"

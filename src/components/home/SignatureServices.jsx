@@ -82,7 +82,7 @@ export default function SignatureServices({ services = [] }) {
             <span className="text-gold text-xs tracking-[0.3em] uppercase">Signature Services</span>
           </div>
           <h2 className="font-serif text-3xl md:text-4xl text-secondary tracking-wider">
-            招牌療程
+            頂級療程
           </h2>
           <p className="mt-4 text-secondary/50 text-sm md:text-base max-w-lg tracking-wide">
             以專業手技與頂級產品，為每一寸肌膚量身訂製的美學體驗。

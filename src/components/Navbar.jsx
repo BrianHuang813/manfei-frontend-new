@@ -21,9 +21,9 @@ const InstagramIcon = ({ size = 20, className }) => (
 
 const navLinks = [
   { label: '關於嫚霏', href: '/about', isRoute: true },
-  { label: '最新消息', href: '#news' },
-  { label: '居家產品', href: '#products' },
-  { label: '美麗見證', href: '#portfolio' },
+  { label: '最新消息', href: '/news', isRoute: true },
+  { label: '頂級療程', href: '/services', isRoute: true },
+  { label: '居家產品', href: '/brands' , isRoute: true },
   { label: '聯絡我們', href: '#contact' },
 ]
 
