@@ -53,20 +53,27 @@ export const AuthProvider = ({ children }) => {
     initAuth()
   }, [])
 
-  const login = (accessToken, refreshToken, userRole) => {
+  const login = async (accessToken, refreshTokenValue, userRole) => {
     // Store tokens (axios interceptor will automatically use them)
     localStorage.setItem('access_token', accessToken)
-    localStorage.setItem('refresh_token', refreshToken)
+    localStorage.setItem('refresh_token', refreshTokenValue)
     
-    // Decode token to get user info
+    // Decode token to get basic user info immediately (for fast redirect)
     const decoded = jwtDecode(accessToken)
-
-    const finalUser = {
+    const basicUser = {
       id: decoded.sub,
       role: decoded.role || userRole,
     }
-    
-    setUser(finalUser)
+    setUser(basicUser)
+
+    // Then fetch full user data from backend (display_name, tier, etc.)
+    try {
+      const response = await api.get('/api/auth/me')
+      setUser(response.data)
+    } catch {
+      // Keep basic user if /me fails — at least auth works
+      console.warn('Failed to fetch full user profile after login')
+    }
   }
 
   const logout = () => {

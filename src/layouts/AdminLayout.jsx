@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext'
 import {
   LayoutDashboard,
   Users,
+  UserCog,
   Newspaper,
   Scissors,
   Package,
@@ -14,11 +15,13 @@ import {
   LogOut,
   Menu,
   X,
+  Heart,
 } from 'lucide-react'
 
 const navigation = [
   { name: '儀表板', path: '/admin', icon: LayoutDashboard },
-  { name: '人員管理', path: '/admin/users', icon: Users },
+  { name: '員工管理', path: '/admin/users', icon: UserCog },
+  { name: '顧客管理', path: '/admin/customers', icon: Heart },
   { name: '最新消息', path: '/admin/news', icon: Newspaper },
   { name: '服務項目', path: '/admin/services', icon: Scissors },
   { name: '產品', path: '/admin/products', icon: Package },

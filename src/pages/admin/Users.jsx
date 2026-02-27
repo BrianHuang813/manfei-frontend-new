@@ -17,17 +17,11 @@ const ROLE_CONFIG = {
     className: 'bg-blue-100 text-blue-700 border-blue-200',
     dotColor: 'bg-blue-500',
   },
-  customer: {
-    label: '顧客',
-    className: 'bg-gray-100 text-gray-600 border-gray-200',
-    dotColor: 'bg-gray-400',
-  },
 }
 
 const ROLE_OPTIONS = [
   { value: 'admin', label: '管理員', icon: Shield },
   { value: 'staff', label: '員工', icon: UserCog },
-  { value: 'customer', label: '顧客', icon: UserIcon },
 ]
 
 /**
@@ -257,17 +251,21 @@ const Users = () => {
     },
   })
 
-  // Client-side filter
+  // Client-side filter — only show admin & staff
+  const staffUsers = useMemo(() => {
+    return users.filter((u) => u.role === 'admin' || u.role === 'staff')
+  }, [users])
+
   const filteredUsers = useMemo(() => {
-    if (!searchQuery.trim()) return users
+    if (!searchQuery.trim()) return staffUsers
     const q = searchQuery.toLowerCase()
-    return users.filter(
+    return staffUsers.filter(
       (u) =>
         u.display_name?.toLowerCase().includes(q) ||
         u.line_user_id?.toLowerCase().includes(q) ||
         (ROLE_CONFIG[u.role]?.label || '').includes(q)
     )
-  }, [users, searchQuery])
+  }, [staffUsers, searchQuery])
 
   const handleRoleChange = (userId, role) => {
     roleMutation.mutate({ userId, role })
@@ -285,9 +283,9 @@ const Users = () => {
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-2xl font-serif font-bold text-secondary">人員管理</h1>
+        <h1 className="text-2xl font-serif font-bold text-secondary">員工管理</h1>
         <p className="text-sm text-gray-500 mt-1">
-          管理系統使用者的角色與帳號狀態
+          管理管理員與員工的角色與帳號狀態
         </p>
       </div>
 
@@ -312,7 +310,7 @@ const Users = () => {
         {!isLoading && (
           <div className="flex items-center gap-3 text-xs text-gray-500">
             <span className="bg-gray-100 px-2.5 py-1 rounded-full">
-              共 {users.length} 位使用者
+              共 {staffUsers.length} 位員工
             </span>
             {searchQuery && (
               <span className="bg-primary-50 text-primary-700 px-2.5 py-1 rounded-full">
@@ -430,7 +428,7 @@ const Users = () => {
       {/* Footer Info */}
       {!isLoading && !isError && filteredUsers.length > 0 && (
         <p className="text-xs text-gray-400 mt-4 text-center">
-          使用者資料僅供管理用途。管理員只能變更角色與帳號狀態，無法編輯個人資訊。
+          員工資料僅供管理用途。管理員只能變更角色與帳號狀態，無法編輯個人資訊。
         </p>
       )}
     </div>

@@ -86,7 +86,7 @@ export default function FeaturedServices() {
             <span className="text-gold text-xs tracking-[0.3em] uppercase">Our Brands</span>
           </div>
           <h2 className="font-serif text-3xl md:text-4xl text-secondary tracking-wider">
-            產品品牌
+            居家產品
           </h2>
           <p className="mt-4 text-secondary/50 text-sm md:text-base max-w-lg tracking-wide">
             嚴選歐洲頂級護膚品牌，為您帶來專業級居家保養體驗。

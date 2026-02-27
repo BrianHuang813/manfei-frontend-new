@@ -14,6 +14,8 @@ import {
   Star,
   Image,
   Users,
+  UserCog,
+  Heart,
   TrendingUp,
   Clock,
   Loader2,
@@ -31,7 +33,8 @@ const STAT_CARDS = [
   { key: 'products', label: '產品', icon: Package, color: 'bg-amber-500', path: '/admin/products' },
   { key: 'testimonials', label: '客戶評價', icon: Star, color: 'bg-purple-500', path: '/admin/testimonials' },
   { key: 'portfolio', label: '對比圖', icon: Image, color: 'bg-rose-500', path: '/admin/portfolio' },
-  { key: 'users', label: '會員', icon: Users, color: 'bg-teal-500', path: '/admin/users' },
+  { key: 'staff', label: '員工', icon: UserCog, color: 'bg-indigo-500', path: '/admin/users', custom: true },
+  { key: 'customers', label: '顧客', icon: Heart, color: 'bg-teal-500', path: '/admin/customers', custom: true },
 ]
 
 const TYPE_COLORS = {
@@ -100,10 +103,22 @@ const Dashboard = () => {
         {STAT_CARDS.map((card) => {
           const Icon = card.icon
           const data = counts[card.key] || {}
-          const total = card.key === 'users' ? data.total : data.total
-          const subtitle = card.key === 'users'
-            ? `管理員 ${data.roles?.admin || 0} / 員工 ${data.roles?.staff || 0} / 顧客 ${data.roles?.customer || 0}`
-            : `啟用中 ${data.active || 0} 筆`
+          let total, subtitle
+
+          if (card.key === 'staff') {
+            // Staff card: admin + staff count
+            const userCounts = counts.users || {}
+            total = (userCounts.roles?.admin || 0) + (userCounts.roles?.staff || 0)
+            subtitle = `管理員 ${userCounts.roles?.admin || 0} / 員工 ${userCounts.roles?.staff || 0}`
+          } else if (card.key === 'customers') {
+            // Customer card
+            const userCounts = counts.users || {}
+            total = userCounts.roles?.customer || 0
+            subtitle = `全部顧客`
+          } else {
+            total = data.total
+            subtitle = `啟用中 ${data.active || 0} 筆`
+          }
 
           return (
             <a

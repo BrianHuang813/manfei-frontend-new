@@ -52,7 +52,7 @@ const WorkLogs = () => {
   // Build query params
   const queryParams = useMemo(() => {
     const params = {}
-    if (filterUserId) params.userId = parseInt(filterUserId)
+    if (filterUserId) params.userId = filterUserId
     if (filterStartDate) params.startDate = filterStartDate
     if (filterEndDate) params.endDate = filterEndDate
     return params

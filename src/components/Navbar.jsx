@@ -145,6 +145,13 @@ export default function Navbar() {
                       transition={{ duration: 0.2 }}
                       className="absolute right-0 mt-2 w-44 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden z-50"
                     >
+                      {/* Member Center — visible to all logged-in users */}
+                      <button
+                        onClick={() => { setUserMenuOpen(false); navigate('/member') }}
+                        className="w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors font-sans"
+                      >
+                        會員中心
+                      </button>
                       {user?.role === 'admin' && (
                         <button
                           onClick={() => { setUserMenuOpen(false); navigate('/admin') }}
@@ -253,16 +260,32 @@ export default function Navbar() {
 
               {/* Auth link */}
               {isAuthenticated ? (
-                <motion.button
-                  onClick={() => { closeMobile(); logout(); navigate('/') }}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 + navLinks.length * 0.1, duration: 0.4 }}
-                  className="font-serif text-2xl text-secondary tracking-widest hover:text-gold transition-colors flex items-center gap-3"
-                >
-                  <LogOut size={22} />
-                  登出
-                </motion.button>
+                <>
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 + navLinks.length * 0.1, duration: 0.4 }}
+                  >
+                    <Link
+                      to="/member"
+                      onClick={closeMobile}
+                      className="font-serif text-2xl text-secondary tracking-widest hover:text-gold transition-colors flex items-center gap-3"
+                    >
+                      <User size={22} />
+                      會員中心
+                    </Link>
+                  </motion.div>
+                  <motion.button
+                    onClick={() => { closeMobile(); logout(); navigate('/') }}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 + (navLinks.length + 1) * 0.1, duration: 0.4 }}
+                    className="font-serif text-2xl text-secondary tracking-widest hover:text-gold transition-colors flex items-center gap-3"
+                  >
+                    <LogOut size={22} />
+                    登出
+                  </motion.button>
+                </>
               ) : (
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
@@ -287,7 +310,7 @@ export default function Navbar() {
                 rel="noopener noreferrer"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 + (navLinks.length + 1) * 0.1, duration: 0.4 }}
+                transition={{ delay: 0.1 + (navLinks.length + (isAuthenticated ? 2 : 1)) * 0.1, duration: 0.4 }}
                 className="mt-2 px-8 py-3 border border-gold text-gold rounded-full text-lg tracking-wider hover:bg-gold hover:text-white transition-all"
               >
                 立即預約

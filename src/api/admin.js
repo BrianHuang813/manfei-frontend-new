@@ -13,7 +13,7 @@ export const fetchUsers = async () => {
 
 /**
  * Update a user's role.
- * @param {number} userId
+ * @param {string} userId - UUID string
  * @param {string} role - 'admin' | 'staff' | 'customer'
  * @returns {Promise<Object>} Updated user
  */
@@ -24,7 +24,7 @@ export const updateUserRole = async (userId, role) => {
 
 /**
  * Update a user's active status.
- * @param {number} userId
+ * @param {string} userId - UUID string
  * @param {boolean} isActive
  * @returns {Promise<Object>} Updated user
  */
@@ -266,5 +266,59 @@ export const fetchSettings = async () => {
 
 export const updateSettings = async (settingsData) => {
   const { data } = await api.put('/api/admin/settings', settingsData)
+  return data
+}
+
+// ==================== Customer Management ====================
+
+/**
+ * Fetch all customers with transaction stats.
+ * @returns {Promise<Array>} List of customers with summary
+ */
+export const fetchCustomers = async () => {
+  const { data } = await api.get('/api/admin/customers')
+  return data
+}
+
+/**
+ * Fetch a single customer's detail with full transaction history.
+ * @param {string} userId - UUID string
+ * @returns {Promise<Object>} Customer detail
+ */
+export const fetchCustomerDetail = async (userId) => {
+  const { data } = await api.get(`/api/admin/customers/${userId}`)
+  return data
+}
+
+/**
+ * Update a customer's member tier.
+ * @param {string} userId - UUID string
+ * @param {string} tier - 'regular' | 'vip'
+ * @returns {Promise<Object>} Updated user
+ */
+export const updateCustomerTier = async (userId, tier) => {
+  const { data } = await api.patch(`/api/admin/customers/${userId}/tier`, { tier })
+  return data
+}
+
+/**
+ * Create a new transaction record for a customer.
+ * @param {string} userId - UUID string
+ * @param {Object} txnData - { service_name, amount }
+ * @returns {Promise<Object>} Created transaction
+ */
+export const createTransaction = async (userId, txnData) => {
+  const { data } = await api.post(`/api/admin/customers/${userId}/transactions`, txnData)
+  return data
+}
+
+/**
+ * Soft-delete a transaction record.
+ * @param {string} userId - UUID string
+ * @param {string} txnId - UUID string
+ * @returns {Promise<Object>} Confirmation message
+ */
+export const deleteTransaction = async (userId, txnId) => {
+  const { data } = await api.delete(`/api/admin/customers/${userId}/transactions/${txnId}`)
   return data
 }

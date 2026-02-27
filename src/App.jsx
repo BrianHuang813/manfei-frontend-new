@@ -36,6 +36,8 @@ const PortfolioManagement = lazy(() => import('./pages/Admin').then((m) => ({ de
 const StaffLogs = lazy(() => import('./pages/Admin').then((m) => ({ default: m.StaffLogs })))
 const SettingsPlaceholder = lazy(() => import('./pages/Admin').then((m) => ({ default: m.SettingsPlaceholder })))
 const Users = lazy(() => import('./pages/admin/Users'))
+const Customers = lazy(() => import('./pages/admin/Customers'))
+const MemberProfile = lazy(() => import('./pages/MemberProfile'))
 
 function App() {
   const location = useLocation()
@@ -77,6 +79,16 @@ function App() {
             <Route path="/login" element={<PageTransition><Login /></PageTransition>} />
             <Route path="/register" element={<PageTransition><Register /></PageTransition>} />
 
+            {/* Protected Member Route */}
+            <Route
+              path="/member"
+              element={
+                <ProtectedRoute allowedRoles={['customer', 'staff', 'admin']}>
+                  <PageTransition><MemberProfile /></PageTransition>
+                </ProtectedRoute>
+              }
+            />
+
             {/* Protected Staff Route */}
             <Route
               path="/staff"
@@ -98,6 +110,7 @@ function App() {
             >
               <Route index element={<Dashboard />} />
               <Route path="users" element={<Users />} />
+              <Route path="customers" element={<Customers />} />
               <Route path="news" element={<NewsManagement />} />
               <Route path="services" element={<ServicesManagement />} />
               <Route path="products" element={<ProductsManagement />} />
