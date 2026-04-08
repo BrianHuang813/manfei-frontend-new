@@ -49,7 +49,7 @@ export default function Footer() {
               <h4 className="text-white text-sm tracking-[0.2em] uppercase mb-6">門市位置</h4>
               <div className="rounded-lg overflow-hidden w-full aspect-[4/3]">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3659.44161326554!2d120.4425709749667!3d23.48059797885543!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346e942e6fdb97bd%3A0x4d792aa337166901!2z5aua6ZyPU1BB!5e0!3m2!1szh-TW!2stw!4v1749344810102!5m2!1szh-TW!2stw"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3659.578684383033!2d120.43269277442113!3d23.475657178858757!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346e942e6fdb97bd%3A0x4d792aa337166901!2z5aua6ZyPU1BB!5e0!3m2!1sen!2stw!4v1775652951752!5m2!1sen!2stw"
                   className="w-full h-full border-0"
                   loading="lazy"
                   allowFullScreen=""
