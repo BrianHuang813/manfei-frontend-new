@@ -14,6 +14,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+p {
+  line-height: 1.7;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
@@ -38,7 +42,7 @@ html {
 
 /* Custom utilities */
 .section-padding {
-  @apply py-16 md:py-24;
+  @apply py-20 md:py-28;
 }
 
 .container-custom {

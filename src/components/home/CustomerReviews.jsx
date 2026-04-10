@@ -114,7 +114,8 @@ export default function CustomerReviews({ reviews = [] }) {
               >
                 {/* Quote text */}
                 <blockquote className="font-serif text-secondary/80 text-lg sm:text-xl md:text-2xl
-                                       leading-relaxed md:leading-relaxed italic tracking-wide">
+                                       leading-relaxed md:leading-relaxed italic tracking-wide
+                                       line-clamp-4">
                   「{current.content}」
                 </blockquote>
 

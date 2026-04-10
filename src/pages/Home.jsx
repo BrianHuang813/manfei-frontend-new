@@ -12,14 +12,15 @@ import CustomerReviews from '../components/home/CustomerReviews'
 
 const localBusinessSchema = {
   "@context": "https://schema.org",
-  "@type": "HealthAndBeautyBusiness",
-  "name": "嫚霏美容 SPA (Manfei Spa)",
+  "@type": "BeautySalon",
+  "name": "嫚霏美容 MANFEI BEAUTY",
+  "description": "嘉義專業美容美體 SPA，提供德系頂級護膚療程、精油按摩與抗老護理服務。",
   "image": "https://www.manfeispa.com/images/hero-background.jpg",
   "address": {
     "@type": "PostalAddress",
-    "streetAddress": "北榮街152號",
-    "addressLocality": "West District",
-    "addressRegion": "Chiayi City",
+    "streetAddress": "北港路7號",
+    "addressLocality": "西區",
+    "addressRegion": "嘉義市",
     "postalCode": "600",
     "addressCountry": "TW"
   },
@@ -72,7 +73,7 @@ export default function Home() {
     <>
       {/* SEO: Page-specific meta + JSON-LD structured data */}
       <Helmet>
-        <title>嫚霏SPA｜嘉義頂級美容與身體舒壓</title>
+        <title>嘉義專業美容美體 SPA - 嫚霏 MANFEI BEAUTY</title>
         <meta
           name="description"
           content="位於嘉義的高級 SPA，提供專屬客製化護膚、身心靈精油按摩與高科技抗老療程。在靜謐的空間中，找回身心平衡與肌膚光澤。"

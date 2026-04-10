@@ -47,7 +47,8 @@ function BentoCell({ cell, index }) {
       className={cn(
         'group relative overflow-hidden rounded-2xl cursor-pointer',
         cell.span,
-        cell.id === 'main' ? 'min-h-[400px] md:min-h-0' : 'min-h-[220px]'
+        'aspect-[4/3] md:aspect-auto',
+        cell.id === 'main' ? 'md:min-h-[400px]' : 'md:min-h-[220px]'
       )}
     >
       <img
@@ -86,7 +87,7 @@ export default function FeaturedServices() {
             <span className="text-gold text-xs tracking-[0.3em] uppercase">Our Brands</span>
           </div>
           <h2 className="font-serif text-3xl md:text-4xl text-secondary tracking-wider">
-            居家產品
+            產品品牌
           </h2>
           <p className="mt-4 text-secondary/50 text-sm md:text-base max-w-lg tracking-wide">
             嚴選歐洲頂級護膚品牌，為您帶來專業級居家保養體驗。
@@ -100,12 +101,10 @@ export default function FeaturedServices() {
           ))}
         </div>
 
-        {/* ── Mobile: Horizontal scroll snap ────────────── */}
-        <div className="md:hidden flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 scrollbar-hide -mx-4 px-4">
+        {/* ── Mobile: Vertical stack ─────────────────────── */}
+        <div className="md:hidden grid grid-cols-1 gap-5">
           {staticCells.map((cell, i) => (
-            <div key={cell.id} className="snap-center shrink-0 w-[80vw]">
-              <BentoCell cell={cell} index={i} />
-            </div>
+            <BentoCell key={cell.id} cell={cell} index={i} />
           ))}
         </div>
 

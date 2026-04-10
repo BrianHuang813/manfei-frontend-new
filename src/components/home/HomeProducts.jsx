@@ -90,20 +90,28 @@ export default function HomeProducts({ products = [] }) {
           </p>
         </motion.div>
 
-        {/* ── Horizontal scroll (all screens) ─────────────── */}
-        <div className="flex overflow-x-auto snap-x snap-mandatory gap-5 pb-4 scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
-          {displayProducts.map((product, i) => (
-            <div
-              key={product.id}
-              className="snap-center shrink-0 w-[260px] md:w-[300px]"
-            >
-              <ProductCard product={product} index={i} />
-            </div>
-          ))}
+        {/* ── Horizontal scroll with right-edge fade hint ── */}
+        <div className="relative">
+          <div className="flex overflow-x-auto snap-x snap-mandatory gap-5 pb-4 scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
+            {displayProducts.map((product, i) => (
+              <div
+                key={product.id}
+                className="snap-center shrink-0 w-[260px] md:w-[300px]"
+              >
+                <ProductCard product={product} index={i} />
+              </div>
+            ))}
+          </div>
+          {/* Right gradient fade — indicates more content to scroll */}
+          <div
+            className="pointer-events-none absolute top-0 right-0 h-full w-16
+                       bg-gradient-to-l from-white to-transparent md:hidden"
+            aria-hidden="true"
+          />
         </div>
 
-        {/* Scroll hint (mobile) */}
-        <div className="md:hidden mt-4 text-center">
+        {/* Scroll hint text (mobile) */}
+        <div className="md:hidden mt-3 text-center">
           <span className="text-secondary/30 text-xs tracking-[0.2em]">← 滑動瀏覽 →</span>
         </div>
       </div>

@@ -55,6 +55,9 @@ export default function Hero() {
             找回肌膚
             <br />
             <span className="text-gold-light">原本的光采</span>
+            <span className="block font-sans font-light text-sm md:text-base text-white/50 tracking-[0.25em] mt-5">
+              嘉義專業美容美體 SPA · 嫚霏
+            </span>
           </motion.h1>
 
           {/* Subtitle */}

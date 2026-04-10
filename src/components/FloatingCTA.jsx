@@ -35,7 +35,7 @@ export default function FloatingCTA() {
           animate={{ scale: 1 }}
           exit={{ scale: 0 }}
           transition={{ delay: 1, type: 'spring', stiffness: 260, damping: 20 }}
-          className="fixed bottom-6 right-6 z-50 block md:hidden
+          className="fixed bottom-[80px] right-6 z-50 block md:hidden
                      w-[50px] h-[50px] rounded-full bg-gold
                      flex items-center justify-center
                      shadow-lg hover:shadow-xl
