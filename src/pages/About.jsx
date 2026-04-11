@@ -5,9 +5,9 @@ import { ArrowLeft, ExternalLink, Check } from 'lucide-react'
 import { useSiteSettings } from '../contexts/SiteSettingsContext'
 
 const envImages = [
-  { src: '/images/env3.jpg', alt: '嫚霏接待區' },
-  { src: '/images/env2.jpg', alt: '嫚霏獨立美容室' },
-  { src: '/images/env1.jpg', alt: '嫚霏舒適休息區' },
+  { src: '/images/S__11296803.jpg', alt: '嫚霏接待區' },
+  { src: '/images/S__11296804.jpg', alt: '嫚霏休息區' },
+  { src: '/images/S__11296806.jpg', alt: '嫚霏專業美容室' },
 ]
 
 const promises = [
