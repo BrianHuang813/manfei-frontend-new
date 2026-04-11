@@ -6,6 +6,7 @@ import {
   updateTestimonial,
   deleteTestimonial,
 } from '../../api/admin'
+import { getErrorMessage } from '../../utils/errorMessage'
 import ImageUploader from '../../components/ImageUploader'
 import {
   Search,
@@ -286,7 +287,7 @@ const Reviews = () => {
       queryClient.invalidateQueries({ queryKey: ['admin-testimonials'] })
       closeModal()
     },
-    onError: (err) => window.alert(err.response?.data?.detail || '操作失敗'),
+    onError: (err) => window.alert(getErrorMessage(err, '操作失敗')),
   })
 
   const updateMutation = useMutation({
@@ -295,7 +296,7 @@ const Reviews = () => {
       queryClient.invalidateQueries({ queryKey: ['admin-testimonials'] })
       closeModal()
     },
-    onError: (err) => window.alert(err.response?.data?.detail || '操作失敗'),
+    onError: (err) => window.alert(getErrorMessage(err, '操作失敗')),
   })
 
   const deleteMutation = useMutation({
@@ -308,7 +309,7 @@ const Reviews = () => {
         return next
       }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin-testimonials'] }),
-    onError: (err) => window.alert(err.response?.data?.detail || '刪除失敗'),
+    onError: (err) => window.alert(getErrorMessage(err, '刪除失敗')),
   })
 
   const toggleMutation = useMutation({
@@ -321,7 +322,7 @@ const Reviews = () => {
         return next
       }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin-testimonials'] }),
-    onError: (err) => window.alert(err.response?.data?.detail || '操作失敗'),
+    onError: (err) => window.alert(getErrorMessage(err, '操作失敗')),
   })
 
   // Filter / Search

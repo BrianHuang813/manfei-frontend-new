@@ -32,7 +32,7 @@ function ServiceRow({ service }) {
         )}
       </div>
       {service.description && (
-        <p className="mt-2 text-secondary/45 text-sm leading-relaxed">
+        <p className="mt-2 text-secondary/45 text-sm leading-relaxed whitespace-pre-line">
           {service.description}
         </p>
       )}

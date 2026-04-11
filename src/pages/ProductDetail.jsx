@@ -133,7 +133,7 @@ export default function ProductDetail() {
                 <h3 className="text-xs text-secondary/40 tracking-[0.2em] uppercase mb-2">
                   規格
                 </h3>
-                <p className="text-secondary/70 text-sm leading-relaxed">
+                <p className="text-secondary/70 text-sm leading-relaxed whitespace-pre-line">
                   {product.spec}
                 </p>
               </div>

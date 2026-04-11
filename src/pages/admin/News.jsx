@@ -7,6 +7,7 @@ import {
   deleteNews,
 } from '../../api/admin'
 import ImageUploader from '../../components/ImageUploader'
+import { getErrorMessage } from '../../utils/errorMessage'
 import {
   Search,
   Plus,
@@ -275,7 +276,7 @@ const News = () => {
       queryClient.invalidateQueries({ queryKey: ['admin-news'] })
       closeModal()
     },
-    onError: (err) => window.alert(err.response?.data?.detail || '操作失敗'),
+    onError: (err) => window.alert(getErrorMessage(err, '操作失敗')),
   })
 
   const updateMutation = useMutation({
@@ -284,7 +285,7 @@ const News = () => {
       queryClient.invalidateQueries({ queryKey: ['admin-news'] })
       closeModal()
     },
-    onError: (err) => window.alert(err.response?.data?.detail || '操作失敗'),
+    onError: (err) => window.alert(getErrorMessage(err, '操作失敗')),
   })
 
   const deleteMutation = useMutation({
@@ -297,7 +298,7 @@ const News = () => {
         return next
       }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin-news'] }),
-    onError: (err) => window.alert(err.response?.data?.detail || '刪除失敗'),
+    onError: (err) => window.alert(getErrorMessage(err, '刪除失敗')),
   })
 
   const toggleMutation = useMutation({
@@ -310,7 +311,7 @@ const News = () => {
         return next
       }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin-news'] }),
-    onError: (err) => window.alert(err.response?.data?.detail || '操作失敗'),
+    onError: (err) => window.alert(getErrorMessage(err, '操作失敗')),
   })
 
   // Filter / Search

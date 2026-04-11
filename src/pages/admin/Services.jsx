@@ -6,6 +6,7 @@ import {
   updateService,
   deleteService,
 } from '../../api/admin'
+import { getErrorMessage } from '../../utils/errorMessage'
 import {
   Search,
   Plus,
@@ -380,7 +381,7 @@ const Services = () => {
       setModal({ isOpen: false, mode: 'create', editingService: null })
     },
     onError: (err) => {
-      window.alert(err.response?.data?.detail || '新增服務失敗')
+      window.alert(getErrorMessage(err, '新增服務失敗'))
     },
   })
 
@@ -391,7 +392,7 @@ const Services = () => {
       setModal({ isOpen: false, mode: 'create', editingService: null })
     },
     onError: (err) => {
-      window.alert(err.response?.data?.detail || '更新服務失敗')
+      window.alert(getErrorMessage(err, '更新服務失敗'))
     },
   })
 
@@ -404,7 +405,7 @@ const Services = () => {
       queryClient.invalidateQueries({ queryKey: ['admin-services'] })
     },
     onError: (err) => {
-      window.alert(err.response?.data?.detail || '刪除服務失敗')
+      window.alert(getErrorMessage(err, '刪除服務失敗'))
     },
     onSettled: (_, __, id) => {
       setMutatingIds((prev) => {
@@ -424,7 +425,7 @@ const Services = () => {
       queryClient.invalidateQueries({ queryKey: ['admin-services'] })
     },
     onError: (err) => {
-      window.alert(err.response?.data?.detail || '狀態切換失敗')
+      window.alert(getErrorMessage(err, '狀態切換失敗'))
     },
     onSettled: (_, __, { id }) => {
       setMutatingIds((prev) => {

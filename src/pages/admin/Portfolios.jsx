@@ -7,6 +7,7 @@ import {
   deletePortfolio,
   fetchServices,
 } from '../../api/admin'
+import { getErrorMessage } from '../../utils/errorMessage'
 import ImageUploader from '../../components/ImageUploader'
 import {
   Search,
@@ -273,7 +274,7 @@ const Portfolios = () => {
       queryClient.invalidateQueries({ queryKey: ['admin-portfolios'] })
       closeModal()
     },
-    onError: (err) => window.alert(err.response?.data?.detail || '操作失敗'),
+    onError: (err) => window.alert(getErrorMessage(err, '操作失敗')),
   })
 
   const updateMutation = useMutation({
@@ -282,7 +283,7 @@ const Portfolios = () => {
       queryClient.invalidateQueries({ queryKey: ['admin-portfolios'] })
       closeModal()
     },
-    onError: (err) => window.alert(err.response?.data?.detail || '操作失敗'),
+    onError: (err) => window.alert(getErrorMessage(err, '操作失敗')),
   })
 
   const deleteMutation = useMutation({
@@ -295,7 +296,7 @@ const Portfolios = () => {
         return next
       }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin-portfolios'] }),
-    onError: (err) => window.alert(err.response?.data?.detail || '刪除失敗'),
+    onError: (err) => window.alert(getErrorMessage(err, '刪除失敗')),
   })
 
   const toggleMutation = useMutation({
@@ -308,7 +309,7 @@ const Portfolios = () => {
         return next
       }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin-portfolios'] }),
-    onError: (err) => window.alert(err.response?.data?.detail || '操作失敗'),
+    onError: (err) => window.alert(getErrorMessage(err, '操作失敗')),
   })
 
   // Filter / Search
