@@ -8,6 +8,7 @@ import {
   createTransaction,
   deleteTransaction,
 } from '../../api/admin'
+import { getErrorMessage } from '../../utils/errorMessage'
 import {
   Search,
   Crown,
@@ -183,7 +184,7 @@ const CustomerDetailModal = ({ userId, onClose }) => {
       setShowAddForm(false)
     },
     onError: (err) => {
-      window.alert(err.response?.data?.detail || '新增失敗')
+      window.alert(getErrorMessage(err, '新增失敗'))
     },
   })
 
@@ -194,7 +195,7 @@ const CustomerDetailModal = ({ userId, onClose }) => {
       queryClient.invalidateQueries({ queryKey: ['admin-customers'] })
     },
     onError: (err) => {
-      window.alert(err.response?.data?.detail || '刪除失敗')
+      window.alert(getErrorMessage(err, '刪除失敗'))
     },
   })
 
@@ -439,7 +440,7 @@ const Customers = () => {
       queryClient.invalidateQueries({ queryKey: ['admin-customers'] })
     },
     onError: (err) => {
-      window.alert(err.response?.data?.detail || '等級更新失敗')
+      window.alert(getErrorMessage(err, '等級更新失敗'))
     },
     onSettled: (_, __, { userId }) => {
       setMutatingUsers((prev) => { const n = { ...prev }; delete n[userId]; return n })
@@ -456,7 +457,7 @@ const Customers = () => {
       queryClient.invalidateQueries({ queryKey: ['admin-customers'] })
     },
     onError: (err) => {
-      window.alert(err.response?.data?.detail || '狀態更新失敗')
+      window.alert(getErrorMessage(err, '狀態更新失敗'))
     },
     onSettled: (_, __, { userId }) => {
       setMutatingUsers((prev) => { const n = { ...prev }; delete n[userId]; return n })

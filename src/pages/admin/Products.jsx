@@ -6,6 +6,7 @@ import {
   updateProduct,
   deleteProduct,
 } from '../../api/admin'
+import { getErrorMessage } from '../../utils/errorMessage'
 import ImageUploader from '../../components/ImageUploader'
 import {
   Search,
@@ -291,7 +292,7 @@ const Products = () => {
       queryClient.invalidateQueries({ queryKey: ['admin-products'] })
       closeModal()
     },
-    onError: (err) => window.alert(err.response?.data?.detail || '操作失敗'),
+    onError: (err) => window.alert(getErrorMessage(err, '操作失敗')),
   })
 
   const updateMutation = useMutation({
@@ -300,7 +301,7 @@ const Products = () => {
       queryClient.invalidateQueries({ queryKey: ['admin-products'] })
       closeModal()
     },
-    onError: (err) => window.alert(err.response?.data?.detail || '操作失敗'),
+    onError: (err) => window.alert(getErrorMessage(err, '操作失敗')),
   })
 
   const deleteMutation = useMutation({
@@ -313,7 +314,7 @@ const Products = () => {
         return next
       }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin-products'] }),
-    onError: (err) => window.alert(err.response?.data?.detail || '刪除失敗'),
+    onError: (err) => window.alert(getErrorMessage(err, '刪除失敗')),
   })
 
   const toggleMutation = useMutation({
@@ -326,7 +327,7 @@ const Products = () => {
         return next
       }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin-products'] }),
-    onError: (err) => window.alert(err.response?.data?.detail || '操作失敗'),
+    onError: (err) => window.alert(getErrorMessage(err, '操作失敗')),
   })
 
   // Filter / Search

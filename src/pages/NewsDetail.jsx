@@ -129,7 +129,14 @@ export default function NewsDetail() {
                      prose-headings:font-serif prose-headings:text-secondary
                      prose-a:text-gold prose-a:no-underline hover:prose-a:underline
                      prose-img:rounded-lg"
-          dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(news.content) }}
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(
+              // If content has no HTML tags, convert newlines to <br> so plain-text entries render correctly
+              /<[a-z][\s\S]*>/i.test(news.content)
+                ? news.content
+                : news.content.replace(/\n/g, '<br>')
+            ),
+          }}
         />
 
         {/* Bottom back link */}
