@@ -55,7 +55,7 @@ function CategorySection({ group, index, settings }) {
       {/* Image — sticky on desktop */}
       <div className={`w-full md:col-span-5 ${!isEven ? 'md:order-2' : ''}`}>
         {/* FIX: Removed h-full. Applied aspect-[4/3] or aspect-[16/9] to preserve landscape photos without cropping. */}
-        <div className="relative sticky top-28 w-full aspect-[4/3] xl:aspect-[16/9] overflow-hidden rounded-sm group shadow-sm">
+        <div className="relative sticky top-28 w-full aspect-[4/3] xl:aspect-[16/9] overflow-hidden rounded-2xl group shadow-md">
           <img
             src={group.image_url || '/images/hero-background.jpg'}
             alt={group.category}
@@ -109,7 +109,7 @@ function Skeleton() {
     <div className="space-y-20">
       {[1, 2, 3].map((n) => (
         <div key={n} className="flex flex-col md:flex-row gap-12">
-          <div className="w-full md:w-[40%] aspect-[3/4] bg-stone-200 rounded-sm animate-pulse" />
+          <div className="w-full md:w-[40%] aspect-[3/4] bg-stone-200 rounded-2xl animate-pulse" />
           <div className="w-full md:w-[60%] space-y-6 py-4">
             <div className="h-3 w-24 bg-stone-200 rounded animate-pulse" />
             <div className="h-px bg-stone-100" />
@@ -162,7 +162,7 @@ export default function Services() {
               <span className="block w-10 h-px bg-gold-light" />
               <span className="text-gold-light text-xs tracking-[0.3em] uppercase">All Services</span>
             </div>
-            <h1 className="font-serif text-4xl md:text-5xl text-white tracking-wider">全部療程</h1>
+            <h1 className="font-serif text-4xl md:text-5xl text-white tracking-wider">頂級療程</h1>
             <p className="mt-4 text-white/60 text-sm md:text-base max-w-md tracking-wide">
               以專業手技與頂級產品，打造屬於您的美學體驗。
             </p>
