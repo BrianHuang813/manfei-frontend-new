@@ -24,3 +24,13 @@ export const fetchMyTransactions = async ({ skip = 0, limit = 100 } = {}) => {
   })
   return data
 }
+
+/**
+ * Update the current user's profile (display_name).
+ * @param {Object} profileData - { display_name }
+ * @returns {Promise<Object>} Updated user profile
+ */
+export const updateMyProfile = async (profileData) => {
+  const { data } = await api.patch('/api/auth/me/profile', profileData)
+  return data
+}

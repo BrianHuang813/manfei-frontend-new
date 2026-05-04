@@ -7,6 +7,9 @@ import {
   updateUserStatus,
   createTransaction,
   deleteTransaction,
+  updateTransaction,
+  reorderCustomerTransactions,
+  updateCustomerDisplayName,
 } from '../../api/admin'
 import { getErrorMessage } from '../../utils/errorMessage'
 import {
@@ -23,6 +26,9 @@ import {
   AlertCircle,
   Loader2,
   CheckCircle,
+  Edit,
+  ArrowUp,
+  ArrowDown,
 } from 'lucide-react'
 
 // ==================== Config ====================
@@ -166,7 +172,7 @@ const TierSelector = ({ currentTier, userId, onTierChange, isLoading }) => {
 
 const CustomerDetailModal = ({ userId, onClose }) => {
   const queryClient = useQueryClient()
-  const [newTxn, setNewTxn] = useState({ service_name: '', amount: '' })
+  const [newTxn, setNewTxn] = useState({ service_name: '', amount: '', transaction_date: null })
   const [showAddForm, setShowAddForm] = useState(false)
 
   const { data: customer, isLoading, isError } = useQuery({
@@ -180,7 +186,7 @@ const CustomerDetailModal = ({ userId, onClose }) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-customer-detail', userId] })
       queryClient.invalidateQueries({ queryKey: ['admin-customers'] })
-      setNewTxn({ service_name: '', amount: '' })
+      setNewTxn({ service_name: '', amount: '', transaction_date: null })
       setShowAddForm(false)
     },
     onError: (err) => {
@@ -199,12 +205,56 @@ const CustomerDetailModal = ({ userId, onClose }) => {
     },
   })
 
+  const [editingTxn, setEditingTxn] = useState(null)
+  const [editingDisplayName, setEditingDisplayName] = useState(null)
+  const [tempDisplayName, setTempDisplayName] = useState('')
+
+  const updateTxnMutation = useMutation({
+    mutationFn: (payload) => updateTransaction(userId, payload.txnId, {
+      service_name: payload.service_name,
+      amount: payload.amount,
+      transaction_date: payload.transaction_date,
+    }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin-customer-detail', userId] })
+      queryClient.invalidateQueries({ queryKey: ['admin-customers'] })
+      setEditingTxn(null)
+    },
+    onError: (err) => {
+      window.alert(getErrorMessage(err, '編輯失敗'))
+    },
+  })
+
+  const reorderTxnMutation = useMutation({
+    mutationFn: (items) => reorderCustomerTransactions(userId, items),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin-customer-detail', userId] })
+      queryClient.invalidateQueries({ queryKey: ['admin-customers'] })
+    },
+    onError: (err) => {
+      window.alert(getErrorMessage(err, '排序失敗'))
+    },
+  })
+
+  const updateDisplayNameMutation = useMutation({
+    mutationFn: (displayName) => updateCustomerDisplayName(userId, { display_name: displayName }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin-customer-detail', userId] })
+      queryClient.invalidateQueries({ queryKey: ['admin-customers'] })
+      setEditingDisplayName(null)
+    },
+    onError: (err) => {
+      window.alert(getErrorMessage(err, '更新失敗'))
+    },
+  })
+
   const handleAddTxn = (e) => {
     e.preventDefault()
     if (!newTxn.service_name.trim() || !newTxn.amount) return
     addTxnMutation.mutate({
       service_name: newTxn.service_name.trim(),
       amount: parseInt(newTxn.amount, 10),
+      transaction_date: newTxn.transaction_date || undefined,
     })
   }
 
@@ -213,6 +263,56 @@ const CustomerDetailModal = ({ userId, onClose }) => {
       deleteTxnMutation.mutate(txnId)
     }
   }
+
+  const handleEditTxn = (txn) => {
+    setEditingTxn({
+      ...txn,
+      amount: parseInt(txn.amount, 10),
+    })
+  }
+
+  const handleSaveEditTxn = () => {
+    if (!editingTxn.service_name.trim() || !editingTxn.amount) return
+    updateTxnMutation.mutate({
+      txnId: editingTxn.id,
+      service_name: editingTxn.service_name.trim(),
+      amount: parseInt(editingTxn.amount, 10),
+      transaction_date: editingTxn.transaction_date,
+    })
+  }
+
+  const handleMoveTxn = (index, direction) => {
+    if (!customer?.transactions || customer.transactions.length <= 1) return
+    const newIndex = direction === 'up' ? index - 1 : index + 1
+    if (newIndex < 0 || newIndex >= customer.transactions.length) return
+
+    // Create updated sort_order mapping
+    const transactions = [...customer.transactions]
+    const temp = transactions[index]
+    transactions[index] = transactions[newIndex]
+    transactions[newIndex] = temp
+
+    const updateItems = transactions.map((txn, idx) => ({
+      id: txn.id,
+      sort_order: idx,
+    }))
+
+    reorderTxnMutation.mutate(updateItems)
+  }
+
+  const handleStartEditDisplayName = () => {
+    setTempDisplayName(customer?.display_name || '')
+    setEditingDisplayName(true)
+  }
+
+  const handleSaveDisplayName = () => {
+    if (!tempDisplayName.trim()) {
+      window.alert('姓名不能為空')
+      return
+    }
+    updateDisplayNameMutation.mutate(tempDisplayName.trim())
+  }
+
 
   const tier = TIER_CONFIG[customer?.tier] || TIER_CONFIG.regular
 
@@ -246,15 +346,25 @@ const CustomerDetailModal = ({ userId, onClose }) => {
             </div>
           ) : (
             <div className="p-6 space-y-6">
-              {/* Customer Info */}
-              <div className="flex items-center gap-4">
-                <Avatar name={customer.display_name} isActive={customer.is_active} />
-                <div>
-                  <h4 className="text-lg font-bold text-gray-900">{customer.display_name}</h4>
-                  <p className="text-xs text-gray-400 font-mono">{customer.line_user_id}</p>
+              {/* Customer Info with Edit Name Button */}
+              <div className="flex items-center gap-4 justify-between">
+                <div className="flex items-center gap-4 flex-1">
+                  <Avatar name={customer.display_name} isActive={customer.is_active} />
+                  <div>
+                    <h4 className="text-lg font-bold text-gray-900">{customer.display_name}</h4>
+                    <p className="text-xs text-gray-400 font-mono">{customer.line_user_id}</p>
+                  </div>
                 </div>
-                <div className="ml-auto">
+                <div className="flex items-center gap-2">
                   <TierBadge tier={customer.tier} />
+                  <button
+                    onClick={handleStartEditDisplayName}
+                    disabled={updateDisplayNameMutation.isPending}
+                    className="p-1 text-gray-300 hover:text-primary-500 transition-colors"
+                    title="編輯姓名"
+                  >
+                    <Edit size={16} />
+                  </button>
                 </div>
               </div>
 
@@ -329,6 +439,15 @@ const CustomerDetailModal = ({ userId, onClose }) => {
                         required
                       />
                     </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-1">消費日期（選填，預設今日）</label>
+                      <input
+                        type="date"
+                        value={newTxn.transaction_date || ''}
+                        onChange={(e) => setNewTxn((p) => ({ ...p, transaction_date: e.target.value || null }))}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                      />
+                    </div>
                     <div className="flex items-center gap-2">
                       <button
                         type="submit"
@@ -357,34 +476,150 @@ const CustomerDetailModal = ({ userId, onClose }) => {
                   </div>
                 ) : (
                   <div className="divide-y divide-gray-50">
-                    {customer.transactions?.map((txn) => (
+                    {customer.transactions?.map((txn, index) => (
                       <div key={txn.id} className="flex items-center justify-between py-3">
-                        <div>
+                        <div className="flex-1">
                           <p className="text-sm font-medium text-gray-900">{txn.service_name}</p>
                           <p className="text-xs text-gray-400 mt-0.5">
-                            {new Date(txn.created_at).toLocaleDateString('zh-TW', {
+                            消費日期: {txn.transaction_date ? new Date(txn.transaction_date).toLocaleDateString('zh-TW', {
                               year: 'numeric', month: 'short', day: 'numeric',
-                            })}
+                            }) : '未設定'}
                           </p>
                         </div>
-                        <div className="flex items-center gap-3">
-                          <span className="text-sm font-semibold text-gray-900">
-                            ${txn.amount?.toLocaleString()}
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-semibold text-gray-900 whitespace-nowrap">
+                            NT${txn.amount?.toLocaleString()}
                           </span>
-                          <button
-                            onClick={() => handleDeleteTxn(txn.id)}
-                            disabled={deleteTxnMutation.isPending}
-                            className="p-1 text-gray-300 hover:text-red-500 transition-colors"
-                            title="刪除"
-                          >
-                            <Trash2 size={14} />
-                          </button>
+                          <div className="flex items-center gap-1">
+                            <button
+                              onClick={() => handleMoveTxn(index, 'up')}
+                              disabled={index === 0 || reorderTxnMutation.isPending}
+                              className="p-1 text-gray-300 hover:text-primary-500 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                              title="上移"
+                            >
+                              <ArrowUp size={14} />
+                            </button>
+                            <button
+                              onClick={() => handleMoveTxn(index, 'down')}
+                              disabled={index === (customer.transactions?.length || 0) - 1 || reorderTxnMutation.isPending}
+                              className="p-1 text-gray-300 hover:text-primary-500 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                              title="下移"
+                            >
+                              <ArrowDown size={14} />
+                            </button>
+                            <button
+                              onClick={() => handleEditTxn(txn)}
+                              disabled={updateTxnMutation.isPending}
+                              className="p-1 text-gray-300 hover:text-blue-500 transition-colors"
+                              title="編輯"
+                            >
+                              <Edit size={14} />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteTxn(txn.id)}
+                              disabled={deleteTxnMutation.isPending}
+                              className="p-1 text-gray-300 hover:text-red-500 transition-colors"
+                              title="刪除"
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          </div>
                         </div>
                       </div>
                     ))}
                   </div>
                 )}
               </div>
+
+              {/* Edit Transaction Modal */}
+              {editingTxn && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 pointer-events-auto">
+                  <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-md mx-4">
+                    <h4 className="text-lg font-bold text-gray-900 mb-4">編輯消費紀錄</h4>
+                    <div className="space-y-3">
+                      <div>
+                        <label className="block text-xs font-medium text-gray-700 mb-1">服務/項目名稱</label>
+                        <input
+                          type="text"
+                          value={editingTxn.service_name}
+                          onChange={(e) => setEditingTxn((p) => ({ ...p, service_name: e.target.value }))}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-gray-700 mb-1">金額 (NT$)</label>
+                        <input
+                          type="number"
+                          min="0"
+                          value={editingTxn.amount}
+                          onChange={(e) => setEditingTxn((p) => ({ ...p, amount: e.target.value }))}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-gray-700 mb-1">消費日期</label>
+                        <input
+                          type="date"
+                          value={editingTxn.transaction_date || ''}
+                          onChange={(e) => setEditingTxn((p) => ({ ...p, transaction_date: e.target.value || null }))}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                        />
+                      </div>
+                      <div className="flex items-center gap-2 pt-2">
+                        <button
+                          onClick={handleSaveEditTxn}
+                          disabled={updateTxnMutation.isPending}
+                          className="flex-1 px-4 py-2 bg-primary-500 text-white rounded-lg text-sm hover:bg-primary-600 transition-colors disabled:opacity-50"
+                        >
+                          {updateTxnMutation.isPending ? <Loader2 size={14} className="animate-spin" /> : '保存'}
+                        </button>
+                        <button
+                          onClick={() => setEditingTxn(null)}
+                          className="flex-1 px-4 py-2 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+                        >
+                          取消
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Edit Display Name Modal */}
+              {editingDisplayName && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 pointer-events-auto">
+                  <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-md mx-4">
+                    <h4 className="text-lg font-bold text-gray-900 mb-4">編輯姓名</h4>
+                    <div className="space-y-3">
+                      <div>
+                        <label className="block text-xs font-medium text-gray-700 mb-1">新姓名</label>
+                        <input
+                          type="text"
+                          value={tempDisplayName}
+                          onChange={(e) => setTempDisplayName(e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                          autoFocus
+                        />
+                      </div>
+                      <div className="flex items-center gap-2 pt-2">
+                        <button
+                          onClick={handleSaveDisplayName}
+                          disabled={updateDisplayNameMutation.isPending}
+                          className="flex-1 px-4 py-2 bg-primary-500 text-white rounded-lg text-sm hover:bg-primary-600 transition-colors disabled:opacity-50"
+                        >
+                          {updateDisplayNameMutation.isPending ? <Loader2 size={14} className="animate-spin" /> : '保存'}
+                        </button>
+                        <button
+                          onClick={() => setEditingDisplayName(false)}
+                          className="flex-1 px-4 py-2 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+                        >
+                          取消
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>

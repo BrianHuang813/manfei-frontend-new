@@ -86,6 +86,14 @@ export const AuthProvider = ({ children }) => {
     setUser(null)
   }
 
+  const updateUser = (updatedUserData) => {
+    // Merge updated user data with current user state
+    setUser((prevUser) => ({
+      ...prevUser,
+      ...updatedUserData,
+    }))
+  }
+
   const refreshToken = async () => {
     try {
       const refresh = localStorage.getItem('refresh_token')
@@ -112,6 +120,7 @@ export const AuthProvider = ({ children }) => {
     loading,
     login,
     logout,
+    updateUser,
     refreshToken,
     isAuthenticated: !!user,
     isAdmin: user?.role === 'admin',

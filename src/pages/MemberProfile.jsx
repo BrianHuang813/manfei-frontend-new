@@ -1,9 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
-import { fetchMyProfile, fetchMyTransactions } from '../api/member'
-import { Loader2, AlertCircle, ArrowLeft } from 'lucide-react'
+import { fetchMyProfile, fetchMyTransactions, updateMyProfile } from '../api/member'
+import { Loader2, AlertCircle, ArrowLeft, Edit } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
+import { getErrorMessage } from '../utils/errorMessage'
 
 // Tier display config — no gradients, unified brand-gold palette
 const TIER_CONFIG = {
@@ -23,7 +26,10 @@ const formatMemberId = (id) => {
 }
 
 const MemberProfile = () => {
-  const { user } = useAuth()
+  const { user, updateUser } = useAuth()
+  const queryClient = useQueryClient()
+  const [isEditingName, setIsEditingName] = useState(false)
+  const [editingName, setEditingName] = useState('')
 
   const {
     data: profile,
@@ -44,6 +50,31 @@ const MemberProfile = () => {
     queryFn: () => fetchMyTransactions(),
     enabled: !!user,
   })
+
+  const updateNameMutation = useMutation({
+    mutationFn: (displayName) => updateMyProfile({ display_name: displayName }),
+    onSuccess: (updatedProfile) => {
+      queryClient.invalidateQueries({ queryKey: ['my-profile'] })
+      updateUser(updatedProfile)
+      setIsEditingName(false)
+    },
+    onError: (err) => {
+      window.alert(getErrorMessage(err, '更新失敗'))
+    },
+  })
+
+  const handleStartEditName = () => {
+    setEditingName(profile?.display_name || '')
+    setIsEditingName(true)
+  }
+
+  const handleSaveName = () => {
+    if (!editingName.trim()) {
+      window.alert('姓名不能為空')
+      return
+    }
+    updateNameMutation.mutate(editingName.trim())
+  }
 
   const isLoading = profileLoading || txnLoading
 
@@ -117,8 +148,16 @@ const MemberProfile = () => {
             </p>
 
             {/* Member name in serif */}
-            <h1 className="text-3xl font-serif font-light text-stone-800 mt-3 mb-5 leading-none">
+            <h1 className="text-3xl font-serif font-light text-stone-800 mt-3 mb-5 leading-none flex items-center gap-3">
               {profile?.display_name || '會員'}
+              <button
+                onClick={handleStartEditName}
+                disabled={updateNameMutation.isPending}
+                className="p-1 text-stone-400 hover:text-[#A89070] transition-colors"
+                title="編輯姓名"
+              >
+                <Edit size={18} />
+              </button>
             </h1>
 
             {/* Tier badge + privileges link */}
@@ -168,7 +207,17 @@ const MemberProfile = () => {
             <div className="divide-y divide-stone-100">
               <div className="flex items-center justify-between py-3">
                 <span className="text-sm text-stone-400">姓名</span>
-                <span className="text-sm text-stone-800">{profile?.display_name || '—'}</span>
+                <div className="flex items-center gap-3">
+                  <span className="text-sm text-stone-800">{profile?.display_name || '—'}</span>
+                  <button
+                    onClick={handleStartEditName}
+                    disabled={updateNameMutation.isPending}
+                    className="p-0.5 text-stone-400 hover:text-[#A89070] transition-colors"
+                    title="編輯姓名"
+                  >
+                    <Edit size={14} />
+                  </button>
+                </div>
               </div>
               <div className="flex items-center justify-between py-3">
                 <span className="text-sm text-stone-400">會員等級</span>
@@ -280,6 +329,37 @@ const MemberProfile = () => {
           </div>
 
         </div>
+
+        {/* Edit Name Modal */}
+        {isEditingName && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+            <div className="bg-white rounded-sm shadow-lg p-8 w-full max-w-md mx-4">
+              <h3 className="text-lg font-serif font-light text-stone-800 mb-6">編輯姓名</h3>
+              <input
+                type="text"
+                value={editingName}
+                onChange={(e) => setEditingName(e.target.value)}
+                className="w-full px-4 py-2 border border-stone-200 rounded-sm text-sm focus:ring-2 focus:ring-[#A89070] focus:border-[#A89070]"
+                autoFocus
+              />
+              <div className="flex items-center gap-3 mt-6">
+                <button
+                  onClick={handleSaveName}
+                  disabled={updateNameMutation.isPending}
+                  className="flex-1 px-6 py-2 bg-[#A89070] text-white rounded-sm text-sm hover:bg-[#947a5f] transition-colors disabled:opacity-50"
+                >
+                  {updateNameMutation.isPending ? <Loader2 size={14} className="inline animate-spin" /> : '保存'}
+                </button>
+                <button
+                  onClick={() => setIsEditingName(false)}
+                  className="flex-1 px-6 py-2 border border-stone-200 text-stone-600 rounded-sm text-sm hover:bg-stone-50 transition-colors"
+                >
+                  取消
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </>
   )

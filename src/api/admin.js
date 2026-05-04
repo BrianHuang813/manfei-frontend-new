@@ -322,3 +322,37 @@ export const deleteTransaction = async (userId, txnId) => {
   const { data } = await api.delete(`/api/admin/customers/${userId}/transactions/${txnId}`)
   return data
 }
+
+/**
+ * Update a transaction record (service_name, amount, transaction_date).
+ * @param {string} userId - UUID string
+ * @param {string} txnId - UUID string
+ * @param {Object} txnData - { service_name?, amount?, transaction_date? }
+ * @returns {Promise<Object>} Updated transaction
+ */
+export const updateTransaction = async (userId, txnId, txnData) => {
+  const { data } = await api.put(`/api/admin/customers/${userId}/transactions/${txnId}`, txnData)
+  return data
+}
+
+/**
+ * Batch reorder customer transactions by updating sort_order.
+ * @param {string} userId - UUID string
+ * @param {Array<{id: string, sort_order: number}>} items
+ * @returns {Promise<Object>} Confirmation message
+ */
+export const reorderCustomerTransactions = async (userId, items) => {
+  const { data } = await api.patch(`/api/admin/customers/${userId}/transactions/reorder`, { items })
+  return data
+}
+
+/**
+ * Update a customer's profile (display_name).
+ * @param {string} userId - UUID string
+ * @param {Object} profileData - { display_name }
+ * @returns {Promise<Object>} Updated user
+ */
+export const updateCustomerDisplayName = async (userId, profileData) => {
+  const { data } = await api.patch(`/api/admin/customers/${userId}/profile`, profileData)
+  return data
+}
