@@ -242,6 +242,7 @@ const CustomerDetailModal = ({ userId, onClose }) => {
       setPayingTxn(null)
       setPayAmount('')
     },
+    onError: (err) => { window.alert(getErrorMessage(err, '繳款失敗')) },
   })
 
   const reorderTxnMutation = useMutation({
@@ -694,10 +695,10 @@ const CustomerDetailModal = ({ userId, onClose }) => {
                       <div className="flex items-center gap-2 pt-2">
                         <button
                           onClick={() => {
-                            if (!payAmount) return
+                            if (!payAmount || parseInt(payAmount, 10) <= 0) return
                             payInstallmentMutation.mutate({ txnId: payingTxn.id, amount: parseInt(payAmount, 10) })
                           }}
-                          disabled={!payAmount || payInstallmentMutation.isPending}
+                          disabled={!payAmount || parseInt(payAmount, 10) <= 0 || payInstallmentMutation.isPending}
                           className="flex-1 px-4 py-2 bg-primary-500 text-white rounded-lg text-sm hover:bg-primary-600 transition-colors disabled:opacity-50"
                         >
                           {payInstallmentMutation.isPending ? '處理中...' : '確認繳款'}
