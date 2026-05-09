@@ -670,6 +670,50 @@ const CustomerDetailModal = ({ userId, onClose }) => {
                 </div>
               )}
 
+              {/* Pay Installment Modal */}
+              {payingTxn && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 pointer-events-auto">
+                  <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-sm mx-4">
+                    <h4 className="text-lg font-bold text-gray-900 mb-1">記錄繳款</h4>
+                    <p className="text-xs text-gray-400 mb-4">
+                      第 {payingTxn.paid_installments + 1} / {payingTxn.total_installments} 期・
+                      剩餘 NT${(payingTxn.amount - payingTxn.paid_amount).toLocaleString()}
+                    </p>
+                    <div className="space-y-3">
+                      <div>
+                        <label className="block text-xs font-medium text-gray-700 mb-1">本次繳款金額 (NT$)</label>
+                        <input
+                          type="number"
+                          min="0"
+                          value={payAmount}
+                          onChange={(e) => setPayAmount(e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                          autoFocus
+                        />
+                      </div>
+                      <div className="flex items-center gap-2 pt-2">
+                        <button
+                          onClick={() => {
+                            if (!payAmount) return
+                            payInstallmentMutation.mutate({ txnId: payingTxn.id, amount: parseInt(payAmount, 10) })
+                          }}
+                          disabled={!payAmount || payInstallmentMutation.isPending}
+                          className="flex-1 px-4 py-2 bg-primary-500 text-white rounded-lg text-sm hover:bg-primary-600 transition-colors disabled:opacity-50"
+                        >
+                          {payInstallmentMutation.isPending ? '處理中...' : '確認繳款'}
+                        </button>
+                        <button
+                          onClick={() => { setPayingTxn(null); setPayAmount('') }}
+                          className="flex-1 px-4 py-2 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+                        >
+                          取消
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Edit Display Name Modal */}
               {editingDisplayName && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 pointer-events-auto">
