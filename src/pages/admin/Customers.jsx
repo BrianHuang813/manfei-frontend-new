@@ -172,7 +172,13 @@ const TierSelector = ({ currentTier, userId, onTierChange, isLoading }) => {
 
 const CustomerDetailModal = ({ userId, onClose }) => {
   const queryClient = useQueryClient()
-  const [newTxn, setNewTxn] = useState({ service_name: '', amount: '', transaction_date: null })
+  const [newTxn, setNewTxn] = useState({
+    service_name: '',
+    amount: '',
+    transaction_date: null,
+    is_installment: false,
+    total_installments: '',
+  })
   const [showAddForm, setShowAddForm] = useState(false)
 
   const { data: customer, isLoading, isError } = useQuery({
@@ -186,7 +192,7 @@ const CustomerDetailModal = ({ userId, onClose }) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-customer-detail', userId] })
       queryClient.invalidateQueries({ queryKey: ['admin-customers'] })
-      setNewTxn({ service_name: '', amount: '', transaction_date: null })
+      setNewTxn({ service_name: '', amount: '', transaction_date: null, is_installment: false, total_installments: '' })
       setShowAddForm(false)
     },
     onError: (err) => {
@@ -255,6 +261,11 @@ const CustomerDetailModal = ({ userId, onClose }) => {
       service_name: newTxn.service_name.trim(),
       amount: parseInt(newTxn.amount, 10),
       transaction_date: newTxn.transaction_date || undefined,
+      is_installment: newTxn.is_installment,
+      total_installments: newTxn.is_installment ? parseInt(newTxn.total_installments, 10) : undefined,
+      amount_per_installment: newTxn.is_installment && newTxn.amount && newTxn.total_installments
+        ? Math.round(parseInt(newTxn.amount, 10) / parseInt(newTxn.total_installments, 10))
+        : undefined,
     })
   }
 
@@ -438,6 +449,42 @@ const CustomerDetailModal = ({ userId, onClose }) => {
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                         required
                       />
+                    </div>
+                    <div>
+                      <label className="flex items-center gap-2 cursor-pointer select-none">
+                        <input
+                          type="checkbox"
+                          checked={newTxn.is_installment}
+                          onChange={(e) => setNewTxn((p) => ({ ...p, is_installment: e.target.checked, total_installments: '' }))}
+                          className="rounded border-gray-300 text-primary-500 focus:ring-primary-500"
+                        />
+                        <span className="text-xs font-medium text-gray-700">分期付款</span>
+                      </label>
+                      {newTxn.is_installment && (
+                        <div className="mt-2 flex items-center gap-3">
+                          <div className="flex-1">
+                            <label className="block text-xs text-gray-500 mb-1">總期數</label>
+                            <input
+                              type="number"
+                              min="2"
+                              max="120"
+                              value={newTxn.total_installments}
+                              onChange={(e) => setNewTxn((p) => ({ ...p, total_installments: e.target.value }))}
+                              placeholder="例：3"
+                              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                              required
+                            />
+                          </div>
+                          {newTxn.amount && newTxn.total_installments && (
+                            <div className="flex-1">
+                              <p className="text-xs text-gray-500 mb-1">每期預設</p>
+                              <p className="text-sm font-semibold text-primary-600">
+                                NT${Math.round(parseInt(newTxn.amount, 10) / parseInt(newTxn.total_installments, 10)).toLocaleString()}
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
                     <div>
                       <label className="block text-xs font-medium text-gray-700 mb-1">消費日期（選填，預設今日）</label>
