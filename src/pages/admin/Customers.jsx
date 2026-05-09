@@ -354,7 +354,7 @@ const CustomerDetailModal = ({ userId, onClose }) => {
       {/* Modal */}
       <div className="fixed inset-0 z-50 flex items-start justify-center pt-12 px-4 pointer-events-none">
         <div
-          className="bg-white rounded-2xl shadow-2xl border border-gray-200 w-full max-w-2xl max-h-[85vh] overflow-y-auto pointer-events-auto"
+          className="bg-white rounded-2xl shadow-2xl border border-gray-200 w-full max-w-2xl max-h-[85vh] overflow-y-auto scrollbar-modal pointer-events-auto"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
@@ -553,7 +553,7 @@ const CustomerDetailModal = ({ userId, onClose }) => {
                           </p>
                           {txn.is_installment && (
                             <p className="text-xs mt-0.5">
-                              <span className={txn.paid_installments >= txn.total_installments ? 'text-green-600 font-medium' : 'text-amber-600 font-medium'}>
+                              <span className={txn.paid_installments >= txn.total_installments ? 'text-green-600 font-medium' : 'text-primary-600 font-medium'}>
                                 已繳 {txn.paid_installments}/{txn.total_installments} 期
                               </span>
                               {txn.paid_installments < txn.total_installments && (
@@ -576,7 +576,7 @@ const CustomerDetailModal = ({ userId, onClose }) => {
                                   setPayingTxn(txn)
                                   setPayAmount(String(txn.amount_per_installment || ''))
                                 }}
-                                className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200 rounded-lg hover:bg-amber-100 transition-colors"
+                                className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium bg-primary-50 text-primary-700 border border-primary-200 rounded-lg hover:bg-primary-100 transition-colors"
                               >
                                 記錄繳款
                               </button>
