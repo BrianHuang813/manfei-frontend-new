@@ -223,6 +223,7 @@ const CustomerDetailModal = ({ userId, onClose }) => {
       service_name: payload.service_name,
       amount: payload.amount,
       transaction_date: payload.transaction_date,
+      is_installment: payload.is_installment,
       total_installments: payload.total_installments,
       amount_per_installment: payload.amount_per_installment,
     }),
@@ -301,13 +302,15 @@ const CustomerDetailModal = ({ userId, onClose }) => {
 
   const handleSaveEditTxn = () => {
     if (!editingTxn.service_name.trim() || !editingTxn.amount) return
+    if (editingTxn.is_installment && (!editingTxn.total_installments || !editingTxn.amount_per_installment)) return
     updateTxnMutation.mutate({
       txnId: editingTxn.id,
       service_name: editingTxn.service_name.trim(),
       amount: parseInt(editingTxn.amount, 10),
       transaction_date: editingTxn.transaction_date,
-      total_installments: editingTxn.total_installments || undefined,
-      amount_per_installment: editingTxn.amount_per_installment || undefined,
+      is_installment: editingTxn.is_installment,
+      total_installments: editingTxn.is_installment ? (editingTxn.total_installments || undefined) : undefined,
+      amount_per_installment: editingTxn.is_installment ? (editingTxn.amount_per_installment || undefined) : undefined,
     })
   }
 
@@ -656,38 +659,61 @@ const CustomerDetailModal = ({ userId, onClose }) => {
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                         />
                       </div>
-                      {editingTxn.is_installment && (
-                        <div className="space-y-2 pt-1 border-t border-gray-100">
-                          <p className="text-xs font-medium text-gray-500">分期資訊</p>
-                          <div className="flex gap-3">
-                            <div className="flex-1">
-                              <label className="block text-xs text-gray-500 mb-1">總期數</label>
-                              <input
-                                type="number"
-                                min="2"
-                                max="120"
-                                value={editingTxn.total_installments || ''}
-                                onChange={(e) => setEditingTxn((p) => ({ ...p, total_installments: parseInt(e.target.value, 10) || null }))}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                              />
+                      <div className="pt-1 border-t border-gray-100 space-y-2">
+                        <label className="flex items-center gap-2 select-none">
+                          <input
+                            type="checkbox"
+                            checked={editingTxn.is_installment}
+                            disabled={editingTxn.paid_installments > 0}
+                            onChange={(e) => {
+                              const on = e.target.checked
+                              setEditingTxn((p) => ({
+                                ...p,
+                                is_installment: on,
+                                ...(on ? {} : { total_installments: null, amount_per_installment: null }),
+                              }))
+                            }}
+                            className="rounded border-gray-300 text-primary-500 focus:ring-primary-500 disabled:opacity-40 disabled:cursor-not-allowed"
+                          />
+                          <span className="text-xs font-medium text-gray-700">分期付款</span>
+                          {editingTxn.paid_installments > 0 && (
+                            <span className="text-xs text-gray-400">（已有繳款紀錄，無法變更）</span>
+                          )}
+                        </label>
+                        {editingTxn.is_installment && (
+                          <div className="space-y-2">
+                            <div className="flex gap-3">
+                              <div className="flex-1">
+                                <label className="block text-xs text-gray-500 mb-1">總期數</label>
+                                <input
+                                  type="number"
+                                  min="2"
+                                  max="120"
+                                  value={editingTxn.total_installments || ''}
+                                  onChange={(e) => setEditingTxn((p) => ({ ...p, total_installments: parseInt(e.target.value, 10) || null }))}
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                                />
+                              </div>
+                              <div className="flex-1">
+                                <label className="block text-xs text-gray-500 mb-1">每期金額</label>
+                                <input
+                                  type="number"
+                                  min="0"
+                                  value={editingTxn.amount_per_installment || ''}
+                                  onChange={(e) => setEditingTxn((p) => ({ ...p, amount_per_installment: parseInt(e.target.value, 10) || null }))}
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                                />
+                              </div>
                             </div>
-                            <div className="flex-1">
-                              <label className="block text-xs text-gray-500 mb-1">每期金額</label>
-                              <input
-                                type="number"
-                                min="0"
-                                value={editingTxn.amount_per_installment || ''}
-                                onChange={(e) => setEditingTxn((p) => ({ ...p, amount_per_installment: parseInt(e.target.value, 10) || null }))}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                              />
-                            </div>
+                            {editingTxn.paid_installments > 0 && (
+                              <div className="flex gap-4 text-xs text-gray-400">
+                                <span>已繳：{editingTxn.paid_installments} 期</span>
+                                <span>已繳金額：NT${(editingTxn.paid_amount || 0).toLocaleString()}</span>
+                              </div>
+                            )}
                           </div>
-                          <div className="flex gap-4 text-xs text-gray-400">
-                            <span>已繳：{editingTxn.paid_installments} 期</span>
-                            <span>已繳金額：NT${(editingTxn.paid_amount || 0).toLocaleString()}</span>
-                          </div>
-                        </div>
-                      )}
+                        )}
+                      </div>
                       <div className="flex items-center gap-2 pt-2">
                         <button
                           onClick={handleSaveEditTxn}
