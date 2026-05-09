@@ -418,12 +418,12 @@ const CustomerDetailModal = ({ userId, onClose }) => {
                   <form onSubmit={handleAddTxn} className="bg-primary-50 rounded-xl p-4 mb-4 space-y-3">
                     <div>
                       <label className="block text-xs font-medium text-gray-700 mb-1">服務/項目名稱</label>
-                      <input
-                        type="text"
+                      <textarea
+                        rows={2}
                         value={newTxn.service_name}
                         onChange={(e) => setNewTxn((p) => ({ ...p, service_name: e.target.value }))}
                         placeholder="例：深層護膚療程"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 resize-none"
                         required
                       />
                     </div>
@@ -479,7 +479,7 @@ const CustomerDetailModal = ({ userId, onClose }) => {
                     {customer.transactions?.map((txn, index) => (
                       <div key={txn.id} className="flex items-center justify-between py-3">
                         <div className="flex-1">
-                          <p className="text-sm font-medium text-gray-900">{txn.service_name}</p>
+                          <p className="text-sm font-medium text-gray-900 whitespace-pre-wrap">{txn.service_name}</p>
                           <p className="text-xs text-gray-400 mt-0.5">
                             消費日期: {txn.transaction_date ? new Date(txn.transaction_date).toLocaleDateString('zh-TW', {
                               year: 'numeric', month: 'short', day: 'numeric',
@@ -539,11 +539,11 @@ const CustomerDetailModal = ({ userId, onClose }) => {
                     <div className="space-y-3">
                       <div>
                         <label className="block text-xs font-medium text-gray-700 mb-1">服務/項目名稱</label>
-                        <input
-                          type="text"
+                        <textarea
+                          rows={2}
                           value={editingTxn.service_name}
                           onChange={(e) => setEditingTxn((p) => ({ ...p, service_name: e.target.value }))}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 resize-none"
                         />
                       </div>
                       <div>
