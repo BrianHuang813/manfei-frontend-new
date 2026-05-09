@@ -257,6 +257,7 @@ const CustomerDetailModal = ({ userId, onClose }) => {
   const handleAddTxn = (e) => {
     e.preventDefault()
     if (!newTxn.service_name.trim() || !newTxn.amount) return
+    if (newTxn.is_installment && !newTxn.total_installments) return
     addTxnMutation.mutate({
       service_name: newTxn.service_name.trim(),
       amount: parseInt(newTxn.amount, 10),
@@ -475,7 +476,7 @@ const CustomerDetailModal = ({ userId, onClose }) => {
                               required
                             />
                           </div>
-                          {newTxn.amount && newTxn.total_installments && (
+                          {newTxn.amount && parseInt(newTxn.total_installments, 10) >= 2 && (
                             <div className="flex-1">
                               <p className="text-xs text-gray-500 mb-1">每期預設</p>
                               <p className="text-sm font-semibold text-primary-600">
