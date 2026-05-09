@@ -356,3 +356,15 @@ export const updateCustomerDisplayName = async (userId, profileData) => {
   const { data } = await api.patch(`/api/admin/customers/${userId}/profile`, profileData)
   return data
 }
+
+/**
+ * Record one installment payment for a transaction.
+ * @param {string} userId
+ * @param {string} txnId
+ * @param {{ amount: number }} payData
+ * @returns {Promise<Object>} Updated transaction
+ */
+export const payInstallment = async (userId, txnId, payData) => {
+  const { data } = await api.post(`/api/admin/customers/${userId}/transactions/${txnId}/pay`, payData)
+  return data
+}
