@@ -10,6 +10,7 @@ import {
   updateTransaction,
   reorderCustomerTransactions,
   updateCustomerDisplayName,
+  payInstallment,
 } from '../../api/admin'
 import { getErrorMessage } from '../../utils/errorMessage'
 import {
@@ -212,6 +213,8 @@ const CustomerDetailModal = ({ userId, onClose }) => {
   })
 
   const [editingTxn, setEditingTxn] = useState(null)
+  const [payingTxn, setPayingTxn] = useState(null)
+  const [payAmount, setPayAmount] = useState('')
   const [editingDisplayName, setEditingDisplayName] = useState(null)
   const [tempDisplayName, setTempDisplayName] = useState('')
 
@@ -228,6 +231,16 @@ const CustomerDetailModal = ({ userId, onClose }) => {
     },
     onError: (err) => {
       window.alert(getErrorMessage(err, '編輯失敗'))
+    },
+  })
+
+  const payInstallmentMutation = useMutation({
+    mutationFn: ({ txnId, amount }) => payInstallment(userId, txnId, { amount }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin-customer-detail', userId] })
+      queryClient.invalidateQueries({ queryKey: ['admin-customers'] })
+      setPayingTxn(null)
+      setPayAmount('')
     },
   })
 
@@ -533,12 +546,36 @@ const CustomerDetailModal = ({ userId, onClose }) => {
                               year: 'numeric', month: 'short', day: 'numeric',
                             }) : '未設定'}
                           </p>
+                          {txn.is_installment && (
+                            <p className="text-xs mt-0.5">
+                              <span className={txn.paid_installments >= txn.total_installments ? 'text-green-600 font-medium' : 'text-amber-600 font-medium'}>
+                                已繳 {txn.paid_installments}/{txn.total_installments} 期
+                              </span>
+                              {txn.paid_installments < txn.total_installments && (
+                                <span className="text-gray-400">・剩餘 NT${(txn.amount - txn.paid_amount).toLocaleString()}</span>
+                              )}
+                              {txn.paid_installments >= txn.total_installments && (
+                                <span className="text-green-600">・已繳清</span>
+                              )}
+                            </p>
+                          )}
                         </div>
                         <div className="flex items-center gap-2">
                           <span className="text-sm font-semibold text-gray-900 whitespace-nowrap">
                             NT${txn.amount?.toLocaleString()}
                           </span>
                           <div className="flex items-center gap-1">
+                            {txn.is_installment && txn.paid_installments < txn.total_installments && (
+                              <button
+                                onClick={() => {
+                                  setPayingTxn(txn)
+                                  setPayAmount(String(txn.amount_per_installment || ''))
+                                }}
+                                className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200 rounded-lg hover:bg-amber-100 transition-colors"
+                              >
+                                記錄繳款
+                              </button>
+                            )}
                             <button
                               onClick={() => handleMoveTxn(index, 'up')}
                               disabled={index === 0 || reorderTxnMutation.isPending}
