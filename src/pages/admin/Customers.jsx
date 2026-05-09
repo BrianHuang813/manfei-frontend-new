@@ -665,6 +665,7 @@ const CustomerDetailModal = ({ userId, onClose }) => {
                               <input
                                 type="number"
                                 min="2"
+                                max="120"
                                 value={editingTxn.total_installments || ''}
                                 onChange={(e) => setEditingTxn((p) => ({ ...p, total_installments: parseInt(e.target.value, 10) || null }))}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
