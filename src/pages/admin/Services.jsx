@@ -66,7 +66,7 @@ const StatusToggle = ({ isActive, isLoading, onToggle }) => (
   <button
     onClick={onToggle}
     disabled={isLoading}
-    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${
+    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${
       isActive ? 'bg-green-500' : 'bg-red-400'
     }`}
     title={isActive ? '上架中 — 點擊下架' : '已下架 — 點擊上架'}
@@ -91,16 +91,16 @@ const StatusToggle = ({ isActive, isLoading, onToggle }) => (
 const TableSkeleton = () => (
   <div className="animate-pulse">
     {[...Array(5)].map((_, i) => (
-      <div key={i} className="flex items-center gap-4 p-4 border-b border-gray-100">
+      <div key={i} className="flex items-center gap-4 p-4 border-b border-primary-100">
         <div className="flex-1 space-y-2">
-          <div className="h-4 bg-gray-200 rounded w-40" />
-          <div className="h-3 bg-gray-100 rounded w-24" />
+          <div className="h-4 bg-primary-200 rounded w-40" />
+          <div className="h-3 bg-primary-100 rounded w-24" />
         </div>
-        <div className="h-6 bg-gray-200 rounded-full w-16" />
-        <div className="h-4 bg-gray-200 rounded w-20" />
-        <div className="h-4 bg-gray-200 rounded w-16" />
-        <div className="h-6 bg-gray-200 rounded w-11" />
-        <div className="h-8 bg-gray-200 rounded w-20" />
+        <div className="h-6 bg-primary-200 rounded-full w-16" />
+        <div className="h-4 bg-primary-200 rounded w-20" />
+        <div className="h-4 bg-primary-200 rounded w-16" />
+        <div className="h-6 bg-primary-200 rounded w-11" />
+        <div className="h-8 bg-primary-200 rounded w-20" />
       </div>
     ))}
   </div>
@@ -169,7 +169,7 @@ const ServiceModal = ({ isOpen, mode, initialData, categories, onClose, onSubmit
         <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
           {/* Name */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="services-f1">
+            <label className="block text-sm font-medium text-secondary mb-1" htmlFor="services-f1">
               服務名稱 <span className="text-red-500">*</span>
             </label>
             <input id="services-f1"
@@ -180,13 +180,13 @@ const ServiceModal = ({ isOpen, mode, initialData, categories, onClose, onSubmit
               required
               maxLength={255}
               placeholder="例：臉部深層清潔"
-              className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full px-3 py-2.5 border border-primary-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold focus:border-gold"
             />
           </div>
 
           {/* Category */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="services-f2">
+            <label className="block text-sm font-medium text-secondary mb-1" htmlFor="services-f2">
               分類 <span className="text-red-500">*</span>
             </label>
             <input id="services-f2"
@@ -198,7 +198,7 @@ const ServiceModal = ({ isOpen, mode, initialData, categories, onClose, onSubmit
               maxLength={100}
               list="category-suggestions"
               placeholder="例：臉部護理"
-              className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full px-3 py-2.5 border border-primary-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold focus:border-gold"
             />
             {categories.length > 0 && (
               <datalist id="category-suggestions">
@@ -212,11 +212,11 @@ const ServiceModal = ({ isOpen, mode, initialData, categories, onClose, onSubmit
           {/* Price + Duration row */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="services-f3">
+              <label className="block text-sm font-medium text-secondary mb-1" htmlFor="services-f3">
                 價格 (NT$) <span className="text-red-500">*</span>
               </label>
               <div className="relative">
-                <DollarSign size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+                <DollarSign size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary-400" />
                 <input id="services-f3"
                   type="number"
                   name="price"
@@ -225,16 +225,16 @@ const ServiceModal = ({ isOpen, mode, initialData, categories, onClose, onSubmit
                   required
                   min={0}
                   placeholder="0"
-                  className="w-full pl-9 pr-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  className="w-full pl-9 pr-3 py-2.5 border border-primary-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold focus:border-gold"
                 />
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="services-f4">
+              <label className="block text-sm font-medium text-secondary mb-1" htmlFor="services-f4">
                 時長 (分鐘) <span className="text-red-500">*</span>
               </label>
               <div className="relative">
-                <Clock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+                <Clock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary-400" />
                 <input id="services-f4"
                   type="number"
                   name="duration_min"
@@ -243,7 +243,7 @@ const ServiceModal = ({ isOpen, mode, initialData, categories, onClose, onSubmit
                   required
                   min={1}
                   placeholder="60"
-                  className="w-full pl-9 pr-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  className="w-full pl-9 pr-3 py-2.5 border border-primary-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold focus:border-gold"
                 />
               </div>
             </div>
@@ -251,20 +251,20 @@ const ServiceModal = ({ isOpen, mode, initialData, categories, onClose, onSubmit
 
           {/* Description */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="services-f5">描述</label>
+            <label className="block text-sm font-medium text-secondary mb-1" htmlFor="services-f5">描述</label>
             <textarea id="services-f5"
               name="description"
               value={form.description}
               onChange={handleChange}
               rows={3}
               placeholder="服務內容說明（選填）"
-              className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 resize-none"
+              className="w-full px-3 py-2.5 border border-primary-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold focus:border-gold resize-none"
             />
           </div>
 
           {/* Image URL */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="services-f6">圖片網址</label>
+            <label className="block text-sm font-medium text-secondary mb-1" htmlFor="services-f6">圖片網址</label>
             <input id="services-f6"
               type="url"
               name="image_url"
@@ -272,29 +272,29 @@ const ServiceModal = ({ isOpen, mode, initialData, categories, onClose, onSubmit
               onChange={handleChange}
               maxLength={500}
               placeholder="https://example.com/image.jpg（選填）"
-              className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full px-3 py-2.5 border border-primary-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold focus:border-gold"
             />
           </div>
 
           {/* Sort Order + Active row */}
           <div className="grid grid-cols-2 gap-4 items-end">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="services-f7">排序順序</label>
+              <label className="block text-sm font-medium text-secondary mb-1" htmlFor="services-f7">排序順序</label>
               <input id="services-f7"
                 type="number"
                 name="sort_order"
                 value={form.sort_order}
                 onChange={handleChange}
                 min={0}
-                className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                className="w-full px-3 py-2.5 border border-primary-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold focus:border-gold"
               />
             </div>
             <div className="flex items-center gap-3 pb-1">
-              <label className="text-sm font-medium text-gray-700">上架狀態</label>
+              <label className="text-sm font-medium text-secondary">上架狀態</label>
               <button
                 type="button"
                 onClick={() => setForm((prev) => ({ ...prev, is_active: !prev.is_active }))}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 ${
                   form.is_active ? 'bg-green-500' : 'bg-red-400'
                 }`}
               >
@@ -304,23 +304,23 @@ const ServiceModal = ({ isOpen, mode, initialData, categories, onClose, onSubmit
                   }`}
                 />
               </button>
-              <span className="text-xs text-gray-500">{form.is_active ? '上架' : '下架'}</span>
+              <span className="text-xs text-secondary-400">{form.is_active ? '上架' : '下架'}</span>
             </div>
           </div>
 
           {/* Actions */}
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-primary-100">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              className="px-4 py-2.5 text-sm font-medium text-secondary bg-white border border-primary-300 rounded-lg hover:bg-primary-50 transition-colors"
             >
               取消
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-white bg-primary-500 rounded-lg hover:bg-primary-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-white bg-secondary rounded-lg hover:bg-secondary-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting && <Loader2 size={16} className="animate-spin" />}
               {mode === 'create' ? '新增' : '儲存'}
@@ -497,11 +497,11 @@ const Services = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div>
           <h1 className="text-2xl font-serif font-bold text-secondary">服務項目管理</h1>
-          <p className="text-sm text-gray-500 mt-1">管理所有服務項目的內容與排序</p>
+          <p className="text-sm text-secondary-400 mt-1">管理所有服務項目的內容與排序</p>
         </div>
         <button
           onClick={openCreateModal}
-          className="inline-flex items-center gap-2 px-4 py-2.5 bg-primary-500 text-white text-sm font-medium rounded-lg hover:bg-primary-600 transition-colors shadow-sm"
+          className="inline-flex items-center gap-2 px-4 py-2.5 bg-secondary text-white text-sm font-medium rounded-lg hover:bg-secondary-600 transition-colors shadow-sm"
         >
           <Plus size={18} />
           新增服務
@@ -514,7 +514,7 @@ const Services = () => {
         <div className="relative flex-1 w-full sm:max-w-md">
           <Search
             size={18}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary-400"
           />
           <input
             aria-label="搜尋服務名稱、分類或描述"
@@ -522,17 +522,17 @@ const Services = () => {
             placeholder="搜尋服務名稱、分類或描述..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white"
+            className="w-full pl-10 pr-4 py-2.5 border border-primary-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold focus:border-gold bg-white"
           />
         </div>
 
         {/* Category Filter */}
         <div className="relative">
-          <Filter size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+          <Filter size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary-400" />
           <select aria-label="全部分類"
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
-            className="pl-9 pr-8 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white appearance-none cursor-pointer"
+            className="pl-9 pr-8 py-2.5 border border-primary-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold focus:border-gold bg-white appearance-none cursor-pointer"
           >
             <option value="">全部分類</option>
             {uniqueCategories.map((cat) => (
@@ -545,12 +545,12 @@ const Services = () => {
 
         {/* Stats */}
         {!isLoading && (
-          <div className="flex items-center gap-3 text-xs text-gray-500">
-            <span className="bg-gray-100 px-2.5 py-1 rounded-full">
+          <div className="flex items-center gap-3 text-xs text-secondary-400">
+            <span className="bg-primary-100 px-2.5 py-1 rounded-full">
               共 {services.length} 項服務
             </span>
             {(searchQuery || categoryFilter) && (
-              <span className="bg-primary-50 text-primary-700 px-2.5 py-1 rounded-full">
+              <span className="bg-primary-50 text-secondary px-2.5 py-1 rounded-full">
                 篩選結果：{filteredServices.length} 項
               </span>
             )}
@@ -559,30 +559,30 @@ const Services = () => {
       </div>
 
       {/* Table Card */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      <div className="bg-white rounded-xl shadow-sm border border-primary-200 overflow-hidden">
         {isLoading ? (
           <TableSkeleton />
         ) : isError ? (
           <div className="flex flex-col items-center justify-center py-16 px-4">
             <AlertCircle size={48} className="text-red-400 mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">載入失敗</h3>
-            <p className="text-sm text-gray-500 mb-4">
+            <h3 className="text-lg font-medium text-secondary mb-2">載入失敗</h3>
+            <p className="text-sm text-secondary-400 mb-4">
               {error?.response?.data?.detail || error?.message || '無法取得服務列表'}
             </p>
             <button
               onClick={() => queryClient.invalidateQueries({ queryKey: ['admin-services'] })}
-              className="px-4 py-2 bg-primary-500 text-white rounded-lg text-sm hover:bg-primary-600 transition-colors"
+              className="px-4 py-2 bg-secondary text-white rounded-lg text-sm hover:bg-secondary-600 transition-colors"
             >
               重試
             </button>
           </div>
         ) : filteredServices.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 px-4">
-            <Scissors size={48} className="text-gray-500 mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <Scissors size={48} className="text-secondary-400 mb-4" />
+            <h3 className="text-lg font-medium text-secondary mb-2">
               {searchQuery || categoryFilter ? '找不到符合的服務' : '目前沒有服務項目'}
             </h3>
-            <p className="text-sm text-gray-500 mb-2">
+            <p className="text-sm text-secondary-400 mb-2">
               {searchQuery || categoryFilter
                 ? '請嘗試不同的搜尋關鍵字或分類'
                 : '點擊「新增服務」按鈕開始建立'}
@@ -590,7 +590,7 @@ const Services = () => {
             {!searchQuery && !categoryFilter && (
               <button
                 onClick={openCreateModal}
-                className="mt-2 inline-flex items-center gap-2 px-4 py-2 bg-primary-500 text-white text-sm rounded-lg hover:bg-primary-600 transition-colors"
+                className="mt-2 inline-flex items-center gap-2 px-4 py-2 bg-secondary text-white text-sm rounded-lg hover:bg-secondary-600 transition-colors"
               >
                 <Plus size={16} />
                 新增第一個服務
@@ -600,7 +600,7 @@ const Services = () => {
         ) : (
           <>
             {/* Table Header */}
-            <div className="hidden md:grid md:grid-cols-12 gap-4 px-6 py-3 bg-gray-50 border-b border-gray-200 text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <div className="hidden md:grid md:grid-cols-12 gap-4 px-6 py-3 bg-primary-50 border-b border-primary-200 text-xs font-medium text-secondary-400 uppercase tracking-wider">
               <div className="col-span-3">服務名稱</div>
               <div className="col-span-2">分類</div>
               <div className="col-span-1 text-right">價格</div>
@@ -611,13 +611,13 @@ const Services = () => {
             </div>
 
             {/* Table Body */}
-            <div className="divide-y divide-gray-100">
+            <div className="divide-y divide-primary-100">
               {filteredServices.map((service) => {
                 const isMutating = mutatingIds[service.id]
                 return (
                   <div
                     key={service.id}
-                    className={`grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-4 px-4 md:px-6 py-4 items-center transition-colors hover:bg-gray-50 ${
+                    className={`grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-4 px-4 md:px-6 py-4 items-center transition-colors hover:bg-primary-50 ${
                       !service.is_active ? 'opacity-60' : ''
                     }`}
                   >
@@ -628,16 +628,16 @@ const Services = () => {
                           <img
                             src={service.image_url}
                             alt={service.name}
-                            className="w-10 h-10 rounded-lg object-cover flex-shrink-0 border border-gray-200"
+                            className="w-10 h-10 rounded-lg object-cover flex-shrink-0 border border-primary-200"
                             onError={(e) => { e.target.style.display = 'none' }}
                           />
                         )}
                         <div className="min-w-0">
-                          <p className="text-sm font-medium text-gray-900 truncate">
+                          <p className="text-sm font-medium text-secondary truncate">
                             {service.name}
                           </p>
                           {service.description && (
-                            <p className="text-xs text-gray-500 truncate mt-0.5">
+                            <p className="text-xs text-secondary-400 truncate mt-0.5">
                               {service.description}
                             </p>
                           )}
@@ -652,22 +652,22 @@ const Services = () => {
 
                     {/* Price */}
                     <div className="md:col-span-1 text-right">
-                      <span className="text-sm font-medium text-gray-900">
+                      <span className="text-sm font-medium text-secondary">
                         {formatPrice(service.price)}
                       </span>
                     </div>
 
                     {/* Duration */}
                     <div className="md:col-span-1 text-center">
-                      <span className="inline-flex items-center gap-1 text-sm text-gray-600">
-                        <Clock size={14} className="text-gray-500" />
+                      <span className="inline-flex items-center gap-1 text-sm text-secondary-400">
+                        <Clock size={14} className="text-secondary-400" />
                         {service.duration_min}分
                       </span>
                     </div>
 
                     {/* Sort Order */}
                     <div className="md:col-span-1 text-center">
-                      <span className="text-sm text-gray-500 font-mono">{service.sort_order}</span>
+                      <span className="text-sm text-secondary-400 font-mono">{service.sort_order}</span>
                     </div>
 
                     {/* Status Toggle */}
@@ -683,7 +683,7 @@ const Services = () => {
                     <div className="md:col-span-3 flex items-center md:justify-end gap-2">
                       <button
                         onClick={() => openEditModal(service)}
-                        className="inline-flex items-center gap-1.5 px-3 py-2.5 min-h-[44px] text-xs font-medium bg-white border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-700 transition-colors"
+                        className="inline-flex items-center gap-1.5 px-3 py-2.5 min-h-[44px] text-xs font-medium bg-white border border-primary-300 rounded-lg hover:bg-primary-50 text-secondary transition-colors"
                       >
                         <Pencil size={14} />
                         編輯
@@ -711,7 +711,7 @@ const Services = () => {
 
       {/* Footer Info */}
       {!isLoading && !isError && filteredServices.length > 0 && (
-        <p className="text-xs text-gray-500 mt-4 text-center">
+        <p className="text-xs text-secondary-400 mt-4 text-center">
           下架的服務不會顯示在前台頁面。排序順序數字越小排越前面。
         </p>
       )}

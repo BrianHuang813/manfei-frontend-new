@@ -79,22 +79,22 @@ const Staff = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary-500 border-r-transparent"></div>
-          <p className="mt-4 text-gray-600">載入中...</p>
+          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-gold border-r-transparent"></div>
+          <p className="mt-4 text-secondary-400">載入中...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-primary-50">
       {/* Header */}
       <header className="bg-white shadow-sm">
         <div className="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-gray-900">員工工作記錄</h1>
+          <h1 className="text-2xl font-bold text-secondary">員工工作記錄</h1>
           <button
             onClick={logout}
-            className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900"
+            className="px-4 py-2 text-sm text-secondary-400 hover:text-secondary"
           >
             登出
           </button>
@@ -105,7 +105,7 @@ const Staff = () => {
       <main className="max-w-4xl mx-auto px-4 py-8">
         {/* Welcome Message */}
         <div className="bg-primary-50 border border-primary-200 rounded-lg p-4 mb-6">
-          <p className="text-primary-800">
+          <p className="text-secondary">
             歡迎，{user?.display_name || '員工'}！請記錄今日的工作內容。
           </p>
         </div>
@@ -125,21 +125,21 @@ const Staff = () => {
 
         {/* Work Log Form */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">新增工作記錄</h2>
+          <h2 className="text-xl font-semibold text-secondary mb-6">新增工作記錄</h2>
           
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Date Field (Readonly - Today Only) */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="staff-f1">
+              <label className="block text-sm font-medium text-secondary mb-2" htmlFor="staff-f1">
                 日期
               </label>
               <input id="staff-f1"
                 type="date"
                 value={formData.date}
                 readOnly
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-600 cursor-not-allowed"
+                className="w-full px-4 py-2 border border-primary-300 rounded-lg bg-primary-50 text-secondary-400 cursor-not-allowed"
               />
-              <p className="mt-1 text-sm text-gray-500">只能記錄今日的工作</p>
+              <p className="mt-1 text-sm text-secondary-400">只能記錄今日的工作</p>
             </div>
 
             {/* Task Type Toggle */}
@@ -151,9 +151,9 @@ const Staff = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, useCustomTask: e.target.checked })
                   }
-                  className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                  className="w-4 h-4 text-secondary border-primary-300 rounded focus:ring-gold"
                 />
-                <span className="ml-2 text-sm text-gray-700">
+                <span className="ml-2 text-sm text-secondary">
                   其他工作（非服務項目）
                 </span>
               </label>
@@ -162,7 +162,7 @@ const Staff = () => {
             {/* Service Dropdown OR Custom Task Input */}
             {!formData.useCustomTask ? (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="staff-f2">
+                <label className="block text-sm font-medium text-secondary mb-2" htmlFor="staff-f2">
                   服務項目
                 </label>
                 <select id="staff-f2"
@@ -171,7 +171,7 @@ const Staff = () => {
                     setFormData({ ...formData, serviceId: e.target.value })
                   }
                   required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-primary-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent"
                 >
                   <option value="">請選擇服務項目</option>
                   {services.map((service) => (
@@ -183,7 +183,7 @@ const Staff = () => {
               </div>
             ) : (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="staff-f3">
+                <label className="block text-sm font-medium text-secondary mb-2" htmlFor="staff-f3">
                   工作內容
                 </label>
                 <input id="staff-f3"
@@ -194,14 +194,14 @@ const Staff = () => {
                   }
                   placeholder="例如：清潔、備料、訓練等"
                   required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-primary-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent"
                 />
               </div>
             )}
 
             {/* Hours Input */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="staff-f4">
+              <label className="block text-sm font-medium text-secondary mb-2" htmlFor="staff-f4">
                 工作時數
               </label>
               <input id="staff-f4"
@@ -214,7 +214,7 @@ const Staff = () => {
                   setFormData({ ...formData, hours: e.target.value })
                 }
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-primary-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent"
                 placeholder="例如：2.5"
               />
             </div>
@@ -223,7 +223,7 @@ const Staff = () => {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full px-6 py-3 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors font-medium disabled:bg-gray-300 disabled:cursor-not-allowed"
+              className="w-full px-6 py-3 bg-secondary text-white rounded-lg hover:bg-secondary-600 transition-colors font-medium disabled:bg-gray-300 disabled:cursor-not-allowed"
             >
               {submitting ? '提交中...' : '提交記錄'}
             </button>
@@ -232,39 +232,39 @@ const Staff = () => {
 
         {/* Today's Logs */}
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">今日記錄</h2>
+          <h2 className="text-xl font-semibold text-secondary mb-6">今日記錄</h2>
           
           {todayLogs.length === 0 ? (
-            <p className="text-gray-500 text-center py-8">尚無今日記錄</p>
+            <p className="text-secondary-400 text-center py-8">尚無今日記錄</p>
           ) : (
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+              <table className="min-w-full divide-y divide-primary-200">
+                <thead className="bg-primary-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-secondary-400 uppercase">
                       時間
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-secondary-400 uppercase">
                       工作內容
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-secondary-400 uppercase">
                       時數
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-white divide-y divide-primary-200">
                   {todayLogs.map((log) => (
                     <tr key={log.id}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-secondary">
                         {new Date(log.created_at).toLocaleTimeString('zh-TW', {
                           hour: '2-digit',
                           minute: '2-digit',
                         })}
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-900">
+                      <td className="px-6 py-4 text-sm text-secondary">
                         {log.service_name || log.custom_task_name}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-secondary">
                         {log.hours} 小時
                       </td>
                     </tr>
@@ -273,10 +273,10 @@ const Staff = () => {
               </table>
               
               {/* Total Hours */}
-              <div className="mt-4 pt-4 border-t border-gray-200 text-right">
-                <span className="text-sm font-medium text-gray-700">
+              <div className="mt-4 pt-4 border-t border-primary-200 text-right">
+                <span className="text-sm font-medium text-secondary">
                   今日總時數：
-                  <span className="text-lg text-primary-600 ml-2">
+                  <span className="text-lg text-secondary ml-2">
                     {todayLogs.reduce((sum, log) => sum + log.hours, 0).toFixed(1)} 小時
                   </span>
                 </span>

@@ -56,7 +56,7 @@ const StatusToggle = ({ isActive, isLoading, onToggle }) => (
   <button
     onClick={onToggle}
     disabled={isLoading}
-    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${
+    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${
       isActive ? 'bg-green-500' : 'bg-red-400'
     }`}
     title={isActive ? '已顯示 — 點擊隱藏' : '已隱藏 — 點擊顯示'}
@@ -128,13 +128,13 @@ const PortfolioModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPendin
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
           {/* Title */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="portfolios-f1">對比圖標題 *</label>
+            <label className="block text-sm font-medium text-secondary mb-1" htmlFor="portfolios-f1">對比圖標題 *</label>
             <input id="portfolios-f1"
               type="text"
               required
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full px-3 py-2 border border-primary-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold"
               placeholder="輸入對比圖標題"
             />
           </div>
@@ -142,24 +142,24 @@ const PortfolioModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPendin
           {/* Category & Service */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="portfolios-f2">分類 *</label>
+              <label className="block text-sm font-medium text-secondary mb-1" htmlFor="portfolios-f2">分類 *</label>
               <input id="portfolios-f2"
                 type="text"
                 required
                 value={form.category}
                 onChange={(e) => setForm({ ...form, category: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                className="w-full px-3 py-2 border border-primary-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold"
                 placeholder="例如：痘痘改善、抗老"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="portfolios-f3">關聯服務（選填）</label>
+              <label className="block text-sm font-medium text-secondary mb-1" htmlFor="portfolios-f3">關聯服務（選填）</label>
               <select id="portfolios-f3"
                 value={form.service_id || ''}
                 onChange={(e) =>
                   setForm({ ...form, service_id: e.target.value ? parseInt(e.target.value) : null })
                 }
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                className="w-full px-3 py-2 border border-primary-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold"
               >
                 <option value="">不關聯</option>
                 {(services || []).map((svc) => (
@@ -181,12 +181,12 @@ const PortfolioModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPendin
 
           {/* Description */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="portfolios-f4">描述</label>
+            <label className="block text-sm font-medium text-secondary mb-1" htmlFor="portfolios-f4">描述</label>
             <textarea id="portfolios-f4"
               rows={3}
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full px-3 py-2 border border-primary-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold"
               placeholder="輸入作品描述"
             />
           </div>
@@ -194,38 +194,38 @@ const PortfolioModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPendin
           {/* Active & Sort Order */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="flex items-center gap-3">
-              <label className="text-sm font-medium text-gray-700">顯示狀態</label>
+              <label className="text-sm font-medium text-secondary">顯示狀態</label>
               <StatusToggle
                 isActive={form.is_active}
                 isLoading={false}
                 onToggle={() => setForm({ ...form, is_active: !form.is_active })}
               />
-              <span className="text-xs text-gray-500">{form.is_active ? '顯示中' : '已隱藏'}</span>
+              <span className="text-xs text-secondary-400">{form.is_active ? '顯示中' : '已隱藏'}</span>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="portfolios-f5">顯示順序</label>
+              <label className="block text-sm font-medium text-secondary mb-1" htmlFor="portfolios-f5">顯示順序</label>
               <input id="portfolios-f5"
                 type="number"
                 value={form.sort_order}
                 onChange={(e) => setForm({ ...form, sort_order: parseInt(e.target.value) || 0 })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                className="w-full px-3 py-2 border border-primary-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold"
               />
             </div>
           </div>
 
           {/* Submit */}
-          <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
+          <div className="flex justify-end gap-3 pt-4 border-t border-primary-100">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+              className="px-4 py-2 text-sm font-medium text-secondary bg-white border border-primary-300 rounded-lg hover:bg-primary-50"
             >
               取消
             </button>
             <button
               type="submit"
               disabled={isPending}
-              className="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 disabled:opacity-50 flex items-center gap-2"
+              className="px-4 py-2 text-sm font-medium text-white bg-secondary rounded-lg hover:bg-secondary-600 disabled:opacity-50 flex items-center gap-2"
             >
               {isPending && <Loader2 size={16} className="animate-spin" />}
               {mode === 'create' ? '新增' : '儲存'}
@@ -365,13 +365,13 @@ const Portfolios = () => {
             <ImageIcon size={28} />
             對比圖管理
           </h2>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-secondary-400 mt-1">
             共 {portfolios.length} 筆對比圖
           </p>
         </div>
         <button
           onClick={openCreate}
-          className="inline-flex items-center gap-2 px-4 py-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors text-sm font-medium shadow-sm"
+          className="inline-flex items-center gap-2 px-4 py-2.5 bg-secondary text-white rounded-lg hover:bg-secondary-600 transition-colors text-sm font-medium shadow-sm"
         >
           <Plus size={18} />
           新增對比圖
@@ -381,22 +381,22 @@ const Portfolios = () => {
       {/* Search & Filter */}
       <div className="flex flex-col sm:flex-row gap-3 mb-6">
         <div className="relative flex-1">
-          <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+          <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary-400" />
           <input
             aria-label="搜尋對比圖標題"
             type="text"
             placeholder="搜尋對比圖標題..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
+            className="w-full pl-10 pr-4 py-2.5 border border-primary-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold text-sm"
           />
         </div>
         <div className="relative">
-          <Filter size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+          <Filter size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary-400" />
           <select aria-label="篩選分類"
             value={filterCategory}
             onChange={(e) => setFilterCategory(e.target.value)}
-            className="pl-9 pr-8 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm appearance-none bg-white"
+            className="pl-9 pr-8 py-2.5 border border-primary-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold text-sm appearance-none bg-white"
           >
             <option value="">所有分類</option>
             {categories.map((cat) => (
@@ -410,18 +410,18 @@ const Portfolios = () => {
       {isLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[...Array(6)].map((_, i) => (
-            <div key={i} className="animate-pulse bg-white rounded-xl border border-gray-200 overflow-hidden">
-              <div className="aspect-[4/3] bg-gray-200" />
+            <div key={i} className="animate-pulse bg-white rounded-xl border border-primary-200 overflow-hidden">
+              <div className="aspect-[4/3] bg-primary-200" />
               <div className="p-4 space-y-2">
-                <div className="h-4 bg-gray-200 rounded w-3/4" />
-                <div className="h-3 bg-gray-100 rounded w-1/2" />
+                <div className="h-4 bg-primary-200 rounded w-3/4" />
+                <div className="h-3 bg-primary-100 rounded w-1/2" />
               </div>
             </div>
           ))}
         </div>
       ) : filtered.length === 0 ? (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <div className="flex flex-col items-center justify-center py-16 text-gray-500">
+        <div className="bg-white rounded-xl shadow-sm border border-primary-200 overflow-hidden">
+          <div className="flex flex-col items-center justify-center py-16 text-secondary-400">
             <ImageIcon size={48} className="mb-3 opacity-50" />
             <p className="text-lg font-medium">尚無對比圖</p>
             <p className="text-sm mt-1">點擊「新增對比圖」開始建立</p>
@@ -434,12 +434,12 @@ const Portfolios = () => {
             return (
               <div
                 key={item.id}
-                className={`bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow ${
+                className={`bg-white rounded-xl shadow-sm border border-primary-200 overflow-hidden hover:shadow-md transition-shadow ${
                   isMutating ? 'opacity-60' : ''
                 }`}
               >
                 {/* Image with 4:3 aspect ratio */}
-                <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
+                <div className="relative aspect-[4/3] overflow-hidden bg-primary-100">
                   {item.image_url ? (
                     <img
                       src={item.image_url}
@@ -448,7 +448,7 @@ const Portfolios = () => {
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <ImageIcon size={40} className="text-gray-500" />
+                      <ImageIcon size={40} className="text-secondary-400" />
                     </div>
                   )}
                   {/* Status badge overlay */}
@@ -463,11 +463,11 @@ const Portfolios = () => {
                 <div className="p-4">
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
-                      <h3 className="text-sm font-semibold text-gray-900 truncate">{item.title}</h3>
+                      <h3 className="text-sm font-semibold text-secondary truncate">{item.title}</h3>
                       <div className="flex items-center gap-2 mt-1.5">
                         <CategoryBadge category={item.category} />
                         {item.service_name && (
-                          <span className="text-xs text-gray-500 truncate">
+                          <span className="text-xs text-secondary-400 truncate">
                             {item.service_name}
                           </span>
                         )}
@@ -483,14 +483,14 @@ const Portfolios = () => {
                   </div>
 
                   {item.description && (
-                    <p className="text-xs text-gray-500 mt-2 line-clamp-2">{item.description}</p>
+                    <p className="text-xs text-secondary-400 mt-2 line-clamp-2">{item.description}</p>
                   )}
 
                   {/* Actions */}
-                  <div className="flex justify-end gap-1 mt-3 pt-3 border-t border-gray-100">
+                  <div className="flex justify-end gap-1 mt-3 pt-3 border-t border-primary-100">
                     <button
                       onClick={() => openEdit(item)}
-                      className="h-11 w-11 inline-flex items-center justify-center rounded-lg text-gray-500 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                      className="h-11 w-11 inline-flex items-center justify-center rounded-lg text-secondary-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
                       title="編輯"
                     >
                       <Pencil size={16} />
@@ -498,7 +498,7 @@ const Portfolios = () => {
                     <button
                       onClick={() => handleDelete(item)}
                       disabled={isMutating}
-                      className="h-11 w-11 inline-flex items-center justify-center rounded-lg text-gray-500 hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
+                      className="h-11 w-11 inline-flex items-center justify-center rounded-lg text-secondary-400 hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
                       title="刪除"
                     >
                       <Trash2 size={16} />

@@ -116,7 +116,9 @@ export function FeedbackProvider({ children }) {
                 'px-4 py-2.5 min-h-[44px] text-sm rounded-lg text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
                 dialog?.tone === 'danger'
                   ? 'bg-red-600 hover:bg-red-700 focus-visible:ring-red-600'
-                  : 'bg-gold hover:bg-gold-dark focus-visible:ring-gold',
+                  // White on gold is only 3.05:1 — the slate token carries
+                  // the same brand weight and clears AA at 10.98:1.
+                  : 'bg-secondary hover:bg-secondary-600 focus-visible:ring-gold',
               )}
             >
               {dialog?.confirmLabel}

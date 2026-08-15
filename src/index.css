@@ -77,7 +77,7 @@ html {
 
 /* Skeleton loading */
 .skeleton {
-  @apply animate-pulse bg-gray-200 rounded;
+  @apply animate-pulse bg-primary-100 rounded;
 }
 
 /* Hide scrollbar utility */

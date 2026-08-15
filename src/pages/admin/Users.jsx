@@ -33,7 +33,7 @@ const Avatar = ({ name, isActive }) => {
 
   // Generate a consistent color from name
   const colors = [
-    'bg-primary-500',
+    'bg-secondary',
     'bg-blue-500',
     'bg-emerald-500',
     'bg-amber-500',
@@ -90,7 +90,7 @@ const StatusToggle = ({ isActive, isLoading, onToggle }) => {
     <button
       onClick={onToggle}
       disabled={isLoading}
-      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${
+      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${
         isActive ? 'bg-green-500' : 'bg-red-400'
       }`}
       title={isActive ? '啟用中 — 點擊停用' : '已停用 — 點擊啟用'}
@@ -138,7 +138,7 @@ const RoleSelector = ({ currentRole, userId, onRoleChange, isLoading }) => {
       <button
         onClick={() => setOpen(!open)}
         disabled={isLoading}
-        className="inline-flex items-center gap-1 px-3 py-2.5 min-h-[44px] text-xs font-medium bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className="inline-flex items-center gap-1 px-3 py-2.5 min-h-[44px] text-xs font-medium bg-white border border-primary-300 rounded-lg hover:bg-primary-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
         變更角色
         <ChevronDown size={14} className={`transition-transform ${open ? 'rotate-180' : ''}`} />
@@ -148,7 +148,7 @@ const RoleSelector = ({ currentRole, userId, onRoleChange, isLoading }) => {
         <>
           {/* Backdrop for closing */}
           <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
-          <div className="absolute right-0 mt-1 w-40 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
+          <div className="absolute right-0 mt-1 w-40 bg-white rounded-lg shadow-lg border border-primary-200 py-1 z-50">
             {ROLE_OPTIONS.map((option) => {
               const Icon = option.icon
               const isSelected = option.value === currentRole
@@ -158,13 +158,13 @@ const RoleSelector = ({ currentRole, userId, onRoleChange, isLoading }) => {
                   onClick={() => handleSelect(option.value)}
                   className={`flex items-center gap-2 w-full px-3 py-2 text-sm transition-colors ${
                     isSelected
-                      ? 'bg-primary-50 text-primary-700 font-medium'
-                      : 'text-gray-700 hover:bg-gray-50'
+                      ? 'bg-primary-50 text-secondary font-medium'
+                      : 'text-secondary hover:bg-primary-50'
                   }`}
                 >
                   <Icon size={14} />
                   <span>{option.label}</span>
-                  {isSelected && <span className="ml-auto text-primary-500">✓</span>}
+                  {isSelected && <span className="ml-auto text-gold">✓</span>}
                 </button>
               )
             })}
@@ -180,15 +180,15 @@ const RoleSelector = ({ currentRole, userId, onRoleChange, isLoading }) => {
 const TableSkeleton = () => (
   <div className="animate-pulse">
     {[...Array(5)].map((_, i) => (
-      <div key={i} className="flex items-center gap-4 p-4 border-b border-gray-100">
-        <div className="w-10 h-10 bg-gray-200 rounded-full" />
+      <div key={i} className="flex items-center gap-4 p-4 border-b border-primary-100">
+        <div className="w-10 h-10 bg-primary-200 rounded-full" />
         <div className="flex-1 space-y-2">
-          <div className="h-4 bg-gray-200 rounded w-32" />
-          <div className="h-3 bg-gray-100 rounded w-24" />
+          <div className="h-4 bg-primary-200 rounded w-32" />
+          <div className="h-3 bg-primary-100 rounded w-24" />
         </div>
-        <div className="h-6 bg-gray-200 rounded-full w-16" />
-        <div className="h-6 bg-gray-200 rounded w-11" />
-        <div className="h-8 bg-gray-200 rounded w-20" />
+        <div className="h-6 bg-primary-200 rounded-full w-16" />
+        <div className="h-6 bg-primary-200 rounded w-11" />
+        <div className="h-8 bg-primary-200 rounded w-20" />
       </div>
     ))}
   </div>
@@ -298,7 +298,7 @@ const Users = () => {
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-2xl font-serif font-bold text-secondary">員工管理</h1>
-        <p className="text-sm text-gray-500 mt-1">
+        <p className="text-sm text-secondary-400 mt-1">
           管理管理員與員工的角色與帳號狀態
         </p>
       </div>
@@ -309,7 +309,7 @@ const Users = () => {
         <div className="relative flex-1 w-full sm:max-w-md">
           <Search
             size={18}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary-400"
           />
           <input
             aria-label="搜尋姓名或 LINE ID"
@@ -317,18 +317,18 @@ const Users = () => {
             placeholder="搜尋姓名或 LINE ID..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white"
+            className="w-full pl-10 pr-4 py-2.5 border border-primary-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold focus:border-gold bg-white"
           />
         </div>
 
         {/* Stats */}
         {!isLoading && (
-          <div className="flex items-center gap-3 text-xs text-gray-500">
-            <span className="bg-gray-100 px-2.5 py-1 rounded-full">
+          <div className="flex items-center gap-3 text-xs text-secondary-400">
+            <span className="bg-primary-100 px-2.5 py-1 rounded-full">
               共 {staffUsers.length} 位員工
             </span>
             {searchQuery && (
-              <span className="bg-primary-50 text-primary-700 px-2.5 py-1 rounded-full">
+              <span className="bg-primary-50 text-secondary px-2.5 py-1 rounded-full">
                 篩選結果：{filteredUsers.length} 位
               </span>
             )}
@@ -337,19 +337,19 @@ const Users = () => {
       </div>
 
       {/* Table Card */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+      <div className="bg-white rounded-xl shadow-sm border border-primary-200">
         {isLoading ? (
           <TableSkeleton />
         ) : isError ? (
           <div className="flex flex-col items-center justify-center py-16 px-4">
             <AlertCircle size={48} className="text-red-400 mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">載入失敗</h3>
-            <p className="text-sm text-gray-500 mb-4">
+            <h3 className="text-lg font-medium text-secondary mb-2">載入失敗</h3>
+            <p className="text-sm text-secondary-400 mb-4">
               {error?.response?.data?.detail || error?.message || '無法取得使用者列表'}
             </p>
             <button
               onClick={() => queryClient.invalidateQueries({ queryKey: ['admin-users'] })}
-              className="px-4 py-2 bg-primary-500 text-white rounded-lg text-sm hover:bg-primary-600 transition-colors"
+              className="px-4 py-2 bg-secondary text-white rounded-lg text-sm hover:bg-secondary-600 transition-colors"
             >
               重試
             </button>
@@ -357,17 +357,17 @@ const Users = () => {
         ) : filteredUsers.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 px-4">
             <Search size={48} className="text-gray-400 mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <h3 className="text-lg font-medium text-secondary mb-2">
               {searchQuery ? '找不到符合的使用者' : '目前沒有使用者'}
             </h3>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-secondary-400">
               {searchQuery ? '請嘗試不同的搜尋關鍵字' : '尚無使用者資料'}
             </p>
           </div>
         ) : (
           <>
             {/* Table Header */}
-            <div className="hidden md:grid md:grid-cols-12 gap-4 px-6 py-3 bg-gray-50 border-b border-gray-200 text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <div className="hidden md:grid md:grid-cols-12 gap-4 px-6 py-3 bg-primary-50 border-b border-primary-200 text-xs font-medium text-secondary-400 uppercase tracking-wider">
               <div className="col-span-5">使用者</div>
               <div className="col-span-2">角色</div>
               <div className="col-span-2 text-center">狀態</div>
@@ -375,14 +375,14 @@ const Users = () => {
             </div>
 
             {/* Table Body */}
-            <div className="divide-y divide-gray-100">
+            <div className="divide-y divide-primary-100">
               {filteredUsers.map((u) => {
                 const isSelf = currentUser && String(u.id) === String(currentUser.id)
                 const isUserMutating = mutatingUsers[u.id]
                 return (
                   <div
                     key={u.id}
-                    className={`relative grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-4 px-4 md:px-6 py-4 items-center transition-colors hover:bg-gray-50 ${
+                    className={`relative grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-4 px-4 md:px-6 py-4 items-center transition-colors hover:bg-primary-50 ${
                       !u.is_active ? 'opacity-60' : ''
                     }`}
                   >
@@ -391,16 +391,16 @@ const Users = () => {
                       <Avatar name={u.display_name} isActive={u.is_active} />
                       <div className="min-w-0">
                         <div className="flex items-center gap-2">
-                          <p className="text-sm font-medium text-gray-900 truncate">
+                          <p className="text-sm font-medium text-secondary truncate">
                             {u.display_name}
                           </p>
                           {isSelf && (
-                            <span className="text-[10px] bg-primary-100 text-primary-700 px-1.5 py-0.5 rounded font-medium">
+                            <span className="text-[10px] bg-primary-100 text-secondary px-1.5 py-0.5 rounded font-medium">
                               你
                             </span>
                           )}
                         </div>
-                        <p className="text-xs text-gray-500 truncate mt-0.5">
+                        <p className="text-xs text-secondary-400 truncate mt-0.5">
                           {u.line_user_id}
                         </p>
                       </div>
@@ -418,7 +418,7 @@ const Users = () => {
                         isLoading={isUserMutating === 'status'}
                         onToggle={() => handleStatusToggle(u.id, u.is_active)}
                       />
-                      <span className="text-xs text-gray-500 md:hidden">
+                      <span className="text-xs text-secondary-400 md:hidden">
                         {u.is_active ? '啟用中' : '已停用'}
                       </span>
                     </div>
@@ -442,7 +442,7 @@ const Users = () => {
 
       {/* Footer Info */}
       {!isLoading && !isError && filteredUsers.length > 0 && (
-        <p className="text-xs text-gray-500 mt-4 text-center">
+        <p className="text-xs text-secondary-400 mt-4 text-center">
           員工資料僅供管理用途。管理員只能變更角色與帳號狀態，無法編輯個人資訊。
         </p>
       )}

@@ -59,7 +59,7 @@ const StatusToggle = ({ isActive, isLoading, onToggle, activeLabel = '上架中'
   <button
     onClick={onToggle}
     disabled={isLoading}
-    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${
+    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${
       isActive ? 'bg-green-500' : 'bg-red-400'
     }`}
     title={isActive ? `${activeLabel} — 點擊下架` : `${inactiveLabel} — 點擊上架`}
@@ -81,14 +81,14 @@ const StatusToggle = ({ isActive, isLoading, onToggle, activeLabel = '上架中'
 const TableSkeleton = () => (
   <div className="animate-pulse">
     {[...Array(5)].map((_, i) => (
-      <div key={i} className="flex items-center gap-4 p-4 border-b border-gray-100">
-        <div className="h-10 w-10 bg-gray-200 rounded" />
+      <div key={i} className="flex items-center gap-4 p-4 border-b border-primary-100">
+        <div className="h-10 w-10 bg-primary-200 rounded" />
         <div className="flex-1 space-y-2">
-          <div className="h-4 bg-gray-200 rounded w-40" />
-          <div className="h-3 bg-gray-100 rounded w-24" />
+          <div className="h-4 bg-primary-200 rounded w-40" />
+          <div className="h-3 bg-primary-100 rounded w-24" />
         </div>
-        <div className="h-6 bg-gray-200 rounded-full w-16" />
-        <div className="h-6 bg-gray-200 rounded w-11" />
+        <div className="h-6 bg-primary-200 rounded-full w-16" />
+        <div className="h-6 bg-primary-200 rounded w-11" />
       </div>
     ))}
   </div>
@@ -143,13 +143,13 @@ const ProductModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPending,
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
           {/* Name */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="products-f1">產品名稱 *</label>
+            <label className="block text-sm font-medium text-secondary mb-1" htmlFor="products-f1">產品名稱 *</label>
             <input id="products-f1"
               type="text"
               required
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full px-3 py-2 border border-primary-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold"
               placeholder="輸入產品名稱"
             />
           </div>
@@ -157,32 +157,32 @@ const ProductModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPending,
           {/* Price & Spec & Category */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="products-f2">價格 (NT$) *</label>
+              <label className="block text-sm font-medium text-secondary mb-1" htmlFor="products-f2">價格 (NT$) *</label>
               <input id="products-f2"
                 type="number"
                 required
                 min="0"
                 value={form.price}
                 onChange={(e) => setForm({ ...form, price: parseInt(e.target.value) || 0 })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                className="w-full px-3 py-2 border border-primary-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="products-f3">規格</label>
+              <label className="block text-sm font-medium text-secondary mb-1" htmlFor="products-f3">規格</label>
               <input id="products-f3"
                 type="text"
                 value={form.spec}
                 onChange={(e) => setForm({ ...form, spec: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                className="w-full px-3 py-2 border border-primary-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold"
                 placeholder="例如 500ml"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="products-f4">分類</label>
+              <label className="block text-sm font-medium text-secondary mb-1" htmlFor="products-f4">分類</label>
               <select id="products-f4"
                 value={form.category}
                 onChange={(e) => setForm({ ...form, category: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                className="w-full px-3 py-2 border border-primary-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold"
               >
                 <option value="">未分類</option>
                 {CATEGORY_OPTIONS.map((cat) => (
@@ -194,12 +194,12 @@ const ProductModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPending,
 
           {/* Description */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="products-f5">描述</label>
+            <label className="block text-sm font-medium text-secondary mb-1" htmlFor="products-f5">描述</label>
             <textarea id="products-f5"
               rows={4}
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full px-3 py-2 border border-primary-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold"
               placeholder="輸入產品描述"
             />
           </div>
@@ -215,7 +215,7 @@ const ProductModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPending,
           {/* Stock & Sort */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="flex items-center gap-3">
-              <label className="text-sm font-medium text-gray-700">庫存狀態</label>
+              <label className="text-sm font-medium text-secondary">庫存狀態</label>
               <StatusToggle
                 isActive={form.is_stock}
                 isLoading={false}
@@ -223,32 +223,32 @@ const ProductModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPending,
                 activeLabel="有庫存"
                 inactiveLabel="無庫存"
               />
-              <span className="text-xs text-gray-500">{form.is_stock ? '有庫存' : '無庫存'}</span>
+              <span className="text-xs text-secondary-400">{form.is_stock ? '有庫存' : '無庫存'}</span>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="products-f6">排序</label>
+              <label className="block text-sm font-medium text-secondary mb-1" htmlFor="products-f6">排序</label>
               <input id="products-f6"
                 type="number"
                 value={form.sort_order}
                 onChange={(e) => setForm({ ...form, sort_order: parseInt(e.target.value) || 0 })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                className="w-full px-3 py-2 border border-primary-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold"
               />
             </div>
           </div>
 
           {/* Submit */}
-          <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
+          <div className="flex justify-end gap-3 pt-4 border-t border-primary-100">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+              className="px-4 py-2 text-sm font-medium text-secondary bg-white border border-primary-300 rounded-lg hover:bg-primary-50"
             >
               取消
             </button>
             <button
               type="submit"
               disabled={isPending}
-              className="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 disabled:opacity-50 flex items-center gap-2"
+              className="px-4 py-2 text-sm font-medium text-white bg-secondary rounded-lg hover:bg-secondary-600 disabled:opacity-50 flex items-center gap-2"
             >
               {isPending && <Loader2 size={16} className="animate-spin" />}
               {mode === 'create' ? '新增' : '儲存'}
@@ -383,13 +383,13 @@ const Products = () => {
             <Package size={28} />
             產品管理
           </h2>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-secondary-400 mt-1">
             共 {products.length} 筆產品
           </p>
         </div>
         <button
           onClick={openCreate}
-          className="inline-flex items-center gap-2 px-4 py-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors text-sm font-medium shadow-sm"
+          className="inline-flex items-center gap-2 px-4 py-2.5 bg-secondary text-white rounded-lg hover:bg-secondary-600 transition-colors text-sm font-medium shadow-sm"
         >
           <Plus size={18} />
           新增產品
@@ -399,22 +399,22 @@ const Products = () => {
       {/* Search & Filter */}
       <div className="flex flex-col sm:flex-row gap-3 mb-6">
         <div className="relative flex-1">
-          <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+          <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary-400" />
           <input
             aria-label="搜尋產品名稱"
             type="text"
             placeholder="搜尋產品名稱..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
+            className="w-full pl-10 pr-4 py-2.5 border border-primary-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold text-sm"
           />
         </div>
         <div className="relative">
-          <Filter size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+          <Filter size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary-400" />
           <select aria-label="篩選分類"
             value={filterCategory}
             onChange={(e) => setFilterCategory(e.target.value)}
-            className="pl-9 pr-8 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm appearance-none bg-white"
+            className="pl-9 pr-8 py-2.5 border border-primary-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold text-sm appearance-none bg-white"
           >
             <option value="">所有分類</option>
             {categories.map((cat) => (
@@ -425,19 +425,19 @@ const Products = () => {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      <div className="bg-white rounded-xl shadow-sm border border-primary-200 overflow-hidden">
         {isLoading ? (
           <TableSkeleton />
         ) : filtered.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-16 text-gray-500">
+          <div className="flex flex-col items-center justify-center py-16 text-secondary-400">
             <Package size={48} className="mb-3 opacity-50" />
             <p className="text-lg font-medium">尚無產品</p>
             <p className="text-sm mt-1">點擊「新增產品」開始建立</p>
           </div>
         ) : (
-          <div className="divide-y divide-gray-100">
+          <div className="divide-y divide-primary-100">
             {/* Desktop Header */}
-            <div className="hidden md:grid md:grid-cols-12 gap-4 px-4 py-3 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <div className="hidden md:grid md:grid-cols-12 gap-4 px-4 py-3 bg-primary-50 text-xs font-medium text-secondary-400 uppercase tracking-wider">
               <div className="col-span-1">圖片</div>
               <div className="col-span-3">名稱</div>
               <div className="col-span-1">分類</div>
@@ -453,7 +453,7 @@ const Products = () => {
               return (
                 <div
                   key={item.id}
-                  className={`px-4 py-3 hover:bg-gray-50 transition-colors ${isMutating ? 'opacity-60' : ''}`}
+                  className={`px-4 py-3 hover:bg-primary-50 transition-colors ${isMutating ? 'opacity-60' : ''}`}
                 >
                   {/* Desktop Row */}
                   <div className="hidden md:grid md:grid-cols-12 gap-4 items-center">
@@ -461,31 +461,31 @@ const Products = () => {
                       {item.image_url ? (
                         <img src={item.image_url} alt="" className="h-10 w-10 object-cover rounded" />
                       ) : (
-                        <div className="h-10 w-10 bg-gray-100 rounded flex items-center justify-center">
-                          <Package size={16} className="text-gray-500" />
+                        <div className="h-10 w-10 bg-primary-100 rounded flex items-center justify-center">
+                          <Package size={16} className="text-secondary-400" />
                         </div>
                       )}
                     </div>
                     <div className="col-span-3">
-                      <p className="text-sm font-medium text-gray-900 truncate">{item.name}</p>
+                      <p className="text-sm font-medium text-secondary truncate">{item.name}</p>
                       {item.description && (
-                        <p className="text-xs text-gray-500 truncate">{item.description}</p>
+                        <p className="text-xs text-secondary-400 truncate">{item.description}</p>
                       )}
                     </div>
                     <div className="col-span-1">
                       <CategoryBadge category={item.category} />
                     </div>
                     <div className="col-span-1">
-                      <span className="text-sm font-medium text-gray-900 flex items-center gap-0.5">
-                        <DollarSign size={14} className="text-gray-500" />
+                      <span className="text-sm font-medium text-secondary flex items-center gap-0.5">
+                        <DollarSign size={14} className="text-secondary-400" />
                         {item.price.toLocaleString()}
                       </span>
                     </div>
                     <div className="col-span-1">
-                      <span className="text-sm text-gray-600">{item.spec || '-'}</span>
+                      <span className="text-sm text-secondary-400">{item.spec || '-'}</span>
                     </div>
                     <div className="col-span-1">
-                      <span className="text-sm text-gray-500 font-mono">{item.sort_order}</span>
+                      <span className="text-sm text-secondary-400 font-mono">{item.sort_order}</span>
                     </div>
                     <div className="col-span-1">
                       <StatusToggle
@@ -501,7 +501,7 @@ const Products = () => {
                     <div className="col-span-3 flex justify-end gap-1">
                       <button
                         onClick={() => openEdit(item)}
-                        className="h-11 w-11 inline-flex items-center justify-center rounded-lg text-gray-500 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                        className="h-11 w-11 inline-flex items-center justify-center rounded-lg text-secondary-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
                         title="編輯"
                       >
                         <Pencil size={16} />
@@ -509,7 +509,7 @@ const Products = () => {
                       <button
                         onClick={() => handleDelete(item)}
                         disabled={isMutating}
-                        className="h-11 w-11 inline-flex items-center justify-center rounded-lg text-gray-500 hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
+                        className="h-11 w-11 inline-flex items-center justify-center rounded-lg text-secondary-400 hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
                         title="刪除"
                       >
                         <Trash2 size={16} />
@@ -523,18 +523,18 @@ const Products = () => {
                       {item.image_url ? (
                         <img src={item.image_url} alt="" className="h-14 w-14 object-cover rounded flex-shrink-0" />
                       ) : (
-                        <div className="h-14 w-14 bg-gray-100 rounded flex items-center justify-center flex-shrink-0">
-                          <Package size={20} className="text-gray-500" />
+                        <div className="h-14 w-14 bg-primary-100 rounded flex items-center justify-center flex-shrink-0">
+                          <Package size={20} className="text-secondary-400" />
                         </div>
                       )}
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-900 truncate">{item.name}</p>
-                        <p className="text-sm font-semibold text-primary-600 mt-0.5">
+                        <p className="text-sm font-medium text-secondary truncate">{item.name}</p>
+                        <p className="text-sm font-semibold text-secondary mt-0.5">
                           NT$ {item.price.toLocaleString()}
                         </p>
                         <div className="flex items-center gap-2 mt-1">
                           {item.category && <CategoryBadge category={item.category} />}
-                          {item.spec && <span className="text-xs text-gray-500">{item.spec}</span>}
+                          {item.spec && <span className="text-xs text-secondary-400">{item.spec}</span>}
                         </div>
                       </div>
                     </div>
@@ -551,14 +551,14 @@ const Products = () => {
                       <div className="flex gap-1">
                         <button
                           onClick={() => openEdit(item)}
-                          className="h-11 w-11 inline-flex items-center justify-center rounded-lg text-gray-500 hover:text-blue-600 hover:bg-blue-50"
+                          className="h-11 w-11 inline-flex items-center justify-center rounded-lg text-secondary-400 hover:text-blue-600 hover:bg-blue-50"
                         >
                           <Pencil size={16} />
                         </button>
                         <button
                           onClick={() => handleDelete(item)}
                           disabled={isMutating}
-                          className="h-11 w-11 inline-flex items-center justify-center rounded-lg text-gray-500 hover:text-red-600 hover:bg-red-50 disabled:opacity-50"
+                          className="h-11 w-11 inline-flex items-center justify-center rounded-lg text-secondary-400 hover:text-red-600 hover:bg-red-50 disabled:opacity-50"
                         >
                           <Trash2 size={16} />
                         </button>

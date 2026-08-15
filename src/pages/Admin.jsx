@@ -58,12 +58,12 @@ const Dashboard = () => {
         <h2 className="text-2xl font-serif font-bold text-secondary">管理儀表板</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[...Array(6)].map((_, i) => (
-            <div key={i} className="animate-pulse bg-white rounded-xl border border-gray-200 p-6">
+            <div key={i} className="animate-pulse bg-white rounded-xl border border-primary-200 p-6">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-gray-200 rounded-xl" />
+                <div className="w-12 h-12 bg-primary-200 rounded-xl" />
                 <div className="flex-1 space-y-2">
-                  <div className="h-4 bg-gray-200 rounded w-16" />
-                  <div className="h-6 bg-gray-200 rounded w-12" />
+                  <div className="h-4 bg-primary-200 rounded w-16" />
+                  <div className="h-6 bg-primary-200 rounded w-12" />
                 </div>
               </div>
             </div>
@@ -95,7 +95,7 @@ const Dashboard = () => {
           <TrendingUp size={28} />
           管理儀表板
         </h2>
-        <p className="text-sm text-gray-500 mt-1">網站內容總覽與近期活動</p>
+        <p className="text-sm text-secondary-400 mt-1">網站內容總覽與近期活動</p>
       </div>
 
       {/* Stats Cards */}
@@ -124,16 +124,16 @@ const Dashboard = () => {
             <a
               key={card.key}
               href={card.path}
-              className="bg-white rounded-xl border border-gray-200 p-5 hover:shadow-md transition-shadow group"
+              className="bg-white rounded-xl border border-primary-200 p-5 hover:shadow-md transition-shadow group"
             >
               <div className="flex items-center gap-4">
                 <div className={`w-12 h-12 ${card.color} rounded-xl flex items-center justify-center text-white shadow-sm group-hover:scale-105 transition-transform`}>
                   <Icon size={22} />
                 </div>
                 <div>
-                  <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">{card.label}</p>
-                  <p className="text-2xl font-bold text-gray-900 mt-0.5">{total ?? 0}</p>
-                  <p className="text-xs text-gray-500 mt-0.5">{subtitle}</p>
+                  <p className="text-xs font-medium text-secondary-400 uppercase tracking-wider">{card.label}</p>
+                  <p className="text-2xl font-bold text-secondary mt-0.5">{total ?? 0}</p>
+                  <p className="text-xs text-secondary-400 mt-0.5">{subtitle}</p>
                 </div>
               </div>
             </a>
@@ -142,26 +142,26 @@ const Dashboard = () => {
       </div>
 
       {/* Recent Activity */}
-      <div className="bg-white rounded-xl border border-gray-200">
-        <div className="px-6 py-4 border-b border-gray-100">
-          <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-            <Clock size={20} className="text-gray-500" />
+      <div className="bg-white rounded-xl border border-primary-200">
+        <div className="px-6 py-4 border-b border-primary-100">
+          <h3 className="text-lg font-semibold text-secondary flex items-center gap-2">
+            <Clock size={20} className="text-secondary-400" />
             近期活動
           </h3>
         </div>
         {recentActivity.length === 0 ? (
-          <div className="px-6 py-8 text-center text-gray-500 text-sm">
+          <div className="px-6 py-8 text-center text-secondary-400 text-sm">
             目前沒有活動紀錄
           </div>
         ) : (
-          <div className="divide-y divide-gray-50">
+          <div className="divide-y divide-primary-50">
             {recentActivity.map((item, idx) => (
-              <div key={idx} className="px-6 py-3 flex items-center gap-3 hover:bg-gray-50 transition-colors">
-                <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${TYPE_COLORS[item.type] || 'bg-gray-100 text-gray-600'}`}>
+              <div key={idx} className="px-6 py-3 flex items-center gap-3 hover:bg-primary-50 transition-colors">
+                <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${TYPE_COLORS[item.type] || 'bg-primary-100 text-secondary-400'}`}>
                   {item.type_label}
                 </span>
-                <span className="text-sm text-gray-700 flex-1 truncate">{item.title}</span>
-                <span className="text-xs text-gray-500 whitespace-nowrap">
+                <span className="text-sm text-secondary flex-1 truncate">{item.title}</span>
+                <span className="text-xs text-secondary-400 whitespace-nowrap">
                   {item.updated_at ? new Date(item.updated_at).toLocaleString('zh-TW', {
                     month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
                   }) : '-'}
@@ -237,7 +237,7 @@ const SettingsPage = () => {
         <h2 className="text-2xl font-serif font-bold text-secondary">網站設定</h2>
         <div className="animate-pulse space-y-4">
           {[...Array(6)].map((_, i) => (
-            <div key={i} className="h-12 bg-gray-200 rounded-lg" />
+            <div key={i} className="h-12 bg-primary-200 rounded-lg" />
           ))}
         </div>
       </div>
@@ -260,23 +260,23 @@ const SettingsPage = () => {
     <div className="max-w-3xl mx-auto">
       <div className="mb-6">
         <h2 className="text-2xl font-serif font-bold text-secondary">網站設定</h2>
-        <p className="text-sm text-gray-500 mt-1">管理網站基本資訊與 SEO 設定</p>
+        <p className="text-sm text-secondary-400 mt-1">管理網站基本資訊與 SEO 設定</p>
       </div>
 
       <form onSubmit={handleSave} className="space-y-8">
         {/* Basic Info */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">基本資訊</h3>
+        <div className="bg-white rounded-xl border border-primary-200 p-6">
+          <h3 className="text-lg font-semibold text-secondary mb-4">基本資訊</h3>
           <div className="space-y-4">
             {SETTING_FIELDS.basic.map((field) => (
               <div key={field.key}>
-                <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor={`setting-${field.key}`}>{field.label}</label>
+                <label className="block text-sm font-medium text-secondary mb-1" htmlFor={`setting-${field.key}`}>{field.label}</label>
                 <input id={`setting-${field.key}`}
                   type={field.type}
                   value={form[field.key] || ''}
                   onChange={(e) => handleChange(field.key, e.target.value)}
                   placeholder={field.placeholder}
-                  className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  className="w-full px-3 py-2.5 border border-primary-300 rounded-lg text-sm focus:ring-2 focus:ring-gold focus:border-gold"
                 />
               </div>
             ))}
@@ -284,19 +284,19 @@ const SettingsPage = () => {
         </div>
 
         {/* SEO Settings */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">SEO 設定</h3>
+        <div className="bg-white rounded-xl border border-primary-200 p-6">
+          <h3 className="text-lg font-semibold text-secondary mb-4">SEO 設定</h3>
           <div className="space-y-4">
             {SETTING_FIELDS.seo.map((field) => (
               <div key={field.key}>
-                <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor={`seo-${field.key}`}>{field.label}</label>
+                <label className="block text-sm font-medium text-secondary mb-1" htmlFor={`seo-${field.key}`}>{field.label}</label>
                 {field.type === 'textarea' ? (
                   <textarea id={`seo-${field.key}`}
                     rows={3}
                     value={form[field.key] || ''}
                     onChange={(e) => handleChange(field.key, e.target.value)}
                     placeholder={field.placeholder}
-                    className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    className="w-full px-3 py-2.5 border border-primary-300 rounded-lg text-sm focus:ring-2 focus:ring-gold focus:border-gold"
                   />
                 ) : (
                   <input
@@ -305,7 +305,7 @@ const SettingsPage = () => {
                     value={form[field.key] || ''}
                     onChange={(e) => handleChange(field.key, e.target.value)}
                     placeholder={field.placeholder}
-                    className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    className="w-full px-3 py-2.5 border border-primary-300 rounded-lg text-sm focus:ring-2 focus:ring-gold focus:border-gold"
                   />
                 )}
               </div>
@@ -313,7 +313,7 @@ const SettingsPage = () => {
 
             {/* OG Image */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">OG Image（社群分享圖）</label>
+              <label className="block text-sm font-medium text-secondary mb-1">OG Image（社群分享圖）</label>
               <ImageUploader
                 value={form.og_image || null}
                 onChange={(url) => handleChange('og_image', url || '')}
@@ -335,7 +335,7 @@ const SettingsPage = () => {
           <button
             type="submit"
             disabled={saveMutation.isPending}
-            className="inline-flex items-center gap-2 px-6 py-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors text-sm font-medium shadow-sm disabled:opacity-50"
+            className="inline-flex items-center gap-2 px-6 py-2.5 bg-secondary text-white rounded-lg hover:bg-secondary-600 transition-colors text-sm font-medium shadow-sm disabled:opacity-50"
           >
             {saveMutation.isPending ? (
               <Loader2 size={16} className="animate-spin" />

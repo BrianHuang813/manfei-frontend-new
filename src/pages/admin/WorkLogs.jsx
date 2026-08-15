@@ -18,13 +18,13 @@ import {
 const TableSkeleton = () => (
   <div className="animate-pulse">
     {[...Array(8)].map((_, i) => (
-      <div key={i} className="flex items-center gap-4 p-4 border-b border-gray-100">
+      <div key={i} className="flex items-center gap-4 p-4 border-b border-primary-100">
         <div className="flex-1 space-y-2">
-          <div className="h-4 bg-gray-200 rounded w-36" />
-          <div className="h-3 bg-gray-100 rounded w-24" />
+          <div className="h-4 bg-primary-200 rounded w-36" />
+          <div className="h-3 bg-primary-100 rounded w-24" />
         </div>
-        <div className="h-4 bg-gray-200 rounded w-20" />
-        <div className="h-4 bg-gray-200 rounded w-16" />
+        <div className="h-4 bg-primary-200 rounded w-20" />
+        <div className="h-4 bg-primary-200 rounded w-16" />
       </div>
     ))}
   </div>
@@ -100,36 +100,36 @@ const WorkLogs = () => {
           <ClipboardList size={28} />
           員工工作記錄
         </h2>
-        <p className="text-sm text-gray-500 mt-1">查看所有員工的工作記錄</p>
+        <p className="text-sm text-secondary-400 mt-1">查看所有員工的工作記錄</p>
       </div>
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-        <div className="bg-white rounded-xl border border-gray-200 p-4 flex items-center gap-3">
+        <div className="bg-white rounded-xl border border-primary-200 p-4 flex items-center gap-3">
           <div className="h-10 w-10 bg-blue-100 rounded-lg flex items-center justify-center">
             <ClipboardList size={20} className="text-blue-600" />
           </div>
           <div>
-            <p className="text-2xl font-bold text-gray-900">{stats.totalLogs}</p>
-            <p className="text-xs text-gray-500">記錄總數</p>
+            <p className="text-2xl font-bold text-secondary">{stats.totalLogs}</p>
+            <p className="text-xs text-secondary-400">記錄總數</p>
           </div>
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-4 flex items-center gap-3">
+        <div className="bg-white rounded-xl border border-primary-200 p-4 flex items-center gap-3">
           <div className="h-10 w-10 bg-emerald-100 rounded-lg flex items-center justify-center">
             <Clock size={20} className="text-emerald-600" />
           </div>
           <div>
-            <p className="text-2xl font-bold text-gray-900">{stats.totalHours.toFixed(1)}</p>
-            <p className="text-xs text-gray-500">總工時</p>
+            <p className="text-2xl font-bold text-secondary">{stats.totalHours.toFixed(1)}</p>
+            <p className="text-xs text-secondary-400">總工時</p>
           </div>
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-4 flex items-center gap-3">
+        <div className="bg-white rounded-xl border border-primary-200 p-4 flex items-center gap-3">
           <div className="h-10 w-10 bg-purple-100 rounded-lg flex items-center justify-center">
             <User size={20} className="text-purple-600" />
           </div>
           <div>
-            <p className="text-2xl font-bold text-gray-900">{stats.uniqueStaff}</p>
-            <p className="text-xs text-gray-500">員工人數</p>
+            <p className="text-2xl font-bold text-secondary">{stats.uniqueStaff}</p>
+            <p className="text-xs text-secondary-400">員工人數</p>
           </div>
         </div>
       </div>
@@ -137,23 +137,23 @@ const WorkLogs = () => {
       {/* Filter Bar */}
       <div className="flex flex-col lg:flex-row gap-3 mb-6">
         <div className="relative flex-1">
-          <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+          <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary-400" />
           <input
             aria-label="搜尋員工、服務或任務"
             type="text"
             placeholder="搜尋員工、服務或任務..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
+            className="w-full pl-10 pr-4 py-2.5 border border-primary-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold text-sm"
           />
         </div>
         <div className="flex flex-wrap gap-3">
           <div className="relative">
-            <User size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+            <User size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary-400" />
             <select aria-label="篩選員工"
               value={filterUserId}
               onChange={(e) => setFilterUserId(e.target.value)}
-              className="pl-9 pr-8 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm appearance-none bg-white"
+              className="pl-9 pr-8 py-2.5 border border-primary-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold text-sm appearance-none bg-white"
             >
               <option value="">所有員工</option>
               {staffUsers.map((u) => (
@@ -168,15 +168,15 @@ const WorkLogs = () => {
               type="date"
               value={filterStartDate}
               onChange={(e) => setFilterStartDate(e.target.value)}
-              className="px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
+              className="px-3 py-2.5 border border-primary-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold text-sm"
               placeholder="開始日期"
             />
-            <span className="text-gray-500 text-sm">至</span>
+            <span className="text-secondary-400 text-sm">至</span>
             <input aria-label="結束日期"
               type="date"
               value={filterEndDate}
               onChange={(e) => setFilterEndDate(e.target.value)}
-              className="px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
+              className="px-3 py-2.5 border border-primary-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold text-sm"
               placeholder="結束日期"
             />
           </div>
@@ -184,19 +184,19 @@ const WorkLogs = () => {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      <div className="bg-white rounded-xl shadow-sm border border-primary-200 overflow-hidden">
         {isLoading ? (
           <TableSkeleton />
         ) : filtered.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-16 text-gray-500">
+          <div className="flex flex-col items-center justify-center py-16 text-secondary-400">
             <ClipboardList size={48} className="mb-3 opacity-50" />
             <p className="text-lg font-medium">尚無工作記錄</p>
             <p className="text-sm mt-1">員工開始記錄工作後會顯示在這裡</p>
           </div>
         ) : (
-          <div className="divide-y divide-gray-100">
+          <div className="divide-y divide-primary-100">
             {/* Desktop Header */}
-            <div className="hidden md:grid md:grid-cols-12 gap-4 px-4 py-3 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <div className="hidden md:grid md:grid-cols-12 gap-4 px-4 py-3 bg-primary-50 text-xs font-medium text-secondary-400 uppercase tracking-wider">
               <div className="col-span-2">員工</div>
               <div className="col-span-2">日期</div>
               <div className="col-span-4">服務/任務</div>
@@ -205,16 +205,16 @@ const WorkLogs = () => {
             </div>
 
             {filtered.map((log) => (
-              <div key={log.id} className="px-4 py-3 hover:bg-gray-50 transition-colors">
+              <div key={log.id} className="px-4 py-3 hover:bg-primary-50 transition-colors">
                 {/* Desktop Row */}
                 <div className="hidden md:grid md:grid-cols-12 gap-4 items-center">
                   <div className="col-span-2">
-                    <p className="text-sm font-medium text-gray-900">
+                    <p className="text-sm font-medium text-secondary">
                       {log.user_display_name || `使用者 #${log.user_id}`}
                     </p>
                   </div>
                   <div className="col-span-2">
-                    <span className="text-sm text-gray-600 flex items-center gap-1">
+                    <span className="text-sm text-secondary-400 flex items-center gap-1">
                       <Calendar size={14} />
                       {log.date}
                     </span>
@@ -225,21 +225,21 @@ const WorkLogs = () => {
                         {log.service_name}
                       </span>
                     ) : log.custom_task_name ? (
-                      <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border bg-gray-100 text-gray-700 border-gray-200">
+                      <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border bg-primary-100 text-secondary border-primary-200">
                         {log.custom_task_name}
                       </span>
                     ) : (
-                      <span className="text-sm text-gray-500">—</span>
+                      <span className="text-sm text-secondary-400">—</span>
                     )}
                   </div>
                   <div className="col-span-2">
-                    <span className="text-sm font-medium text-gray-900 flex items-center gap-1">
-                      <Clock size={14} className="text-gray-500" />
+                    <span className="text-sm font-medium text-secondary flex items-center gap-1">
+                      <Clock size={14} className="text-secondary-400" />
                       {log.hours} 小時
                     </span>
                   </div>
                   <div className="col-span-2">
-                    <span className="text-xs text-gray-500">
+                    <span className="text-xs text-secondary-400">
                       {new Date(log.created_at).toLocaleString('zh-TW', {
                         month: '2-digit',
                         day: '2-digit',
@@ -253,10 +253,10 @@ const WorkLogs = () => {
                 {/* Mobile Card */}
                 <div className="md:hidden space-y-2">
                   <div className="flex items-center justify-between">
-                    <p className="text-sm font-medium text-gray-900">
+                    <p className="text-sm font-medium text-secondary">
                       {log.user_display_name || `使用者 #${log.user_id}`}
                     </p>
-                    <span className="text-xs text-gray-500">{log.date}</span>
+                    <span className="text-xs text-secondary-400">{log.date}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     {log.service_name ? (
@@ -264,11 +264,11 @@ const WorkLogs = () => {
                         {log.service_name}
                       </span>
                     ) : log.custom_task_name ? (
-                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-secondary">
                         {log.custom_task_name}
                       </span>
                     ) : null}
-                    <span className="text-sm text-gray-600 ml-auto flex items-center gap-1">
+                    <span className="text-sm text-secondary-400 ml-auto flex items-center gap-1">
                       <Clock size={12} />
                       {log.hours} 小時
                     </span>
