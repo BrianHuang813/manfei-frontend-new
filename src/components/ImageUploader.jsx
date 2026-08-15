@@ -89,9 +89,9 @@ const ImageUploader = ({ value, onChange, label, helpText, className = '' }) => 
   return (
     <div className={className}>
       {label && (
-        <label className="block text-sm font-medium text-gray-700 mb-1.5">
+        <span className="block text-sm font-medium text-gray-700 mb-1.5">
           {label}
-        </label>
+        </span>
       )}
 
       {/* Preview or Upload Area */}
@@ -142,7 +142,7 @@ const ImageUploader = ({ value, onChange, label, helpText, className = '' }) => 
               <span className="text-sm font-medium">
                 {isDragOver ? '放開以上傳圖片' : '點擊或拖曳上傳圖片'}
               </span>
-              <span className="text-xs text-gray-400">
+              <span className="text-xs text-gray-500">
                 支援 JPG、PNG、WebP、GIF（最大 10MB）
               </span>
             </div>
@@ -154,6 +154,8 @@ const ImageUploader = ({ value, onChange, label, helpText, className = '' }) => 
       <input
         ref={fileInputRef}
         type="file"
+        aria-label={label || '選擇圖片檔案'}
+        tabIndex={-1}
         accept="image/jpeg,image/png,image/webp,image/gif"
         onChange={handleInputChange}
         className="hidden"
@@ -161,7 +163,7 @@ const ImageUploader = ({ value, onChange, label, helpText, className = '' }) => 
 
       {/* Help text */}
       {helpText && (
-        <p className="mt-1.5 text-xs text-gray-400 flex items-center gap-1">
+        <p className="mt-1.5 text-xs text-gray-500 flex items-center gap-1">
           <ImageIcon size={12} />
           {helpText}
         </p>

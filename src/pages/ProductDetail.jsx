@@ -1,4 +1,5 @@
 import { useParams, Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import { useQuery } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Package } from 'lucide-react'
@@ -51,7 +52,7 @@ export default function ProductDetail() {
           <Link
             to="/"
             className="inline-block px-8 py-3 border border-gold text-gold rounded-full text-sm tracking-[0.2em]
-                       transition-all duration-300 hover:bg-gold hover:text-white"
+                       transition-colors duration-300 hover:bg-gold hover:text-white"
           >
             返回首頁
           </Link>
@@ -63,6 +64,15 @@ export default function ProductDetail() {
   /* ── Main content ───────────────────────────────────────── */
   return (
     <section className="min-h-screen bg-background section-padding">
+      <Helmet>
+        <title>{`${product.name}｜嫚霏美容 SPA`}</title>
+        <meta
+          name="description"
+          content={(product.description || `${product.name} —— 嫚霏美容 SPA 居家保養推薦。`)
+            .replace(/<[^>]*>/g, '')
+            .slice(0, 120)}
+        />
+      </Helmet>
       <div className="container-custom">
         {/* Back link */}
         <motion.div
@@ -96,7 +106,7 @@ export default function ProductDetail() {
                 className="w-full aspect-square object-cover
                            grayscale-[20%] sepia-[10%] brightness-95 contrast-[90%]
                            hover:grayscale-0 hover:sepia-0 hover:brightness-100
-                           transition-all duration-700"
+                           transition-[filter] duration-700"
               />
             </div>
           </motion.div>
@@ -158,14 +168,14 @@ export default function ProductDetail() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block px-8 py-3 bg-gold text-white rounded-full text-sm tracking-[0.2em]
-                           transition-all duration-300 hover:bg-gold-dark"
+                           transition-colors duration-300 hover:bg-gold-dark"
               >
                 LINE 諮詢購買
               </a>
               <Link
                 to="/"
                 className="inline-block px-8 py-3 border border-gold text-gold rounded-full text-sm tracking-[0.2em]
-                           transition-all duration-300 hover:bg-gold hover:text-white"
+                           transition-colors duration-300 hover:bg-gold hover:text-white"
               >
                 瀏覽更多產品
               </Link>

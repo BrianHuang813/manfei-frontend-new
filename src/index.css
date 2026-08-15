@@ -1,9 +1,19 @@
-/* Import Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@300;400;500;600;700&display=swap');
+/* Fonts are linked from index.html so they are discovered without waiting
+   for this stylesheet to parse. */
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Token mirrors for the few places a utility class can't reach
+   (inline gradient strings, scrollbar colours, selection). */
+:root {
+  --color-gold: #A89070;
+  --color-secondary: #2C3E50;
+  --color-primary-200: #eaddd7;
+  --color-primary-400: #d2bab0;
+  --color-primary-500: #bfa094;
+}
 
 /* Base styles */
 body {
@@ -110,4 +120,38 @@ html {
 
 .ql-editor {
   min-height: 200px;
+}
+
+/* Browser surfaces — the parts we didn't draw still carry the design */
+::selection {
+  background-color: #eaddd7;
+  color: #2C3E50;
+}
+
+:focus-visible {
+  outline: 2px solid #A89070;
+  outline-offset: 2px;
+}
+
+/* Reduced motion — keep state changes legible, remove travel and looping.
+   Deliberately not a global 0.01ms kill: transitions that communicate state
+   (hover, focus, open/close) stay, journeys across the screen stop. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .fade-in {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Transforms are the vestibular trigger; colour and opacity are not. */
+  *,
+  *::before,
+  *::after {
+    transition-property: opacity, color, background-color, border-color, fill, stroke, box-shadow;
+    animation-iteration-count: 1 !important;
+  }
 }

@@ -31,7 +31,7 @@ function ServiceColumn({ service, index }) {
             src={service.image_url || '/images/hero-background.jpg'}
             alt={service.name}
             loading="lazy"
-            className="w-full aspect-[3/4] object-cover transition-all duration-700
+            className="w-full aspect-[3/4] object-cover transition-[filter,transform] duration-700
                        grayscale-[20%] sepia-[10%] brightness-95 contrast-[90%]
                        group-hover:grayscale-0 group-hover:sepia-0
                        group-hover:brightness-100 group-hover:contrast-100
@@ -107,7 +107,7 @@ export default function SignatureServices({ services = [] }) {
           <Link
             to="/services"
             className="inline-block px-8 py-3 border border-gold text-gold rounded-full text-sm tracking-[0.2em]
-                       transition-all duration-300 hover:bg-gold hover:text-white"
+                       transition-colors duration-300 hover:bg-gold hover:text-white"
           >
             探索所有療程
           </Link>

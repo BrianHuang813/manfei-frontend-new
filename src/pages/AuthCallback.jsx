@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import { useAuth } from '../contexts/AuthContext'
 
 const AuthCallback = () => {
@@ -50,6 +51,10 @@ const AuthCallback = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <Helmet>
+        <title>登入處理中｜嫚霏美容 SPA</title>
+        <meta name="robots" content="noindex" />
+      </Helmet>
       <div className="text-center">
         <div className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-primary-500 border-r-transparent"></div>
         <p className="mt-4 text-lg text-gray-600">正在登入...</p>

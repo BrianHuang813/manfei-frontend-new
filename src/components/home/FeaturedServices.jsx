@@ -19,10 +19,10 @@ const staticCells = [
     span: 'md:col-span-1 md:row-span-1',
   },
   {
-    id: 'innova',
-    image: '/images/innova.png',
-    title: 'INNOVA',
-    subtitle: '以植研重啟妳的自信美學維度',
+    id: 'ericson',
+    image: '/images/ericson.jpg',
+    title: 'ERICSON LABORATOIRE',
+    subtitle: '以醫美級科研重塑肌膚的時間軸',
     span: 'md:col-span-1 md:row-span-1',
   },
 ]
@@ -119,7 +119,7 @@ export default function FeaturedServices() {
           <Link
             to="/brands"
             className="inline-block px-8 py-3 border border-gold text-gold rounded-full text-sm tracking-[0.2em]
-                       transition-all duration-300 hover:bg-gold hover:text-white"
+                       transition-colors duration-300 hover:bg-gold hover:text-white"
           >
             了解更多品牌
           </Link>

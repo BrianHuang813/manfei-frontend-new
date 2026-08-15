@@ -130,10 +130,10 @@ const Staff = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Date Field (Readonly - Today Only) */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="staff-f1">
                 日期
               </label>
-              <input
+              <input id="staff-f1"
                 type="date"
                 value={formData.date}
                 readOnly
@@ -162,10 +162,10 @@ const Staff = () => {
             {/* Service Dropdown OR Custom Task Input */}
             {!formData.useCustomTask ? (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="staff-f2">
                   服務項目
                 </label>
-                <select
+                <select id="staff-f2"
                   value={formData.serviceId}
                   onChange={(e) =>
                     setFormData({ ...formData, serviceId: e.target.value })
@@ -183,10 +183,10 @@ const Staff = () => {
               </div>
             ) : (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="staff-f3">
                   工作內容
                 </label>
-                <input
+                <input id="staff-f3"
                   type="text"
                   value={formData.customTaskName}
                   onChange={(e) =>
@@ -201,10 +201,10 @@ const Staff = () => {
 
             {/* Hours Input */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="staff-f4">
                 工作時數
               </label>
-              <input
+              <input id="staff-f4"
                 type="number"
                 step="0.5"
                 min="0.5"

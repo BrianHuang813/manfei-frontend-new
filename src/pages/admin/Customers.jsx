@@ -13,13 +13,14 @@ import {
   payInstallment,
 } from '../../api/admin'
 import { getErrorMessage } from '../../utils/errorMessage'
+import { useFeedback } from '../../components/ui/Feedback'
+import Modal from '../../components/ui/Modal'
 import {
   Search,
   Crown,
   Star,
   ChevronDown,
   ChevronRight,
-  X,
   Plus,
   Trash2,
   DollarSign,
@@ -118,14 +119,19 @@ const StatusToggle = ({ isActive, isLoading, onToggle }) => (
 
 const TierSelector = ({ currentTier, userId, onTierChange, isLoading }) => {
   const [open, setOpen] = useState(false)
+  const { confirm } = useFeedback()
 
-  const handleSelect = (tier) => {
+  const handleSelect = async (tier) => {
     if (tier === currentTier) { setOpen(false); return }
     const label = TIER_CONFIG[tier]?.label || tier
-    if (window.confirm(`確定要將此顧客的等級變更為「${label}」嗎？`)) {
-      onTierChange(userId, tier)
-    }
     setOpen(false)
+    const confirmed = await confirm({
+      title: '變更會員等級',
+      message: `確定要將此顧客的等級變更為「${label}」嗎？`,
+      detail: '等級影響顧客在會員中心看到的專屬禮遇，變更後立即生效。',
+      confirmLabel: '變更',
+    })
+    if (confirmed) onTierChange(userId, tier)
   }
 
   return (
@@ -133,7 +139,7 @@ const TierSelector = ({ currentTier, userId, onTierChange, isLoading }) => {
       <button
         onClick={() => setOpen(!open)}
         disabled={isLoading}
-        className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className="inline-flex items-center gap-1 px-3 py-2.5 min-h-[44px] text-xs font-medium bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
         變更等級
         <ChevronDown size={14} className={`transition-transform ${open ? 'rotate-180' : ''}`} />
@@ -173,6 +179,7 @@ const TierSelector = ({ currentTier, userId, onTierChange, isLoading }) => {
 
 const CustomerDetailModal = ({ userId, onClose }) => {
   const queryClient = useQueryClient()
+  const { toast, confirm } = useFeedback()
   const [newTxn, setNewTxn] = useState({
     service_name: '',
     amount: '',
@@ -197,7 +204,7 @@ const CustomerDetailModal = ({ userId, onClose }) => {
       setShowAddForm(false)
     },
     onError: (err) => {
-      window.alert(getErrorMessage(err, '新增失敗'))
+      toast(getErrorMessage(err, '新增失敗'), 'error')
     },
   })
 
@@ -208,7 +215,7 @@ const CustomerDetailModal = ({ userId, onClose }) => {
       queryClient.invalidateQueries({ queryKey: ['admin-customers'] })
     },
     onError: (err) => {
-      window.alert(getErrorMessage(err, '刪除失敗'))
+      toast(getErrorMessage(err, '刪除失敗'), 'error')
     },
   })
 
@@ -233,7 +240,7 @@ const CustomerDetailModal = ({ userId, onClose }) => {
       setEditingTxn(null)
     },
     onError: (err) => {
-      window.alert(getErrorMessage(err, '編輯失敗'))
+      toast(getErrorMessage(err, '編輯失敗'), 'error')
     },
   })
 
@@ -245,7 +252,7 @@ const CustomerDetailModal = ({ userId, onClose }) => {
       setPayingTxn(null)
       setPayAmount('')
     },
-    onError: (err) => { window.alert(getErrorMessage(err, '繳款失敗')) },
+    onError: (err) => { toast(getErrorMessage(err, '繳款失敗'), 'error') },
   })
 
   const reorderTxnMutation = useMutation({
@@ -255,7 +262,7 @@ const CustomerDetailModal = ({ userId, onClose }) => {
       queryClient.invalidateQueries({ queryKey: ['admin-customers'] })
     },
     onError: (err) => {
-      window.alert(getErrorMessage(err, '排序失敗'))
+      toast(getErrorMessage(err, '排序失敗'), 'error')
     },
   })
 
@@ -267,7 +274,7 @@ const CustomerDetailModal = ({ userId, onClose }) => {
       setEditingDisplayName(null)
     },
     onError: (err) => {
-      window.alert(getErrorMessage(err, '更新失敗'))
+      toast(getErrorMessage(err, '更新失敗'), 'error')
     },
   })
 
@@ -287,10 +294,15 @@ const CustomerDetailModal = ({ userId, onClose }) => {
     })
   }
 
-  const handleDeleteTxn = (txnId) => {
-    if (window.confirm('確定要刪除此消費記錄嗎？')) {
-      deleteTxnMutation.mutate(txnId)
-    }
+  const handleDeleteTxn = async (txnId) => {
+    const confirmed = await confirm({
+      title: '刪除消費記錄',
+      message: '確定要刪除此消費記錄嗎？',
+      detail: '刪除後無法復原，此筆金額將從顧客的累計消費中扣除。',
+      confirmLabel: '刪除',
+      tone: 'danger',
+    })
+    if (confirmed) deleteTxnMutation.mutate(txnId)
   }
 
   const handleEditTxn = (txn) => {
@@ -340,7 +352,7 @@ const CustomerDetailModal = ({ userId, onClose }) => {
 
   const handleSaveDisplayName = () => {
     if (!tempDisplayName.trim()) {
-      window.alert('姓名不能為空')
+      toast('姓名不能為空', 'error')
       return
     }
     updateDisplayNameMutation.mutate(tempDisplayName.trim())
@@ -350,24 +362,7 @@ const CustomerDetailModal = ({ userId, onClose }) => {
   const tier = TIER_CONFIG[customer?.tier] || TIER_CONFIG.regular
 
   return (
-    <>
-      {/* Backdrop */}
-      <div className="fixed inset-0 z-50 bg-black/40" onClick={onClose} />
-
-      {/* Modal */}
-      <div className="fixed inset-0 z-50 flex items-start justify-center pt-12 px-4 pointer-events-none">
-        <div
-          className="bg-white rounded-2xl shadow-2xl border border-gray-200 w-full max-w-2xl max-h-[85vh] overflow-y-auto scrollbar-modal pointer-events-auto"
-          onClick={(e) => e.stopPropagation()}
-        >
-          {/* Header */}
-          <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between rounded-t-2xl z-10">
-            <h3 className="text-lg font-bold text-gray-900">顧客詳情</h3>
-            <button onClick={onClose} className="p-1 text-gray-400 hover:text-gray-600 transition-colors">
-              <X size={20} />
-            </button>
-          </div>
-
+    <Modal isOpen onClose={onClose} title="顧客詳情" size="lg">
           {isLoading ? (
             <div className="flex items-center justify-center py-16">
               <Loader2 size={32} className="animate-spin text-primary-500" />
@@ -385,7 +380,7 @@ const CustomerDetailModal = ({ userId, onClose }) => {
                   <Avatar name={customer.display_name} isActive={customer.is_active} />
                   <div>
                     <h4 className="text-lg font-bold text-gray-900">{customer.display_name}</h4>
-                    <p className="text-xs text-gray-400 font-mono">{customer.line_user_id}</p>
+                    <p className="text-xs text-gray-500 font-mono">{customer.line_user_id}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
@@ -393,7 +388,7 @@ const CustomerDetailModal = ({ userId, onClose }) => {
                   <button
                     onClick={handleStartEditDisplayName}
                     disabled={updateDisplayNameMutation.isPending}
-                    className="p-1 text-gray-300 hover:text-primary-500 transition-colors"
+                    className="h-11 w-11 inline-flex items-center justify-center rounded-lg text-gray-500 hover:text-primary-500 transition-colors"
                     title="編輯姓名"
                   >
                     <Edit size={16} />
@@ -439,7 +434,7 @@ const CustomerDetailModal = ({ userId, onClose }) => {
                   <h4 className="text-sm font-bold text-gray-900">消費紀錄</h4>
                   <button
                     onClick={() => setShowAddForm(!showAddForm)}
-                    className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors"
+                    className="inline-flex items-center gap-1 px-3 py-2.5 min-h-[44px] text-xs font-medium bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors"
                   >
                     <Plus size={14} />
                     新增紀錄
@@ -450,8 +445,8 @@ const CustomerDetailModal = ({ userId, onClose }) => {
                 {showAddForm && (
                   <form onSubmit={handleAddTxn} className="bg-primary-50 rounded-xl p-4 mb-4 space-y-3">
                     <div>
-                      <label className="block text-xs font-medium text-gray-700 mb-1">服務/項目名稱</label>
-                      <textarea
+                      <label className="block text-xs font-medium text-gray-700 mb-1" htmlFor="customers-f1">服務/項目名稱</label>
+                      <textarea id="customers-f1"
                         rows={2}
                         value={newTxn.service_name}
                         onChange={(e) => setNewTxn((p) => ({ ...p, service_name: e.target.value }))}
@@ -461,8 +456,8 @@ const CustomerDetailModal = ({ userId, onClose }) => {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-gray-700 mb-1">金額 (NT$)</label>
-                      <input
+                      <label className="block text-xs font-medium text-gray-700 mb-1" htmlFor="customers-f2">金額 (NT$)</label>
+                      <input id="customers-f2"
                         type="number"
                         min="0"
                         value={newTxn.amount}
@@ -485,8 +480,8 @@ const CustomerDetailModal = ({ userId, onClose }) => {
                       {newTxn.is_installment && (
                         <div className="mt-2 flex items-center gap-3">
                           <div className="flex-1">
-                            <label className="block text-xs text-gray-500 mb-1">總期數</label>
-                            <input
+                            <label className="block text-xs text-gray-500 mb-1" htmlFor="customers-f3">總期數</label>
+                            <input id="customers-f3"
                               type="number"
                               min="2"
                               max="120"
@@ -509,8 +504,8 @@ const CustomerDetailModal = ({ userId, onClose }) => {
                       )}
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-gray-700 mb-1">消費日期（選填，預設今日）</label>
-                      <input
+                      <label className="block text-xs font-medium text-gray-700 mb-1" htmlFor="customers-f4">消費日期（選填，預設今日）</label>
+                      <input id="customers-f4"
                         type="date"
                         value={newTxn.transaction_date || ''}
                         onChange={(e) => setNewTxn((p) => ({ ...p, transaction_date: e.target.value || null }))}
@@ -539,7 +534,7 @@ const CustomerDetailModal = ({ userId, onClose }) => {
 
                 {/* Transaction List */}
                 {customer.transactions?.length === 0 ? (
-                  <div className="text-center py-8 text-gray-400">
+                  <div className="text-center py-8 text-gray-500">
                     <ShoppingBag size={28} className="mx-auto mb-2" />
                     <p className="text-sm">尚無消費紀錄</p>
                   </div>
@@ -549,7 +544,7 @@ const CustomerDetailModal = ({ userId, onClose }) => {
                       <div key={txn.id} className="flex items-center justify-between py-3">
                         <div className="flex-1">
                           <p className="text-sm font-medium text-gray-900 whitespace-pre-wrap">{txn.service_name}</p>
-                          <p className="text-xs text-gray-400 mt-0.5">
+                          <p className="text-xs text-gray-500 mt-0.5">
                             消費日期: {txn.transaction_date ? new Date(txn.transaction_date).toLocaleDateString('zh-TW', {
                               year: 'numeric', month: 'short', day: 'numeric',
                             }) : '未設定'}
@@ -560,7 +555,7 @@ const CustomerDetailModal = ({ userId, onClose }) => {
                                 已繳 {txn.paid_installments}/{txn.total_installments} 期
                               </span>
                               {txn.paid_installments < txn.total_installments && (
-                                <span className="text-gray-400">・剩餘 NT${(txn.amount - txn.paid_amount).toLocaleString()}</span>
+                                <span className="text-gray-500">・剩餘 NT${(txn.amount - txn.paid_amount).toLocaleString()}</span>
                               )}
                               {txn.paid_installments >= txn.total_installments && (
                                 <span className="text-green-600">・已繳清</span>
@@ -587,7 +582,7 @@ const CustomerDetailModal = ({ userId, onClose }) => {
                             <button
                               onClick={() => handleMoveTxn(index, 'up')}
                               disabled={index === 0 || reorderTxnMutation.isPending}
-                              className="p-1 text-gray-300 hover:text-primary-500 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                              className="h-11 w-11 inline-flex items-center justify-center rounded-lg text-gray-500 hover:text-primary-500 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                               title="上移"
                             >
                               <ArrowUp size={14} />
@@ -595,7 +590,7 @@ const CustomerDetailModal = ({ userId, onClose }) => {
                             <button
                               onClick={() => handleMoveTxn(index, 'down')}
                               disabled={index === (customer.transactions?.length || 0) - 1 || reorderTxnMutation.isPending}
-                              className="p-1 text-gray-300 hover:text-primary-500 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                              className="h-11 w-11 inline-flex items-center justify-center rounded-lg text-gray-500 hover:text-primary-500 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                               title="下移"
                             >
                               <ArrowDown size={14} />
@@ -603,7 +598,7 @@ const CustomerDetailModal = ({ userId, onClose }) => {
                             <button
                               onClick={() => handleEditTxn(txn)}
                               disabled={updateTxnMutation.isPending}
-                              className="p-1 text-gray-300 hover:text-blue-500 transition-colors"
+                              className="h-11 w-11 inline-flex items-center justify-center rounded-lg text-gray-500 hover:text-blue-500 transition-colors"
                               title="編輯"
                             >
                               <Edit size={14} />
@@ -611,7 +606,7 @@ const CustomerDetailModal = ({ userId, onClose }) => {
                             <button
                               onClick={() => handleDeleteTxn(txn.id)}
                               disabled={deleteTxnMutation.isPending}
-                              className="p-1 text-gray-300 hover:text-red-500 transition-colors"
+                              className="h-11 w-11 inline-flex items-center justify-center rounded-lg text-gray-500 hover:text-red-500 transition-colors"
                               title="刪除"
                             >
                               <Trash2 size={14} />
@@ -626,13 +621,12 @@ const CustomerDetailModal = ({ userId, onClose }) => {
 
               {/* Edit Transaction Modal */}
               {editingTxn && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 pointer-events-auto">
-                  <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-md mx-4">
-                    <h4 className="text-lg font-bold text-gray-900 mb-4">編輯消費紀錄</h4>
+              <Modal isOpen onClose={() => setEditingTxn(null)} title="編輯消費紀錄" size="lg">
+                  <div className="px-6 py-5">
                     <div className="space-y-3">
                       <div>
-                        <label className="block text-xs font-medium text-gray-700 mb-1">服務/項目名稱</label>
-                        <textarea
+                        <label className="block text-xs font-medium text-gray-700 mb-1" htmlFor="customers-f5">服務/項目名稱</label>
+                        <textarea id="customers-f5"
                           rows={2}
                           value={editingTxn.service_name}
                           onChange={(e) => setEditingTxn((p) => ({ ...p, service_name: e.target.value }))}
@@ -641,8 +635,8 @@ const CustomerDetailModal = ({ userId, onClose }) => {
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-medium text-gray-700 mb-1">金額 (NT$)</label>
-                        <input
+                        <label className="block text-xs font-medium text-gray-700 mb-1" htmlFor="customers-f6">金額 (NT$)</label>
+                        <input id="customers-f6"
                           type="number"
                           min="0"
                           value={editingTxn.amount}
@@ -651,8 +645,8 @@ const CustomerDetailModal = ({ userId, onClose }) => {
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-medium text-gray-700 mb-1">消費日期</label>
-                        <input
+                        <label className="block text-xs font-medium text-gray-700 mb-1" htmlFor="customers-f7">消費日期</label>
+                        <input id="customers-f7"
                           type="date"
                           value={editingTxn.transaction_date || ''}
                           onChange={(e) => setEditingTxn((p) => ({ ...p, transaction_date: e.target.value || null }))}
@@ -677,15 +671,15 @@ const CustomerDetailModal = ({ userId, onClose }) => {
                           />
                           <span className="text-xs font-medium text-gray-700">分期付款</span>
                           {editingTxn.paid_installments > 0 && (
-                            <span className="text-xs text-gray-400">（已有繳款紀錄，無法變更）</span>
+                            <span className="text-xs text-gray-500">（已有繳款紀錄，無法變更）</span>
                           )}
                         </label>
                         {editingTxn.is_installment && (
                           <div className="space-y-2">
                             <div className="flex gap-3">
                               <div className="flex-1">
-                                <label className="block text-xs text-gray-500 mb-1">總期數</label>
-                                <input
+                                <label className="block text-xs text-gray-500 mb-1" htmlFor="customers-f8">總期數</label>
+                                <input id="customers-f8"
                                   type="number"
                                   min="2"
                                   max="120"
@@ -695,8 +689,8 @@ const CustomerDetailModal = ({ userId, onClose }) => {
                                 />
                               </div>
                               <div className="flex-1">
-                                <label className="block text-xs text-gray-500 mb-1">每期金額</label>
-                                <input
+                                <label className="block text-xs text-gray-500 mb-1" htmlFor="customers-f9">每期金額</label>
+                                <input id="customers-f9"
                                   type="number"
                                   min="0"
                                   value={editingTxn.amount_per_installment || ''}
@@ -706,7 +700,7 @@ const CustomerDetailModal = ({ userId, onClose }) => {
                               </div>
                             </div>
                             {editingTxn.paid_installments > 0 && (
-                              <div className="flex gap-4 text-xs text-gray-400">
+                              <div className="flex gap-4 text-xs text-gray-500">
                                 <span>已繳：{editingTxn.paid_installments} 期</span>
                                 <span>已繳金額：NT${(editingTxn.paid_amount || 0).toLocaleString()}</span>
                               </div>
@@ -731,22 +725,21 @@ const CustomerDetailModal = ({ userId, onClose }) => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </Modal>
               )}
 
               {/* Pay Installment Modal */}
               {payingTxn && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 pointer-events-auto">
-                  <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-sm mx-4">
-                    <h4 className="text-lg font-bold text-gray-900 mb-1">記錄繳款</h4>
-                    <p className="text-xs text-gray-400 mb-4">
+              <Modal isOpen onClose={() => setPayingTxn(null)} title="記錄繳款" size="sm">
+                  <div className="px-6 py-5">
+                    <p className="text-xs text-gray-500 mb-4">
                       第 {payingTxn.paid_installments + 1} / {payingTxn.total_installments} 期・
                       剩餘 NT${(payingTxn.amount - payingTxn.paid_amount).toLocaleString()}
                     </p>
                     <div className="space-y-3">
                       <div>
-                        <label className="block text-xs font-medium text-gray-700 mb-1">本次繳款金額 (NT$)</label>
-                        <input
+                        <label className="block text-xs font-medium text-gray-700 mb-1" htmlFor="customers-f10">本次繳款金額 (NT$)</label>
+                        <input id="customers-f10"
                           type="number"
                           min="0"
                           value={payAmount}
@@ -775,18 +768,17 @@ const CustomerDetailModal = ({ userId, onClose }) => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </Modal>
               )}
 
               {/* Edit Display Name Modal */}
               {editingDisplayName && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 pointer-events-auto">
-                  <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-md mx-4">
-                    <h4 className="text-lg font-bold text-gray-900 mb-4">編輯姓名</h4>
+              <Modal isOpen onClose={() => setEditingDisplayName(null)} title="編輯姓名" size="sm">
+                  <div className="px-6 py-5">
                     <div className="space-y-3">
                       <div>
-                        <label className="block text-xs font-medium text-gray-700 mb-1">新姓名</label>
-                        <input
+                        <label className="block text-xs font-medium text-gray-700 mb-1" htmlFor="customers-f11">新姓名</label>
+                        <input id="customers-f11"
                           type="text"
                           value={tempDisplayName}
                           onChange={(e) => setTempDisplayName(e.target.value)}
@@ -811,13 +803,11 @@ const CustomerDetailModal = ({ userId, onClose }) => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </Modal>
               )}
             </div>
           )}
-        </div>
-      </div>
-    </>
+    </Modal>
   )
 }
 
@@ -844,6 +834,7 @@ const TableSkeleton = () => (
 
 const Customers = () => {
   const queryClient = useQueryClient()
+  const { toast, confirm } = useFeedback()
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCustomerId, setSelectedCustomerId] = useState(null)
   const [mutatingUsers, setMutatingUsers] = useState({})
@@ -868,7 +859,7 @@ const Customers = () => {
       queryClient.invalidateQueries({ queryKey: ['admin-customers'] })
     },
     onError: (err) => {
-      window.alert(getErrorMessage(err, '等級更新失敗'))
+      toast(getErrorMessage(err, '等級更新失敗'), 'error')
     },
     onSettled: (_, __, { userId }) => {
       setMutatingUsers((prev) => { const n = { ...prev }; delete n[userId]; return n })
@@ -885,7 +876,7 @@ const Customers = () => {
       queryClient.invalidateQueries({ queryKey: ['admin-customers'] })
     },
     onError: (err) => {
-      window.alert(getErrorMessage(err, '狀態更新失敗'))
+      toast(getErrorMessage(err, '狀態更新失敗'), 'error')
     },
     onSettled: (_, __, { userId }) => {
       setMutatingUsers((prev) => { const n = { ...prev }; delete n[userId]; return n })
@@ -907,11 +898,18 @@ const Customers = () => {
     tierMutation.mutate({ userId, tier })
   }
 
-  const handleStatusToggle = (userId, currentStatus) => {
+  const handleStatusToggle = async (userId, currentStatus) => {
     const action = currentStatus ? '停用' : '啟用'
-    if (window.confirm(`確定要${action}此帳號嗎？`)) {
-      statusMutation.mutate({ userId, isActive: !currentStatus })
-    }
+    const confirmed = await confirm({
+      title: `${action}帳號`,
+      message: `確定要${action}此帳號嗎？`,
+      detail: currentStatus
+        ? '停用後此顧客將無法登入會員中心，消費記錄會保留。'
+        : '啟用後此顧客可立即重新登入。',
+      confirmLabel: action,
+      tone: currentStatus ? 'danger' : 'default',
+    })
+    if (confirmed) statusMutation.mutate({ userId, isActive: !currentStatus })
   }
 
   return (
@@ -927,8 +925,9 @@ const Customers = () => {
       {/* Search + Stats */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-6">
         <div className="relative flex-1 w-full sm:max-w-md">
-          <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
           <input
+            aria-label="搜尋顧客姓名或 LINE ID"
             type="text"
             placeholder="搜尋顧客姓名或 LINE ID..."
             value={searchQuery}
@@ -970,7 +969,7 @@ const Customers = () => {
           </div>
         ) : filteredCustomers.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 px-4">
-            <Search size={48} className="text-gray-300 mb-4" />
+            <Search size={48} className="text-gray-400 mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">
               {searchQuery ? '找不到符合的顧客' : '目前沒有顧客'}
             </h3>
@@ -1006,7 +1005,7 @@ const Customers = () => {
                       <Avatar name={c.display_name} isActive={c.is_active} />
                       <div className="min-w-0">
                         <p className="text-sm font-medium text-gray-900 truncate">{c.display_name}</p>
-                        <p className="text-xs text-gray-400 truncate mt-0.5">{c.line_user_id}</p>
+                        <p className="text-xs text-gray-500 truncate mt-0.5">{c.line_user_id}</p>
                       </div>
                     </div>
 
@@ -1047,7 +1046,7 @@ const Customers = () => {
                       />
                       <button
                         onClick={() => setSelectedCustomerId(c.id)}
-                        className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                        className="inline-flex items-center gap-1 px-3 py-2.5 min-h-[44px] text-xs font-medium bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                       >
                         詳情
                         <ChevronRight size={14} />

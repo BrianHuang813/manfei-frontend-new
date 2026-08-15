@@ -2,7 +2,8 @@ import { useState, useMemo } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { fetchUsers, updateUserRole, updateUserStatus } from '../../api/admin'
 import { useAuth } from '../../contexts/AuthContext'
-import { Search, ChevronDown, Shield, UserCog, User as UserIcon, AlertCircle, Loader2 } from 'lucide-react'
+import { useFeedback } from '../../components/ui/Feedback'
+import { Search, ChevronDown, Shield, UserCog, AlertCircle, Loader2 } from 'lucide-react'
 
 // ==================== Sub-components ====================
 
@@ -114,17 +115,22 @@ const StatusToggle = ({ isActive, isLoading, onToggle }) => {
  */
 const RoleSelector = ({ currentRole, userId, onRoleChange, isLoading }) => {
   const [open, setOpen] = useState(false)
+  const { confirm } = useFeedback()
 
-  const handleSelect = (role) => {
+  const handleSelect = async (role) => {
     if (role === currentRole) {
       setOpen(false)
       return
     }
     const roleLabel = ROLE_CONFIG[role]?.label || role
-    if (window.confirm(`確定要將此使用者的角色變更為「${roleLabel}」嗎？`)) {
-      onRoleChange(userId, role)
-    }
     setOpen(false)
+    const confirmed = await confirm({
+      title: '變更角色',
+      message: `確定要將此使用者的角色變更為「${roleLabel}」嗎？`,
+      detail: '角色決定此帳號能存取的後台功能，變更後立即生效。',
+      confirmLabel: '變更',
+    })
+    if (confirmed) onRoleChange(userId, role)
   }
 
   return (
@@ -132,7 +138,7 @@ const RoleSelector = ({ currentRole, userId, onRoleChange, isLoading }) => {
       <button
         onClick={() => setOpen(!open)}
         disabled={isLoading}
-        className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className="inline-flex items-center gap-1 px-3 py-2.5 min-h-[44px] text-xs font-medium bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
         變更角色
         <ChevronDown size={14} className={`transition-transform ${open ? 'rotate-180' : ''}`} />
@@ -193,6 +199,7 @@ const TableSkeleton = () => (
 const Users = () => {
   const { user: currentUser } = useAuth()
   const queryClient = useQueryClient()
+  const { toast, confirm } = useFeedback()
   const [searchQuery, setSearchQuery] = useState('')
   const [mutatingUsers, setMutatingUsers] = useState({}) // Track per-user loading states
 
@@ -218,7 +225,7 @@ const Users = () => {
     },
     onError: (err) => {
       const message = err.response?.data?.detail || '角色更新失敗'
-      window.alert(message)
+      toast(message, 'error')
     },
     onSettled: (_, __, { userId }) => {
       setMutatingUsers((prev) => {
@@ -240,7 +247,7 @@ const Users = () => {
     },
     onError: (err) => {
       const message = err.response?.data?.detail || '狀態更新失敗'
-      window.alert(message)
+      toast(message, 'error')
     },
     onSettled: (_, __, { userId }) => {
       setMutatingUsers((prev) => {
@@ -271,11 +278,18 @@ const Users = () => {
     roleMutation.mutate({ userId, role })
   }
 
-  const handleStatusToggle = (userId, currentStatus) => {
+  const handleStatusToggle = async (userId, currentStatus) => {
     const action = currentStatus ? '停用' : '啟用'
-    if (window.confirm(`確定要${action}此帳號嗎？`)) {
-      statusMutation.mutate({ userId, isActive: !currentStatus })
-    }
+    const confirmed = await confirm({
+      title: `${action}帳號`,
+      message: `確定要${action}此帳號嗎？`,
+      detail: currentStatus
+        ? '停用後此使用者將無法登入，資料會保留。'
+        : '啟用後此使用者可立即重新登入。',
+      confirmLabel: action,
+      tone: currentStatus ? 'danger' : 'default',
+    })
+    if (confirmed) statusMutation.mutate({ userId, isActive: !currentStatus })
   }
 
   // ---- Render ----
@@ -295,9 +309,10 @@ const Users = () => {
         <div className="relative flex-1 w-full sm:max-w-md">
           <Search
             size={18}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
           />
           <input
+            aria-label="搜尋姓名或 LINE ID"
             type="text"
             placeholder="搜尋姓名或 LINE ID..."
             value={searchQuery}
@@ -341,7 +356,7 @@ const Users = () => {
           </div>
         ) : filteredUsers.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 px-4">
-            <Search size={48} className="text-gray-300 mb-4" />
+            <Search size={48} className="text-gray-400 mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">
               {searchQuery ? '找不到符合的使用者' : '目前沒有使用者'}
             </h3>
@@ -385,7 +400,7 @@ const Users = () => {
                             </span>
                           )}
                         </div>
-                        <p className="text-xs text-gray-400 truncate mt-0.5">
+                        <p className="text-xs text-gray-500 truncate mt-0.5">
                           {u.line_user_id}
                         </p>
                       </div>
@@ -427,7 +442,7 @@ const Users = () => {
 
       {/* Footer Info */}
       {!isLoading && !isError && filteredUsers.length > 0 && (
-        <p className="text-xs text-gray-400 mt-4 text-center">
+        <p className="text-xs text-gray-500 mt-4 text-center">
           員工資料僅供管理用途。管理員只能變更角色與帳號狀態，無法編輯個人資訊。
         </p>
       )}

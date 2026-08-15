@@ -15,7 +15,7 @@ export default function Footer() {
       />
 
       {/* Heavy overlay */}
-      <div className="absolute inset-0 bg-[#2C3E50]/90" />
+      <div className="absolute inset-0 bg-secondary/90" />
 
       {/* Content */}
       <div className="relative z-10">
@@ -97,7 +97,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block mt-6 px-6 py-2.5 border border-gold/60 text-gold text-sm 
-                           rounded-full tracking-wider transition-all duration-300
+                           rounded-full tracking-wider transition-colors duration-300
                            hover:bg-gold hover:text-white"
               >
                 LINE 預約諮詢

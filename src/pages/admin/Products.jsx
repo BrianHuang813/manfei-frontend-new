@@ -7,13 +7,14 @@ import {
   deleteProduct,
 } from '../../api/admin'
 import { getErrorMessage } from '../../utils/errorMessage'
+import { useFeedback } from '../../components/ui/Feedback'
+import Modal from '../../components/ui/Modal'
 import ImageUploader from '../../components/ImageUploader'
 import {
   Search,
   Plus,
   Pencil,
   Trash2,
-  X,
   Loader2,
   AlertCircle,
   Filter,
@@ -136,25 +137,14 @@ const ProductModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPending,
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="fixed inset-0 bg-black/50" onClick={onClose} />
-      <div className="relative bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto scrollbar-modal">
-        {/* Header */}
-        <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 rounded-t-xl flex items-center justify-between z-10">
-          <h3 className="text-lg font-semibold text-gray-900">
-            {mode === 'create' ? '新增產品' : '編輯產品'}
-          </h3>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
-            <X size={20} />
-          </button>
-        </div>
+    <Modal isOpen={isOpen} onClose={onClose} title={mode === 'create' ? '新增產品' : '編輯產品'} size="lg">
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
           {/* Name */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">產品名稱 *</label>
-            <input
+            <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="products-f1">產品名稱 *</label>
+            <input id="products-f1"
               type="text"
               required
               value={form.name}
@@ -167,8 +157,8 @@ const ProductModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPending,
           {/* Price & Spec & Category */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">價格 (NT$) *</label>
-              <input
+              <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="products-f2">價格 (NT$) *</label>
+              <input id="products-f2"
                 type="number"
                 required
                 min="0"
@@ -178,8 +168,8 @@ const ProductModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPending,
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">規格</label>
-              <input
+              <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="products-f3">規格</label>
+              <input id="products-f3"
                 type="text"
                 value={form.spec}
                 onChange={(e) => setForm({ ...form, spec: e.target.value })}
@@ -188,8 +178,8 @@ const ProductModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPending,
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">分類</label>
-              <select
+              <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="products-f4">分類</label>
+              <select id="products-f4"
                 value={form.category}
                 onChange={(e) => setForm({ ...form, category: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
@@ -204,8 +194,8 @@ const ProductModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPending,
 
           {/* Description */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">描述</label>
-            <textarea
+            <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="products-f5">描述</label>
+            <textarea id="products-f5"
               rows={4}
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
@@ -236,8 +226,8 @@ const ProductModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPending,
               <span className="text-xs text-gray-500">{form.is_stock ? '有庫存' : '無庫存'}</span>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">排序</label>
-              <input
+              <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="products-f6">排序</label>
+              <input id="products-f6"
                 type="number"
                 value={form.sort_order}
                 onChange={(e) => setForm({ ...form, sort_order: parseInt(e.target.value) || 0 })}
@@ -265,8 +255,7 @@ const ProductModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPending,
             </button>
           </div>
         </form>
-      </div>
-    </div>
+    </Modal>
   )
 }
 
@@ -274,6 +263,7 @@ const ProductModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPending,
 
 const Products = () => {
   const queryClient = useQueryClient()
+  const { toast, confirm } = useFeedback()
   const [search, setSearch] = useState('')
   const [filterCategory, setFilterCategory] = useState('')
   const [modal, setModal] = useState({ isOpen: false, mode: 'create', editingItem: null })
@@ -292,7 +282,7 @@ const Products = () => {
       queryClient.invalidateQueries({ queryKey: ['admin-products'] })
       closeModal()
     },
-    onError: (err) => window.alert(getErrorMessage(err, '操作失敗')),
+    onError: (err) => toast(getErrorMessage(err, '操作失敗'), 'error'),
   })
 
   const updateMutation = useMutation({
@@ -301,7 +291,7 @@ const Products = () => {
       queryClient.invalidateQueries({ queryKey: ['admin-products'] })
       closeModal()
     },
-    onError: (err) => window.alert(getErrorMessage(err, '操作失敗')),
+    onError: (err) => toast(getErrorMessage(err, '操作失敗'), 'error'),
   })
 
   const deleteMutation = useMutation({
@@ -314,7 +304,7 @@ const Products = () => {
         return next
       }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin-products'] }),
-    onError: (err) => window.alert(getErrorMessage(err, '刪除失敗')),
+    onError: (err) => toast(getErrorMessage(err, '刪除失敗'), 'error'),
   })
 
   const toggleMutation = useMutation({
@@ -327,7 +317,7 @@ const Products = () => {
         return next
       }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin-products'] }),
-    onError: (err) => window.alert(getErrorMessage(err, '操作失敗')),
+    onError: (err) => toast(getErrorMessage(err, '操作失敗'), 'error'),
   })
 
   // Filter / Search
@@ -364,10 +354,15 @@ const Products = () => {
     }
   }
 
-  const handleDelete = (item) => {
-    if (window.confirm(`確定要刪除「${item.name}」嗎？此操作無法復原。`)) {
-      deleteMutation.mutate(item.id)
-    }
+  const handleDelete = async (item) => {
+    const confirmed = await confirm({
+      title: '刪除產品',
+      message: `確定要刪除「${item.name}」嗎？`,
+      detail: '刪除後無法復原，此產品將立即從網站上移除。',
+      confirmLabel: '刪除',
+      tone: 'danger',
+    })
+    if (confirmed) deleteMutation.mutate(item.id)
   }
 
   if (isError) {
@@ -404,8 +399,9 @@ const Products = () => {
       {/* Search & Filter */}
       <div className="flex flex-col sm:flex-row gap-3 mb-6">
         <div className="relative flex-1">
-          <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
           <input
+            aria-label="搜尋產品名稱"
             type="text"
             placeholder="搜尋產品名稱..."
             value={search}
@@ -414,8 +410,8 @@ const Products = () => {
           />
         </div>
         <div className="relative">
-          <Filter size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-          <select
+          <Filter size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+          <select aria-label="篩選分類"
             value={filterCategory}
             onChange={(e) => setFilterCategory(e.target.value)}
             className="pl-9 pr-8 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm appearance-none bg-white"
@@ -433,7 +429,7 @@ const Products = () => {
         {isLoading ? (
           <TableSkeleton />
         ) : filtered.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-16 text-gray-400">
+          <div className="flex flex-col items-center justify-center py-16 text-gray-500">
             <Package size={48} className="mb-3 opacity-50" />
             <p className="text-lg font-medium">尚無產品</p>
             <p className="text-sm mt-1">點擊「新增產品」開始建立</p>
@@ -466,7 +462,7 @@ const Products = () => {
                         <img src={item.image_url} alt="" className="h-10 w-10 object-cover rounded" />
                       ) : (
                         <div className="h-10 w-10 bg-gray-100 rounded flex items-center justify-center">
-                          <Package size={16} className="text-gray-300" />
+                          <Package size={16} className="text-gray-500" />
                         </div>
                       )}
                     </div>
@@ -481,7 +477,7 @@ const Products = () => {
                     </div>
                     <div className="col-span-1">
                       <span className="text-sm font-medium text-gray-900 flex items-center gap-0.5">
-                        <DollarSign size={14} className="text-gray-400" />
+                        <DollarSign size={14} className="text-gray-500" />
                         {item.price.toLocaleString()}
                       </span>
                     </div>
@@ -505,7 +501,7 @@ const Products = () => {
                     <div className="col-span-3 flex justify-end gap-1">
                       <button
                         onClick={() => openEdit(item)}
-                        className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                        className="h-11 w-11 inline-flex items-center justify-center rounded-lg text-gray-500 hover:text-blue-600 hover:bg-blue-50 transition-colors"
                         title="編輯"
                       >
                         <Pencil size={16} />
@@ -513,7 +509,7 @@ const Products = () => {
                       <button
                         onClick={() => handleDelete(item)}
                         disabled={isMutating}
-                        className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
+                        className="h-11 w-11 inline-flex items-center justify-center rounded-lg text-gray-500 hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
                         title="刪除"
                       >
                         <Trash2 size={16} />
@@ -528,7 +524,7 @@ const Products = () => {
                         <img src={item.image_url} alt="" className="h-14 w-14 object-cover rounded flex-shrink-0" />
                       ) : (
                         <div className="h-14 w-14 bg-gray-100 rounded flex items-center justify-center flex-shrink-0">
-                          <Package size={20} className="text-gray-300" />
+                          <Package size={20} className="text-gray-500" />
                         </div>
                       )}
                       <div className="flex-1 min-w-0">
@@ -555,14 +551,14 @@ const Products = () => {
                       <div className="flex gap-1">
                         <button
                           onClick={() => openEdit(item)}
-                          className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg"
+                          className="h-11 w-11 inline-flex items-center justify-center rounded-lg text-gray-500 hover:text-blue-600 hover:bg-blue-50"
                         >
                           <Pencil size={16} />
                         </button>
                         <button
                           onClick={() => handleDelete(item)}
                           disabled={isMutating}
-                          className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg disabled:opacity-50"
+                          className="h-11 w-11 inline-flex items-center justify-center rounded-lg text-gray-500 hover:text-red-600 hover:bg-red-50 disabled:opacity-50"
                         >
                           <Trash2 size={16} />
                         </button>

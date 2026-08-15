@@ -78,7 +78,7 @@ export default function LatestNews({ news = [] }) {
                   )}
                   <ArrowRight
                     size={16}
-                    className="text-gold/40 transition-all duration-300
+                    className="text-gold/40 transition-[color,transform] duration-300
                                group-hover:text-gold group-hover:translate-x-1"
                   />
                 </div>

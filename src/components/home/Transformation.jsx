@@ -21,7 +21,10 @@ function CaseCard({ item }) {
     >
       <div className="group overflow-hidden rounded-2xl shadow-sm hover:shadow-lg
                       transition-shadow duration-700 bg-white">
-        <div className="overflow-hidden">
+        {/* Reserve space before the image lands. These are admin-uploaded
+            before/after shots of unknown ratio, so we hold a minimum height
+            rather than force an aspect that would crop them. */}
+        <div className="overflow-hidden bg-stone-100 min-h-[220px] md:min-h-[340px]">
           <img
             src={item.image_url}
             alt={item.title}

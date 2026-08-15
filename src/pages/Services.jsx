@@ -62,7 +62,7 @@ function CategorySection({ group, index, settings }) {
             loading="lazy"
             className="w-full h-full object-cover filter brightness-[0.95] contrast-[1.05] saturate-[0.85] transition-transform duration-700 group-hover:scale-105"
           />
-          <div className="absolute inset-0 bg-[#A89070]/[0.1] pointer-events-none transition-opacity duration-700 group-hover:opacity-0"></div>
+          <div className="absolute inset-0 bg-gold/10 pointer-events-none transition-opacity duration-700 group-hover:opacity-0"></div>
         </div>
       </div>
 

@@ -1,19 +1,15 @@
 import { useState, useMemo } from 'react'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import {
   fetchWorkLogs,
   fetchUsers,
-  fetchServices,
 } from '../../api/admin'
 import {
   Search,
-  Loader2,
   AlertCircle,
-  Filter,
   ClipboardList,
   Calendar,
   Clock,
-  DollarSign,
   User,
 } from 'lucide-react'
 
@@ -33,13 +29,6 @@ const TableSkeleton = () => (
     ))}
   </div>
 )
-
-// Get status label and color
-function getStatusStyle(status) {
-  // WorkLog doesn't have a status column in current model,
-  // but we display based on available data
-  return { label: '已完成', color: 'bg-green-100 text-green-700 border-green-200' }
-}
 
 // ==================== Main Component ====================
 
@@ -67,11 +56,6 @@ const WorkLogs = () => {
   const { data: users = [] } = useQuery({
     queryKey: ['admin-users-list'],
     queryFn: fetchUsers,
-  })
-
-  const { data: services = [] } = useQuery({
-    queryKey: ['admin-services-list'],
-    queryFn: fetchServices,
   })
 
   // Staff users only
@@ -153,8 +137,9 @@ const WorkLogs = () => {
       {/* Filter Bar */}
       <div className="flex flex-col lg:flex-row gap-3 mb-6">
         <div className="relative flex-1">
-          <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
           <input
+            aria-label="搜尋員工、服務或任務"
             type="text"
             placeholder="搜尋員工、服務或任務..."
             value={search}
@@ -164,8 +149,8 @@ const WorkLogs = () => {
         </div>
         <div className="flex flex-wrap gap-3">
           <div className="relative">
-            <User size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-            <select
+            <User size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+            <select aria-label="篩選員工"
               value={filterUserId}
               onChange={(e) => setFilterUserId(e.target.value)}
               className="pl-9 pr-8 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm appearance-none bg-white"
@@ -179,15 +164,15 @@ const WorkLogs = () => {
             </select>
           </div>
           <div className="flex items-center gap-2">
-            <input
+            <input aria-label="開始日期"
               type="date"
               value={filterStartDate}
               onChange={(e) => setFilterStartDate(e.target.value)}
               className="px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
               placeholder="開始日期"
             />
-            <span className="text-gray-400 text-sm">至</span>
-            <input
+            <span className="text-gray-500 text-sm">至</span>
+            <input aria-label="結束日期"
               type="date"
               value={filterEndDate}
               onChange={(e) => setFilterEndDate(e.target.value)}
@@ -203,7 +188,7 @@ const WorkLogs = () => {
         {isLoading ? (
           <TableSkeleton />
         ) : filtered.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-16 text-gray-400">
+          <div className="flex flex-col items-center justify-center py-16 text-gray-500">
             <ClipboardList size={48} className="mb-3 opacity-50" />
             <p className="text-lg font-medium">尚無工作記錄</p>
             <p className="text-sm mt-1">員工開始記錄工作後會顯示在這裡</p>
@@ -244,12 +229,12 @@ const WorkLogs = () => {
                         {log.custom_task_name}
                       </span>
                     ) : (
-                      <span className="text-sm text-gray-400">—</span>
+                      <span className="text-sm text-gray-500">—</span>
                     )}
                   </div>
                   <div className="col-span-2">
                     <span className="text-sm font-medium text-gray-900 flex items-center gap-1">
-                      <Clock size={14} className="text-gray-400" />
+                      <Clock size={14} className="text-gray-500" />
                       {log.hours} 小時
                     </span>
                   </div>

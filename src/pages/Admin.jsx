@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { fetchDashboardStats, fetchSettings, updateSettings } from '../api/admin'
 import ImageUploader from '../components/ImageUploader'
+import { useFeedback } from '../components/ui/Feedback'
 import ServicesManagement from './admin/Services'
 import NewsManagement from './admin/News'
 import ProductsManagement from './admin/Products'
@@ -13,7 +14,6 @@ import {
   Package,
   Star,
   Image,
-  Users,
   UserCog,
   Heart,
   TrendingUp,
@@ -133,7 +133,7 @@ const Dashboard = () => {
                 <div>
                   <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">{card.label}</p>
                   <p className="text-2xl font-bold text-gray-900 mt-0.5">{total ?? 0}</p>
-                  <p className="text-xs text-gray-400 mt-0.5">{subtitle}</p>
+                  <p className="text-xs text-gray-500 mt-0.5">{subtitle}</p>
                 </div>
               </div>
             </a>
@@ -145,12 +145,12 @@ const Dashboard = () => {
       <div className="bg-white rounded-xl border border-gray-200">
         <div className="px-6 py-4 border-b border-gray-100">
           <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-            <Clock size={20} className="text-gray-400" />
+            <Clock size={20} className="text-gray-500" />
             近期活動
           </h3>
         </div>
         {recentActivity.length === 0 ? (
-          <div className="px-6 py-8 text-center text-gray-400 text-sm">
+          <div className="px-6 py-8 text-center text-gray-500 text-sm">
             目前沒有活動紀錄
           </div>
         ) : (
@@ -161,7 +161,7 @@ const Dashboard = () => {
                   {item.type_label}
                 </span>
                 <span className="text-sm text-gray-700 flex-1 truncate">{item.title}</span>
-                <span className="text-xs text-gray-400 whitespace-nowrap">
+                <span className="text-xs text-gray-500 whitespace-nowrap">
                   {item.updated_at ? new Date(item.updated_at).toLocaleString('zh-TW', {
                     month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
                   }) : '-'}
@@ -195,6 +195,7 @@ const SETTING_FIELDS = {
 
 const SettingsPage = () => {
   const queryClient = useQueryClient()
+  const { toast } = useFeedback()
   const [form, setForm] = useState({})
   const [saveSuccess, setSaveSuccess] = useState(false)
 
@@ -211,7 +212,7 @@ const SettingsPage = () => {
       setTimeout(() => setSaveSuccess(false), 3000)
     },
     onError: (err) => {
-      window.alert(err.response?.data?.detail || '儲存失敗')
+      toast(err.response?.data?.detail || '儲存失敗', 'error')
     },
   })
 
@@ -269,8 +270,8 @@ const SettingsPage = () => {
           <div className="space-y-4">
             {SETTING_FIELDS.basic.map((field) => (
               <div key={field.key}>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{field.label}</label>
-                <input
+                <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor={`setting-${field.key}`}>{field.label}</label>
+                <input id={`setting-${field.key}`}
                   type={field.type}
                   value={form[field.key] || ''}
                   onChange={(e) => handleChange(field.key, e.target.value)}
@@ -288,9 +289,9 @@ const SettingsPage = () => {
           <div className="space-y-4">
             {SETTING_FIELDS.seo.map((field) => (
               <div key={field.key}>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{field.label}</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor={`seo-${field.key}`}>{field.label}</label>
                 {field.type === 'textarea' ? (
-                  <textarea
+                  <textarea id={`seo-${field.key}`}
                     rows={3}
                     value={form[field.key] || ''}
                     onChange={(e) => handleChange(field.key, e.target.value)}
@@ -299,6 +300,7 @@ const SettingsPage = () => {
                   />
                 ) : (
                   <input
+                    id={`seo-${field.key}`}
                     type={field.type}
                     value={form[field.key] || ''}
                     onChange={(e) => handleChange(field.key, e.target.value)}

@@ -1,4 +1,5 @@
 import { useParams, Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import { useQuery } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
 import { ChevronRight } from 'lucide-react'
@@ -33,7 +34,7 @@ export default function NewsDetail() {
     return (
       <section className="section-padding bg-white min-h-screen">
         <div className="max-w-3xl mx-auto px-6">
-          <p className="text-center text-stone-400 tracking-wide py-20">載入中…</p>
+          <p className="text-center text-stone-500 tracking-wide py-20">載入中…</p>
         </div>
       </section>
     )
@@ -59,13 +60,20 @@ export default function NewsDetail() {
   /* ── Content ─────────────────────────────────────────── */
   return (
     <section className="section-padding bg-white min-h-screen">
+      <Helmet>
+        <title>{`${news.title}｜嫚霏美容 SPA`}</title>
+        <meta
+          name="description"
+          content={(news.summary || news.content || '').replace(/<[^>]*>/g, '').slice(0, 120)}
+        />
+      </Helmet>
       <div className="max-w-3xl mx-auto px-6">
         {/* Breadcrumb */}
         <motion.nav
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.4 }}
-          className="flex items-center gap-1.5 text-xs text-stone-400 mb-10 md:mb-14 flex-wrap"
+          className="flex items-center gap-1.5 text-xs text-stone-500 mb-10 md:mb-14 flex-wrap"
         >
           <Link to="/" className="hover:text-gold transition-colors">首頁</Link>
           <ChevronRight size={12} className="shrink-0" />

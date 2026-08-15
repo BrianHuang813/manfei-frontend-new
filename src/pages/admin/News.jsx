@@ -7,13 +7,14 @@ import {
   deleteNews,
 } from '../../api/admin'
 import ImageUploader from '../../components/ImageUploader'
+import Modal from '../../components/ui/Modal'
 import { getErrorMessage } from '../../utils/errorMessage'
+import { useFeedback } from '../../components/ui/Feedback'
 import {
   Search,
   Plus,
   Pencil,
   Trash2,
-  X,
   Loader2,
   AlertCircle,
   Filter,
@@ -133,25 +134,14 @@ const NewsModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPending, ne
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="fixed inset-0 bg-black/50" onClick={onClose} />
-      <div className="relative bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto scrollbar-modal">
-        {/* Header */}
-        <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 rounded-t-xl flex items-center justify-between z-10">
-          <h3 className="text-lg font-semibold text-gray-900">
-            {mode === 'create' ? '新增消息' : '編輯消息'}
-          </h3>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
-            <X size={20} />
-          </button>
-        </div>
+    <Modal isOpen={isOpen} onClose={onClose} title={mode === 'create' ? '新增消息' : '編輯消息'} size="lg">
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
           {/* Title */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">標題 *</label>
-            <input
+            <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="news-f1">標題 *</label>
+            <input id="news-f1"
               type="text"
               required
               value={form.title}
@@ -164,8 +154,8 @@ const NewsModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPending, ne
           {/* Category & Date */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">分類 *</label>
-              <select
+              <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="news-f2">分類 *</label>
+              <select id="news-f2"
                 value={form.category}
                 onChange={(e) => setForm({ ...form, category: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
@@ -176,8 +166,8 @@ const NewsModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPending, ne
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">日期 *</label>
-              <input
+              <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="news-f3">日期 *</label>
+              <input id="news-f3"
                 type="date"
                 required
                 value={form.date}
@@ -197,8 +187,8 @@ const NewsModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPending, ne
 
           {/* Content */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">內容 *</label>
-            <textarea
+            <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="news-f4">內容 *</label>
+            <textarea id="news-f4"
               required
               rows={8}
               value={form.content}
@@ -220,8 +210,8 @@ const NewsModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPending, ne
               <span className="text-xs text-gray-500">{form.is_active ? '已發布' : '草稿'}</span>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">排序</label>
-              <input
+              <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="news-f5">排序</label>
+              <input id="news-f5"
                 type="number"
                 value={form.sort_order}
                 onChange={(e) => setForm({ ...form, sort_order: parseInt(e.target.value) || 0 })}
@@ -249,8 +239,7 @@ const NewsModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPending, ne
             </button>
           </div>
         </form>
-      </div>
-    </div>
+    </Modal>
   )
 }
 
@@ -258,6 +247,7 @@ const NewsModal = ({ isOpen, mode, initialData, onClose, onSubmit, isPending, ne
 
 const News = () => {
   const queryClient = useQueryClient()
+  const { toast, confirm } = useFeedback()
   const [search, setSearch] = useState('')
   const [filterCategory, setFilterCategory] = useState('')
   const [modal, setModal] = useState({ isOpen: false, mode: 'create', editingItem: null })
@@ -276,7 +266,7 @@ const News = () => {
       queryClient.invalidateQueries({ queryKey: ['admin-news'] })
       closeModal()
     },
-    onError: (err) => window.alert(getErrorMessage(err, '操作失敗')),
+    onError: (err) => toast(getErrorMessage(err, '操作失敗'), 'error'),
   })
 
   const updateMutation = useMutation({
@@ -285,7 +275,7 @@ const News = () => {
       queryClient.invalidateQueries({ queryKey: ['admin-news'] })
       closeModal()
     },
-    onError: (err) => window.alert(getErrorMessage(err, '操作失敗')),
+    onError: (err) => toast(getErrorMessage(err, '操作失敗'), 'error'),
   })
 
   const deleteMutation = useMutation({
@@ -298,7 +288,7 @@ const News = () => {
         return next
       }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin-news'] }),
-    onError: (err) => window.alert(getErrorMessage(err, '刪除失敗')),
+    onError: (err) => toast(getErrorMessage(err, '刪除失敗'), 'error'),
   })
 
   const toggleMutation = useMutation({
@@ -311,7 +301,7 @@ const News = () => {
         return next
       }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin-news'] }),
-    onError: (err) => window.alert(getErrorMessage(err, '操作失敗')),
+    onError: (err) => toast(getErrorMessage(err, '操作失敗'), 'error'),
   })
 
   // Filter / Search
@@ -348,10 +338,15 @@ const News = () => {
     }
   }
 
-  const handleDelete = (item) => {
-    if (window.confirm(`確定要刪除「${item.title}」嗎？此操作無法復原。`)) {
-      deleteMutation.mutate(item.id)
-    }
+  const handleDelete = async (item) => {
+    const confirmed = await confirm({
+      title: '刪除消息',
+      message: `確定要刪除「${item.title}」嗎？`,
+      detail: '刪除後無法復原，此則消息將立即從網站上移除。',
+      confirmLabel: '刪除',
+      tone: 'danger',
+    })
+    if (confirmed) deleteMutation.mutate(item.id)
   }
 
   // Render
@@ -389,8 +384,9 @@ const News = () => {
       {/* Search & Filter Bar */}
       <div className="flex flex-col sm:flex-row gap-3 mb-6">
         <div className="relative flex-1">
-          <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
           <input
+            aria-label="搜尋標題"
             type="text"
             placeholder="搜尋標題..."
             value={search}
@@ -399,8 +395,8 @@ const News = () => {
           />
         </div>
         <div className="relative">
-          <Filter size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-          <select
+          <Filter size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+          <select aria-label="篩選分類"
             value={filterCategory}
             onChange={(e) => setFilterCategory(e.target.value)}
             className="pl-9 pr-8 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm appearance-none bg-white"
@@ -418,7 +414,7 @@ const News = () => {
         {isLoading ? (
           <TableSkeleton />
         ) : filtered.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-16 text-gray-400">
+          <div className="flex flex-col items-center justify-center py-16 text-gray-500">
             <Newspaper size={48} className="mb-3 opacity-50" />
             <p className="text-lg font-medium">尚無消息</p>
             <p className="text-sm mt-1">點擊「新增消息」開始建立</p>
@@ -454,7 +450,7 @@ const News = () => {
                         />
                       ) : (
                         <div className="h-10 w-14 bg-gray-100 rounded flex items-center justify-center">
-                          <Newspaper size={16} className="text-gray-300" />
+                          <Newspaper size={16} className="text-gray-500" />
                         </div>
                       )}
                     </div>
@@ -485,7 +481,7 @@ const News = () => {
                     <div className="col-span-2 flex justify-end gap-1">
                       <button
                         onClick={() => openEdit(item)}
-                        className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                        className="h-11 w-11 inline-flex items-center justify-center rounded-lg text-gray-500 hover:text-blue-600 hover:bg-blue-50 transition-colors"
                         title="編輯"
                       >
                         <Pencil size={16} />
@@ -493,7 +489,7 @@ const News = () => {
                       <button
                         onClick={() => handleDelete(item)}
                         disabled={isMutating}
-                        className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
+                        className="h-11 w-11 inline-flex items-center justify-center rounded-lg text-gray-500 hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
                         title="刪除"
                       >
                         <Trash2 size={16} />
@@ -512,7 +508,7 @@ const News = () => {
                         />
                       ) : (
                         <div className="h-16 w-20 bg-gray-100 rounded flex items-center justify-center flex-shrink-0">
-                          <Newspaper size={20} className="text-gray-300" />
+                          <Newspaper size={20} className="text-gray-500" />
                         </div>
                       )}
                       <div className="flex-1 min-w-0">
@@ -534,14 +530,14 @@ const News = () => {
                       <div className="flex gap-1">
                         <button
                           onClick={() => openEdit(item)}
-                          className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg"
+                          className="h-11 w-11 inline-flex items-center justify-center rounded-lg text-gray-500 hover:text-blue-600 hover:bg-blue-50"
                         >
                           <Pencil size={16} />
                         </button>
                         <button
                           onClick={() => handleDelete(item)}
                           disabled={isMutating}
-                          className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg disabled:opacity-50"
+                          className="h-11 w-11 inline-flex items-center justify-center rounded-lg text-gray-500 hover:text-red-600 hover:bg-red-50 disabled:opacity-50"
                         >
                           <Trash2 size={16} />
                         </button>

@@ -6,6 +6,7 @@ import { HelmetProvider } from 'react-helmet-async'
 import App from './App.jsx'
 import ScrollToTop from './components/ScrollToTop.jsx'
 import { SiteSettingsProvider } from './contexts/SiteSettingsContext.jsx'
+import { FeedbackProvider } from './components/ui/Feedback.jsx'
 import './index.css'
 
 // Create QueryClient for data fetching
@@ -26,7 +27,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <ScrollToTop />
       <QueryClientProvider client={queryClient}>
         <SiteSettingsProvider>
-          <App />
+          <FeedbackProvider>
+            <App />
+          </FeedbackProvider>
         </SiteSettingsProvider>
       </QueryClientProvider>
     </BrowserRouter>

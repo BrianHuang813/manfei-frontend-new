@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import { motion } from 'framer-motion'
 import { ArrowLeft, ExternalLink, Check } from 'lucide-react'
 
@@ -29,10 +30,17 @@ export default function About() {
   const settings = useSiteSettings()
   return (
     <section className="min-h-screen bg-background">
+      <Helmet>
+        <title>關於嫚霏｜嘉義專業美容美體 SPA</title>
+        <meta
+          name="description"
+          content="認識嫚霏美容 MANFEI BEAUTY —— 嘉義在地的專業美容美體 SPA，以德系與法系頂級護膚品牌，為每一種膚質量身打造護理方案。"
+        />
+      </Helmet>
       {/* ── Hero Banner ── */}
       <div className="relative h-[40vh] md:h-[50vh] overflow-hidden">
         <img
-          src="/images/shop_cover.png"
+          src="/images/shop_cover.jpg"
           alt="嫚霏SPA工作室"
           className="absolute inset-0 w-full h-full object-cover
                      grayscale-[25%] sepia-[12%] brightness-[0.8]"
@@ -125,10 +133,10 @@ export default function About() {
           >
             <div className="overflow-hidden rounded-2xl shadow-md group">
               <img
-                src="/images/shop_cover.png"
+                src="/images/shop_cover.jpg"
                 alt="嫚霏工作室優雅環境"
                 loading="lazy"
-                className="w-full aspect-[4/3] object-cover transition-all duration-700
+                className="w-full aspect-[4/3] object-cover transition-[filter,transform] duration-700
                            grayscale-[15%] sepia-[8%] brightness-[0.95]
                            group-hover:grayscale-0 group-hover:sepia-0
                            group-hover:brightness-100 group-hover:scale-[1.02]"
@@ -218,7 +226,7 @@ export default function About() {
                   src={img.src}
                   alt={img.alt}
                   loading="lazy"
-                  className="w-full aspect-[4/3] object-cover transition-all duration-700
+                  className="w-full aspect-[4/3] object-cover transition-[filter,transform] duration-700
                              grayscale-[15%] sepia-[8%] brightness-[0.95]
                              group-hover:grayscale-0 group-hover:sepia-0
                              group-hover:brightness-100 group-hover:scale-[1.03]"
@@ -245,7 +253,7 @@ export default function About() {
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-8 py-3 bg-gold text-white rounded-full text-sm tracking-[0.2em]
-                         transition-all duration-300 hover:bg-gold-dark"
+                         transition-colors duration-300 hover:bg-gold-dark"
             >
               LINE 諮詢
               <ExternalLink size={14} />
@@ -253,7 +261,7 @@ export default function About() {
             <Link
               to="/"
               className="inline-block px-8 py-3 border border-gold text-gold rounded-full text-sm tracking-[0.2em]
-                         transition-all duration-300 hover:bg-gold hover:text-white"
+                         transition-colors duration-300 hover:bg-gold hover:text-white"
             >
               返回首頁
             </Link>

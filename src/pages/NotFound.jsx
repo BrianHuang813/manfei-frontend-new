@@ -1,9 +1,14 @@
 import { Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import { motion } from 'framer-motion'
 
 const NotFound = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-background relative overflow-hidden">
+      <Helmet>
+        <title>找不到頁面｜嫚霏美容 SPA</title>
+        <meta name="robots" content="noindex" />
+      </Helmet>
       {/* Decorative background number */}
       <motion.span
         initial={{ opacity: 0, scale: 0.8 }}
@@ -32,7 +37,7 @@ const NotFound = () => {
         <Link
           to="/"
           className="inline-block mt-10 px-8 py-3 border border-gold text-gold text-sm tracking-wider rounded-full
-                     transition-all duration-300 hover:bg-gold hover:text-white"
+                     transition-colors duration-300 hover:bg-gold hover:text-white"
         >
           返回首頁
         </Link>

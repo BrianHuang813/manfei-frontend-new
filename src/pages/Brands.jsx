@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import { motion } from 'framer-motion'
 import { ArrowLeft, ExternalLink } from 'lucide-react'
 
@@ -25,13 +26,13 @@ const brands = [
     features: ['70 年德國品牌傳承', '天然活性精華', '專業院線級保養'],
   },
   {
-    id: 'innova',
-    name: 'INNOVA',
-    tagline: '以植研重啟妳的自信美學維度',
-    image: '/images/innova.png',
+    id: 'ericson',
+    name: 'ERICSON LABORATOIRE',
+    tagline: '以醫美級科研重塑肌膚的時間軸',
+    image: '/images/ericson.jpg',
     description:
-      'INNOVA 以植物萃取科技為核心，開發出溫和而有效的護膚系列。堅持無添加有害化學成分的理念，為敏感肌膚帶來安心且卓越的保養體驗。',
-    features: ['植物萃取科技', '敏感肌友善', '純淨無添加配方'],
+      '法國伊力信 ERICSON LABORATOIRE 創立於 1962 年巴黎，是專業院線級的藥妝保養品牌。以高濃度活性成分配方搭配專業療程手法，提供媲美醫學美容卻不需侵入的護理方案，目前於全球 60 多個國家販售。',
+    features: ['1962 年法國巴黎創立', '高濃度活性成分配方', '非侵入式醫美級護理'],
   },
 ]
 
@@ -64,7 +65,7 @@ function BrandSection({ brand, index }) {
             src={brand.image}
             alt={brand.name}
             loading="lazy"
-            className="w-full aspect-[4/3] object-cover transition-all duration-700
+            className="w-full aspect-[4/3] object-cover transition-[filter,transform] duration-700
                        grayscale-[15%] sepia-[8%] brightness-[0.95]
                        group-hover:grayscale-0 group-hover:sepia-0
                        group-hover:brightness-100 group-hover:scale-[1.02]"
@@ -131,6 +132,14 @@ export default function Brands() {
   const settings = useSiteSettings()
   return (
     <section className="min-h-screen bg-background">
+      <Helmet>
+        <title>頂級品牌｜嫚霏美容 SPA</title>
+        <meta
+          name="description"
+          content="嫚霏美容 SPA 嚴選歐洲頂級護膚品牌：德國 REVIDERM、DR. GRANDEL 與法國伊力信 ERICSON LABORATOIRE。"
+        />
+      </Helmet>
+
       {/* Hero banner */}
       <div className="relative h-[40vh] md:h-[50vh] overflow-hidden">
         <img
@@ -202,14 +211,14 @@ export default function Brands() {
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block px-8 py-3 bg-gold text-white rounded-full text-sm tracking-[0.2em]
-                         transition-all duration-300 hover:bg-gold-dark"
+                         transition-colors duration-300 hover:bg-gold-dark"
             >
               LINE 諮詢
             </a>
             <Link
               to="/"
               className="inline-block px-8 py-3 border border-gold text-gold rounded-full text-sm tracking-[0.2em]
-                         transition-all duration-300 hover:bg-gold hover:text-white"
+                         transition-colors duration-300 hover:bg-gold hover:text-white"
             >
               返回首頁
             </Link>

@@ -102,7 +102,7 @@ export default function Home() {
       {/* TODO: 替換為專用 fetchTransformations API */}
       <Transformation cases={portfolioQ.data ?? []} />
 
-      {/* 7. Customer Reviews — Hero quote + infinite marquee */}
+      {/* 7. Customer Reviews — Hero quote + auto-rotator */}
       <CustomerReviews reviews={testimonialsQ.data ?? []} />
     </>
   )

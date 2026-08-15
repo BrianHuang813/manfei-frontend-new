@@ -57,8 +57,11 @@ function App() {
       <AnimatePresence mode="wait">
         <Suspense
           fallback={(
-            <div className="min-h-screen flex items-center justify-center text-[#A89070] font-serif tracking-widest">
-              Loading...
+            <div
+              role="status"
+              className="min-h-screen flex items-center justify-center text-gold font-serif tracking-[0.3em]"
+            >
+              載入中
             </div>
           )}
         >

@@ -34,14 +34,14 @@ function CategoryCard({ group, index }) {
                    transition-shadow duration-500"
       >
         {/* Zen-filtered category image */}
-        <div className="relative w-full aspect-[4/3] xl:aspect-[16/9] bg-[#A89070] overflow-hidden">
+        <div className="relative w-full aspect-[4/3] xl:aspect-[16/9] bg-gold overflow-hidden">
           <img
             src={group.image_url}
             alt={group.category}
             loading="lazy"
             className="w-full h-full object-cover filter brightness-[0.95] contrast-[1.05] saturate-[0.85] transition-transform duration-700 group-hover:scale-105"
           />
-          <div className="absolute inset-0 bg-[#A89070]/[0.1] pointer-events-none transition-opacity duration-700 group-hover:opacity-0"></div>
+          <div className="absolute inset-0 bg-gold/10 pointer-events-none transition-opacity duration-700 group-hover:opacity-0"></div>
         </div>
 
         {/* Typography */}
@@ -113,7 +113,7 @@ export default function ServicePreview() {
         >
           <Link
             to="/services"
-            className="inline-block px-8 py-3 border border-gold text-gold rounded-full text-sm tracking-[0.2em] transition-all duration-300 hover:bg-gold hover:text-white"
+            className="inline-block px-8 py-3 border border-gold text-gold rounded-full text-sm tracking-[0.2em] transition-colors duration-300 hover:bg-gold hover:text-white"
           >
             探索所有療程
           </Link>

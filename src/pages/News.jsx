@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import { useQuery } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
 import { ChevronRight, ArrowRight } from 'lucide-react'
@@ -22,13 +23,20 @@ export default function News() {
 
   return (
     <section className="section-padding bg-white min-h-screen">
+      <Helmet>
+        <title>最新消息｜嫚霏美容 SPA</title>
+        <meta
+          name="description"
+          content="嫚霏美容 SPA 的最新消息、療程優惠與保養知識分享。"
+        />
+      </Helmet>
       <div className="max-w-4xl mx-auto px-6">
         {/* Breadcrumb */}
         <motion.nav
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.4 }}
-          className="flex items-center gap-1.5 text-xs text-stone-400 mb-10 md:mb-14"
+          className="flex items-center gap-1.5 text-xs text-stone-500 mb-10 md:mb-14"
         >
           <Link to="/" className="hover:text-gold transition-colors">首頁</Link>
           <ChevronRight size={12} className="shrink-0" />
@@ -51,12 +59,12 @@ export default function News() {
 
         {/* Loading state */}
         {isLoading && (
-          <p className="text-center text-stone-400 tracking-wide">載入中…</p>
+          <p className="text-center text-stone-500 tracking-wide">載入中…</p>
         )}
 
         {/* Empty state */}
         {!isLoading && news.length === 0 && (
-          <p className="text-center text-stone-400 tracking-wide">目前沒有最新消息。</p>
+          <p className="text-center text-stone-500 tracking-wide">目前沒有最新消息。</p>
         )}
 
         {/* News list */}
@@ -93,7 +101,7 @@ export default function News() {
                     )}
                   </div>
                   {item.content && (
-                    <p className="text-sm text-stone-400 line-clamp-1 leading-relaxed">
+                    <p className="text-sm text-stone-500 line-clamp-1 leading-relaxed">
                       {item.content.replace(/<[^>]*>/g, '')}
                     </p>
                   )}
@@ -102,7 +110,7 @@ export default function News() {
                 {/* Arrow */}
                 <ArrowRight
                   size={16}
-                  className="text-gold/40 shrink-0 transition-all duration-300
+                  className="text-gold/40 shrink-0 transition-[color,transform] duration-300
                              group-hover:text-gold group-hover:translate-x-1"
                 />
               </Link>

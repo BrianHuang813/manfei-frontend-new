@@ -7,12 +7,13 @@ import {
   deleteService,
 } from '../../api/admin'
 import { getErrorMessage } from '../../utils/errorMessage'
+import { useFeedback } from '../../components/ui/Feedback'
+import Modal from '../../components/ui/Modal'
 import {
   Search,
   Plus,
   Pencil,
   Trash2,
-  X,
   Loader2,
   AlertCircle,
   Clock,
@@ -163,35 +164,15 @@ const ServiceModal = ({ isOpen, mode, initialData, categories, onClose, onSubmit
   const title = mode === 'create' ? '新增服務' : '編輯服務'
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
-        onClick={onClose}
-        onKeyDown={(e) => e.key === 'Escape' && onClose()}
-      />
-
-      {/* Modal */}
-      <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto scrollbar-modal">
-        {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
-          <h3 className="text-lg font-serif font-bold text-secondary">{title}</h3>
-          <button
-            onClick={onClose}
-            className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
-          >
-            <X size={20} />
-          </button>
-        </div>
-
+    <Modal isOpen={isOpen} onClose={onClose} title={title} size="md">
         {/* Form */}
         <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
           {/* Name */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="services-f1">
               服務名稱 <span className="text-red-500">*</span>
             </label>
-            <input
+            <input id="services-f1"
               type="text"
               name="name"
               value={form.name}
@@ -205,10 +186,10 @@ const ServiceModal = ({ isOpen, mode, initialData, categories, onClose, onSubmit
 
           {/* Category */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="services-f2">
               分類 <span className="text-red-500">*</span>
             </label>
-            <input
+            <input id="services-f2"
               type="text"
               name="category"
               value={form.category}
@@ -231,12 +212,12 @@ const ServiceModal = ({ isOpen, mode, initialData, categories, onClose, onSubmit
           {/* Price + Duration row */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="services-f3">
                 價格 (NT$) <span className="text-red-500">*</span>
               </label>
               <div className="relative">
-                <DollarSign size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                <input
+                <DollarSign size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+                <input id="services-f3"
                   type="number"
                   name="price"
                   value={form.price}
@@ -249,12 +230,12 @@ const ServiceModal = ({ isOpen, mode, initialData, categories, onClose, onSubmit
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="services-f4">
                 時長 (分鐘) <span className="text-red-500">*</span>
               </label>
               <div className="relative">
-                <Clock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                <input
+                <Clock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+                <input id="services-f4"
                   type="number"
                   name="duration_min"
                   value={form.duration_min}
@@ -270,8 +251,8 @@ const ServiceModal = ({ isOpen, mode, initialData, categories, onClose, onSubmit
 
           {/* Description */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">描述</label>
-            <textarea
+            <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="services-f5">描述</label>
+            <textarea id="services-f5"
               name="description"
               value={form.description}
               onChange={handleChange}
@@ -283,8 +264,8 @@ const ServiceModal = ({ isOpen, mode, initialData, categories, onClose, onSubmit
 
           {/* Image URL */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">圖片網址</label>
-            <input
+            <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="services-f6">圖片網址</label>
+            <input id="services-f6"
               type="url"
               name="image_url"
               value={form.image_url}
@@ -298,8 +279,8 @@ const ServiceModal = ({ isOpen, mode, initialData, categories, onClose, onSubmit
           {/* Sort Order + Active row */}
           <div className="grid grid-cols-2 gap-4 items-end">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">排序順序</label>
-              <input
+              <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="services-f7">排序順序</label>
+              <input id="services-f7"
                 type="number"
                 name="sort_order"
                 value={form.sort_order}
@@ -346,8 +327,7 @@ const ServiceModal = ({ isOpen, mode, initialData, categories, onClose, onSubmit
             </button>
           </div>
         </form>
-      </div>
-    </div>
+    </Modal>
   )
 }
 
@@ -355,6 +335,7 @@ const ServiceModal = ({ isOpen, mode, initialData, categories, onClose, onSubmit
 
 const Services = () => {
   const queryClient = useQueryClient()
+  const { toast, confirm } = useFeedback()
   const [searchQuery, setSearchQuery] = useState('')
   const [categoryFilter, setCategoryFilter] = useState('')
   const [mutatingIds, setMutatingIds] = useState({})
@@ -381,7 +362,7 @@ const Services = () => {
       setModal({ isOpen: false, mode: 'create', editingService: null })
     },
     onError: (err) => {
-      window.alert(getErrorMessage(err, '新增服務失敗'))
+      toast(getErrorMessage(err, '新增服務失敗'), 'error')
     },
   })
 
@@ -392,7 +373,7 @@ const Services = () => {
       setModal({ isOpen: false, mode: 'create', editingService: null })
     },
     onError: (err) => {
-      window.alert(getErrorMessage(err, '更新服務失敗'))
+      toast(getErrorMessage(err, '更新服務失敗'), 'error')
     },
   })
 
@@ -405,7 +386,7 @@ const Services = () => {
       queryClient.invalidateQueries({ queryKey: ['admin-services'] })
     },
     onError: (err) => {
-      window.alert(getErrorMessage(err, '刪除服務失敗'))
+      toast(getErrorMessage(err, '刪除服務失敗'), 'error')
     },
     onSettled: (_, __, id) => {
       setMutatingIds((prev) => {
@@ -425,7 +406,7 @@ const Services = () => {
       queryClient.invalidateQueries({ queryKey: ['admin-services'] })
     },
     onError: (err) => {
-      window.alert(getErrorMessage(err, '狀態切換失敗'))
+      toast(getErrorMessage(err, '狀態切換失敗'), 'error')
     },
     onSettled: (_, __, { id }) => {
       setMutatingIds((prev) => {
@@ -481,17 +462,28 @@ const Services = () => {
     }
   }
 
-  const handleDelete = (service) => {
-    if (window.confirm(`確定要刪除「${service.name}」嗎？此操作無法復原。`)) {
-      deleteMutation.mutate(service.id)
-    }
+  const handleDelete = async (service) => {
+    const confirmed = await confirm({
+      title: '刪除服務',
+      message: `確定要刪除「${service.name}」嗎？`,
+      detail: '刪除後無法復原，此療程將立即從網站上移除。若只是暫時不提供，請改用下架。',
+      confirmLabel: '刪除',
+      tone: 'danger',
+    })
+    if (confirmed) deleteMutation.mutate(service.id)
   }
 
-  const handleStatusToggle = (service) => {
+  const handleStatusToggle = async (service) => {
     const action = service.is_active ? '下架' : '上架'
-    if (window.confirm(`確定要${action}「${service.name}」嗎？`)) {
-      toggleStatusMutation.mutate({ id: service.id, is_active: !service.is_active })
-    }
+    const confirmed = await confirm({
+      title: `${action}服務`,
+      message: `確定要${action}「${service.name}」嗎？`,
+      detail: service.is_active
+        ? '下架後顧客將看不到此療程，資料會保留，隨時可重新上架。'
+        : '上架後此療程會立即顯示在網站上。',
+      confirmLabel: action,
+    })
+    if (confirmed) toggleStatusMutation.mutate({ id: service.id, is_active: !service.is_active })
   }
 
   const formatPrice = (price) => {
@@ -522,9 +514,10 @@ const Services = () => {
         <div className="relative flex-1 w-full sm:max-w-md">
           <Search
             size={18}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
           />
           <input
+            aria-label="搜尋服務名稱、分類或描述"
             type="text"
             placeholder="搜尋服務名稱、分類或描述..."
             value={searchQuery}
@@ -535,8 +528,8 @@ const Services = () => {
 
         {/* Category Filter */}
         <div className="relative">
-          <Filter size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-          <select
+          <Filter size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+          <select aria-label="全部分類"
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
             className="pl-9 pr-8 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white appearance-none cursor-pointer"
@@ -585,7 +578,7 @@ const Services = () => {
           </div>
         ) : filteredServices.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 px-4">
-            <Scissors size={48} className="text-gray-300 mb-4" />
+            <Scissors size={48} className="text-gray-500 mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">
               {searchQuery || categoryFilter ? '找不到符合的服務' : '目前沒有服務項目'}
             </h3>
@@ -644,7 +637,7 @@ const Services = () => {
                             {service.name}
                           </p>
                           {service.description && (
-                            <p className="text-xs text-gray-400 truncate mt-0.5">
+                            <p className="text-xs text-gray-500 truncate mt-0.5">
                               {service.description}
                             </p>
                           )}
@@ -667,7 +660,7 @@ const Services = () => {
                     {/* Duration */}
                     <div className="md:col-span-1 text-center">
                       <span className="inline-flex items-center gap-1 text-sm text-gray-600">
-                        <Clock size={14} className="text-gray-400" />
+                        <Clock size={14} className="text-gray-500" />
                         {service.duration_min}分
                       </span>
                     </div>
@@ -690,7 +683,7 @@ const Services = () => {
                     <div className="md:col-span-3 flex items-center md:justify-end gap-2">
                       <button
                         onClick={() => openEditModal(service)}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-white border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-700 transition-colors"
+                        className="inline-flex items-center gap-1.5 px-3 py-2.5 min-h-[44px] text-xs font-medium bg-white border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-700 transition-colors"
                       >
                         <Pencil size={14} />
                         編輯
@@ -698,7 +691,7 @@ const Services = () => {
                       <button
                         onClick={() => handleDelete(service)}
                         disabled={isMutating === 'delete'}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-white border border-red-200 rounded-lg hover:bg-red-50 text-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="inline-flex items-center gap-1.5 px-3 py-2.5 min-h-[44px] text-xs font-medium bg-white border border-red-200 rounded-lg hover:bg-red-50 text-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         {isMutating === 'delete' ? (
                           <Loader2 size={14} className="animate-spin" />
@@ -718,7 +711,7 @@ const Services = () => {
 
       {/* Footer Info */}
       {!isLoading && !isError && filteredServices.length > 0 && (
-        <p className="text-xs text-gray-400 mt-4 text-center">
+        <p className="text-xs text-gray-500 mt-4 text-center">
           下架的服務不會顯示在前台頁面。排序順序數字越小排越前面。
         </p>
       )}

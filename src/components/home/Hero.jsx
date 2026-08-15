@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 
 // LINE_URL now provided via SiteSettingsContext (used downstream)
 
@@ -12,15 +12,24 @@ const textVariants = {
 }
 
 export default function Hero() {
+  const reduceMotion = useReducedMotion()
+
   return (
     <section className="relative h-screen w-full overflow-hidden">
-      {/* Background image with Ken Burns zoom */}
+      {/* Background image with Ken Burns zoom — held still under reduced motion */}
       <motion.img
         src="/images/hero-background.jpg"
         alt="嫚霏美容空間"
+        width={2400}
+        height={1600}
+        fetchPriority="high"
         initial={{ scale: 1 }}
-        animate={{ scale: 1.05 }}
-        transition={{ duration: 10, ease: 'linear', repeat: Infinity, repeatType: 'reverse' }}
+        animate={reduceMotion ? { scale: 1 } : { scale: 1.05 }}
+        transition={
+          reduceMotion
+            ? { duration: 0 }
+            : { duration: 10, ease: 'linear', repeat: Infinity, repeatType: 'reverse' }
+        }
         className="absolute inset-0 w-full h-full object-cover"
       />
 
@@ -91,8 +100,8 @@ export default function Hero() {
       >
         <span className="text-white/40 text-xs tracking-[0.3em]">SCROLL</span>
         <motion.span
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity }}
+          animate={reduceMotion ? { y: 0 } : { y: [0, 8, 0] }}
+          transition={reduceMotion ? { duration: 0 } : { duration: 1.5, repeat: Infinity }}
           className="block w-px h-8 bg-white/30"
         />
       </motion.div>

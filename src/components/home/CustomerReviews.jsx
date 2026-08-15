@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import { Star, ChevronLeft, ChevronRight } from 'lucide-react'
 import { cn } from '../../utils/cn'
 
@@ -33,6 +33,7 @@ export default function CustomerReviews({ reviews = [] }) {
   const [index, setIndex] = useState(0)
   const [direction, setDirection] = useState(1)
   const [paused, setPaused] = useState(false)
+  const reduceMotion = useReducedMotion()
 
   const goTo = useCallback((next) => {
     setDirection(next > index ? 1 : -1)
@@ -49,12 +50,13 @@ export default function CustomerReviews({ reviews = [] }) {
     setIndex((prev) => (prev - 1 + reviews.length) % reviews.length)
   }, [reviews.length])
 
-  // Auto-rotate every 6 seconds
+  // Auto-rotate every 6 seconds — stopped on hover, on keyboard focus, and
+  // entirely when the visitor has asked for reduced motion.
   useEffect(() => {
-    if (paused || reviews.length <= 1) return
+    if (paused || reduceMotion || reviews.length <= 1) return
     const timer = setInterval(next, 6000)
     return () => clearInterval(timer)
-  }, [paused, next, reviews.length])
+  }, [paused, reduceMotion, next, reviews.length])
 
   if (!reviews || reviews.length === 0) return null
 
@@ -89,6 +91,8 @@ export default function CustomerReviews({ reviews = [] }) {
           className="relative max-w-3xl mx-auto"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
+          onFocusCapture={() => setPaused(true)}
+          onBlurCapture={() => setPaused(false)}
         >
           {/* Large decorative quote */}
           <span
@@ -165,7 +169,7 @@ export default function CustomerReviews({ reviews = [] }) {
                     onClick={() => goTo(i)}
                     aria-label={`第 ${i + 1} 則評論`}
                     className={cn(
-                      'h-2 rounded-full transition-all duration-300',
+                      'h-2 rounded-full transition-[width,background-color] duration-300',
                       i === index ? 'bg-gold w-6' : 'bg-gold/25 hover:bg-gold/50 w-2',
                     )}
                   />

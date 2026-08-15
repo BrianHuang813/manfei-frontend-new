@@ -33,6 +33,9 @@ export default {
           900: '#0c0e10',
         },
         background: '#F9F9F9',
+        // Warmer off-white used by member-facing surfaces
+        canvas: '#FAF9F6',
+        line: '#06C755', // LINE brand green — fixed by LINE, not ours to theme
         gold: {
           DEFAULT: '#A89070',
           light: '#C4AD94',
@@ -42,20 +45,6 @@ export default {
       fontFamily: {
         serif: ['"Noto Serif TC"', 'serif'],
         sans: ['"Noto Sans TC"', 'system-ui', 'sans-serif'],
-      },
-      keyframes: {
-        'marquee-left': {
-          '0%':   { transform: 'translateX(0)' },
-          '100%': { transform: 'translateX(-50%)' },
-        },
-        'marquee-right': {
-          '0%':   { transform: 'translateX(-50%)' },
-          '100%': { transform: 'translateX(0)' },
-        },
-      },
-      animation: {
-        'marquee-left':  'marquee-left 40s linear infinite',
-        'marquee-right': 'marquee-right 40s linear infinite',
       },
     },
   },
