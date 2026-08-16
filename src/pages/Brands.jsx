@@ -133,6 +133,7 @@ export default function Brands() {
   return (
     <section className="min-h-screen bg-background">
       <Helmet>
+        <link rel="canonical" href="https://www.manfeispa.com/brands" />
         <title>頂級品牌｜嫚霏美容 SPA</title>
         <meta
           name="description"

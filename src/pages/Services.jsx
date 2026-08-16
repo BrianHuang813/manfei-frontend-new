@@ -137,6 +137,7 @@ export default function Services() {
   return (
     <section className="min-h-screen bg-background">
       <Helmet>
+        <link rel="canonical" href="https://www.manfeispa.com/services" />
         <title>療程總覽｜嫚霏美容 SPA</title>
         <meta
           name="description"

@@ -31,6 +31,7 @@ export default function About() {
   return (
     <section className="min-h-screen bg-background">
       <Helmet>
+        <link rel="canonical" href="https://www.manfeispa.com/about" />
         <title>關於嫚霏｜嘉義專業美容美體 SPA</title>
         <meta
           name="description"

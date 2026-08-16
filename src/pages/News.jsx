@@ -24,6 +24,7 @@ export default function News() {
   return (
     <section className="section-padding bg-white min-h-screen">
       <Helmet>
+        <link rel="canonical" href="https://www.manfeispa.com/news" />
         <title>最新消息｜嫚霏美容 SPA</title>
         <meta
           name="description"

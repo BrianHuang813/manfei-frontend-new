@@ -65,6 +65,7 @@ export default function ProductDetail() {
   return (
     <section className="min-h-screen bg-background section-padding">
       <Helmet>
+        <link rel="canonical" href={`https://www.manfeispa.com/products/${product.id}`} />
         <title>{`${product.name}｜嫚霏美容 SPA`}</title>
         <meta
           name="description"

@@ -73,6 +73,7 @@ export default function Home() {
     <>
       {/* SEO: Page-specific meta + JSON-LD structured data */}
       <Helmet>
+        <link rel="canonical" href="https://www.manfeispa.com/" />
         <title>嘉義專業美容美體 SPA - 嫚霏 MANFEI BEAUTY</title>
         <meta
           name="description"
