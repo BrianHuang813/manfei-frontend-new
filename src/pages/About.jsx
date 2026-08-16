@@ -252,8 +252,8 @@ export default function About() {
               href={settings.line_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-8 py-3 bg-gold text-white rounded-full text-sm tracking-[0.2em]
-                         transition-colors duration-300 hover:bg-gold-dark"
+              className="inline-flex items-center gap-2 px-8 py-3 bg-gold-deep text-white rounded-full text-sm tracking-[0.2em]
+                         transition-colors duration-300 hover:brightness-90"
             >
               LINE 諮詢
               <ExternalLink size={14} />

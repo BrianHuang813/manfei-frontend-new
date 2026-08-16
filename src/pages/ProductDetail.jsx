@@ -167,8 +167,8 @@ export default function ProductDetail() {
                 href={settings.line_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block px-8 py-3 bg-gold text-white rounded-full text-sm tracking-[0.2em]
-                           transition-colors duration-300 hover:bg-gold-dark"
+                className="inline-block px-8 py-3 bg-gold-deep text-white rounded-full text-sm tracking-[0.2em]
+                           transition-colors duration-300 hover:brightness-90"
               >
                 LINE 諮詢購買
               </a>

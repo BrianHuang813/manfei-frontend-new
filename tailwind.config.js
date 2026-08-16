@@ -40,6 +40,9 @@ export default {
           DEFAULT: '#A89070',
           light: '#C4AD94',
           dark: '#8A7560',
+          // Same hue, 20% darker. The only gold that clears 4.5:1 against
+          // white, so it is the one to use when white text sits on gold.
+          deep: '#86735A',
         },
       },
       fontFamily: {

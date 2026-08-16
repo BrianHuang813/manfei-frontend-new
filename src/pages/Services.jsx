@@ -13,9 +13,9 @@ function ServiceRow({ service }) {
         {/* Left: name + duration */}
         <div className="flex-1 min-w-0">
           <div className="flex items-baseline gap-3 flex-wrap">
-            <h4 className="font-serif text-lg md:text-xl text-secondary tracking-wider font-bold">
+            <h2 className="font-serif text-lg md:text-xl text-secondary tracking-wider font-bold">
               {service.name}
-            </h4>
+            </h2>
             {service.duration != null && (
               <span className="flex items-center gap-1 text-secondary/40 text-xs whitespace-nowrap">
                 <Clock size={12} className="text-gold/50" />

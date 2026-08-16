@@ -344,7 +344,7 @@ const MemberProfile = () => {
               <button
                 onClick={handleSaveName}
                 disabled={updateNameMutation.isPending}
-                className="flex-1 px-6 py-2.5 min-h-[44px] bg-gold text-white rounded-sm text-sm hover:bg-gold-dark transition-colors disabled:opacity-50"
+                className="flex-1 px-6 py-2.5 min-h-[44px] bg-gold-deep text-white rounded-sm text-sm hover:brightness-90 transition-colors disabled:opacity-50"
               >
                 {updateNameMutation.isPending ? <Loader2 size={14} className="inline animate-spin" /> : '保存'}
               </button>
