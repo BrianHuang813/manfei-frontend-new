@@ -116,7 +116,7 @@ const AvatarCircle = ({ name, url }) => {
 
   return (
     <div
-      className={`h-10 w-10 rounded-full ${bgColor} flex items-center justify-center text-white font-semibold text-sm`}
+      className={`h-10 w-10 rounded-full ${bgColor} flex items-center justify-center text-white font-bold text-sm`}
     >
       {initial}
     </div>

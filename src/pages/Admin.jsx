@@ -144,7 +144,7 @@ const Dashboard = () => {
       {/* Recent Activity */}
       <div className="bg-white rounded-xl border border-primary-200">
         <div className="px-6 py-4 border-b border-primary-100">
-          <h3 className="text-lg font-semibold text-secondary flex items-center gap-2">
+          <h3 className="text-lg font-bold text-secondary flex items-center gap-2">
             <Clock size={20} className="text-secondary-400" />
             近期活動
           </h3>
@@ -266,7 +266,7 @@ const SettingsPage = () => {
       <form onSubmit={handleSave} className="space-y-8">
         {/* Basic Info */}
         <div className="bg-white rounded-xl border border-primary-200 p-6">
-          <h3 className="text-lg font-semibold text-secondary mb-4">基本資訊</h3>
+          <h3 className="text-lg font-bold text-secondary mb-4">基本資訊</h3>
           <div className="space-y-4">
             {SETTING_FIELDS.basic.map((field) => (
               <div key={field.key}>
@@ -285,7 +285,7 @@ const SettingsPage = () => {
 
         {/* SEO Settings */}
         <div className="bg-white rounded-xl border border-primary-200 p-6">
-          <h3 className="text-lg font-semibold text-secondary mb-4">SEO 設定</h3>
+          <h3 className="text-lg font-bold text-secondary mb-4">SEO 設定</h3>
           <div className="space-y-4">
             {SETTING_FIELDS.seo.map((field) => (
               <div key={field.key}>

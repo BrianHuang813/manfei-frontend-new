@@ -125,7 +125,7 @@ const Staff = () => {
 
         {/* Work Log Form */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <h2 className="text-xl font-semibold text-secondary mb-6">新增工作記錄</h2>
+          <h2 className="text-xl font-bold text-secondary mb-6">新增工作記錄</h2>
           
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Date Field (Readonly - Today Only) */}
@@ -232,7 +232,7 @@ const Staff = () => {
 
         {/* Today's Logs */}
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-semibold text-secondary mb-6">今日記錄</h2>
+          <h2 className="text-xl font-bold text-secondary mb-6">今日記錄</h2>
           
           {todayLogs.length === 0 ? (
             <p className="text-secondary-400 text-center py-8">尚無今日記錄</p>

@@ -463,7 +463,7 @@ const Portfolios = () => {
                 <div className="p-4">
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
-                      <h3 className="text-sm font-semibold text-secondary truncate">{item.title}</h3>
+                      <h3 className="text-sm font-bold text-secondary truncate">{item.title}</h3>
                       <div className="flex items-center gap-2 mt-1.5">
                         <CategoryBadge category={item.category} />
                         {item.service_name && (

@@ -1,16 +1,26 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { MapPin, Phone, Clock } from 'lucide-react'
+import { MapPin, Phone, Clock, Map as MapIcon } from 'lucide-react'
 import { useSiteSettings } from '../contexts/SiteSettingsContext'
+
+const MAP_EMBED =
+  'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3659.578684383033!2d120.43269277442113!3d23.475657178858757!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346e942e6fdb97bd%3A0x4d792aa337166901!2z5aua6ZyPU1BB!5e0!3m2!1sen!2stw!4v1775652951752!5m2!1sen!2stw'
 
 export default function Footer() {
   const settings = useSiteSettings()
+  // The embed pulls ~460KB of Google Maps JS across 15 requests, on every page,
+  // for something most visitors never look at. Load it only when asked.
+  const [mapLoaded, setMapLoaded] = useState(false)
   return (
     <footer id="contact" className="relative overflow-hidden">
-      {/* Background image */}
+      {/* Background image — a 12KB blurred copy, because the 90% overlay below
+          means only the broad texture is ever visible. The full 330KB version
+          stays for About, where it is actually seen. */}
       <img
-        src="/images/shop_cover.jpg"
+        src="/images/shop_cover-bg.jpg"
         alt=""
         aria-hidden="true"
+        loading="lazy"
         className="absolute inset-0 w-full h-full object-cover"
       />
 
@@ -47,15 +57,33 @@ export default function Footer() {
               className="md:col-span-1"
             >
               <h4 className="text-white text-sm tracking-[0.2em] uppercase mb-6">門市位置</h4>
-              <div className="rounded-lg overflow-hidden w-full aspect-[4/3]">
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3659.578684383033!2d120.43269277442113!3d23.475657178858757!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346e942e6fdb97bd%3A0x4d792aa337166901!2z5aua6ZyPU1BB!5e0!3m2!1sen!2stw!4v1775652951752!5m2!1sen!2stw"
-                  className="w-full h-full border-0"
-                  loading="lazy"
-                  allowFullScreen=""
-                  title="嫚霏SPA地圖位置"
-                  referrerPolicy="strict-origin-when-cross-origin"
-                />
+              <div className="rounded-lg overflow-hidden w-full aspect-[4/3] bg-white/5 border border-white/10">
+                {mapLoaded ? (
+                  <iframe
+                    src={MAP_EMBED}
+                    className="w-full h-full border-0"
+                    loading="lazy"
+                    allowFullScreen=""
+                    title="嫚霏SPA地圖位置"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                  />
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setMapLoaded(true)}
+                    className="group w-full h-full flex flex-col items-center justify-center gap-3 px-4 text-center transition-colors hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+                  >
+                    <MapIcon
+                      size={26}
+                      className="text-white/40 transition-colors group-hover:text-gold-light"
+                      aria-hidden="true"
+                    />
+                    <span className="text-white/70 text-sm tracking-wider">載入地圖</span>
+                    <span className="text-white/40 text-xs leading-relaxed">
+                      {settings.address}
+                    </span>
+                  </button>
+                )}
               </div>
             </motion.div>
 

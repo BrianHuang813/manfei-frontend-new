@@ -60,7 +60,7 @@ const AdminLayout = () => {
               onClick={() => setSidebarOpen(false)}
               className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-sm font-medium ${
                 active
-                  ? 'bg-primary-500/20 text-primary-100 font-semibold ring-1 ring-inset ring-primary-400/40'
+                  ? 'bg-primary-500/20 text-primary-100 font-bold ring-1 ring-inset ring-primary-400/40'
                   : 'text-secondary-200 hover:bg-secondary-600 hover:text-white'
               }`}
             >

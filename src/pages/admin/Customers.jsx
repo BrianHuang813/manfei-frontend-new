@@ -495,7 +495,7 @@ const CustomerDetailModal = ({ userId, onClose }) => {
                           {newTxn.amount && parseInt(newTxn.total_installments, 10) >= 2 && (
                             <div className="flex-1">
                               <p className="text-xs text-secondary-400 mb-1">每期預設</p>
-                              <p className="text-sm font-semibold text-secondary">
+                              <p className="text-sm font-bold text-secondary">
                                 NT${Math.round(parseInt(newTxn.amount, 10) / parseInt(newTxn.total_installments, 10)).toLocaleString()}
                               </p>
                             </div>
@@ -564,7 +564,7 @@ const CustomerDetailModal = ({ userId, onClose }) => {
                           )}
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className="text-sm font-semibold text-secondary whitespace-nowrap">
+                          <span className="text-sm font-bold text-secondary whitespace-nowrap">
                             NT${txn.amount?.toLocaleString()}
                           </span>
                           <div className="flex items-center gap-1">
@@ -1016,7 +1016,7 @@ const Customers = () => {
 
                     {/* Total Spent */}
                     <div className="md:col-span-2 flex items-center md:justify-end">
-                      <span className="text-sm font-semibold text-secondary flex items-center gap-1">
+                      <span className="text-sm font-bold text-secondary flex items-center gap-1">
                         <DollarSign size={14} className="text-emerald-500" />
                         {c.total_spent?.toLocaleString()}
                       </span>

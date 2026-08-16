@@ -151,7 +151,7 @@ const MemberProfile = () => {
             </p>
 
             {/* Member name in serif */}
-            <h1 className="text-3xl font-serif font-light text-stone-800 mt-3 mb-5 leading-none flex items-center gap-3">
+            <h1 className="text-3xl font-serif font-normal text-stone-800 mt-3 mb-5 leading-none flex items-center gap-3">
               {profile?.display_name || '會員'}
               <button
                 onClick={handleStartEditName}
@@ -188,7 +188,7 @@ const MemberProfile = () => {
               <p className="text-[10px] text-stone-500 uppercase tracking-widest font-mono">
                 累計消費
               </p>
-              <p className="text-4xl font-light text-gold mt-2 tabular-nums">
+              <p className="text-4xl font-normal text-gold mt-2 tabular-nums">
                 {totalSpent > 0 ? `$${totalSpent.toLocaleString()}` : '—'}
               </p>
             </div>
@@ -196,7 +196,7 @@ const MemberProfile = () => {
               <p className="text-[10px] text-stone-500 uppercase tracking-widest font-mono">
                 到訪次數
               </p>
-              <p className="text-4xl font-light text-gold mt-2 tabular-nums">
+              <p className="text-4xl font-normal text-gold mt-2 tabular-nums">
                 {transactions.length > 0 ? transactions.length : '—'}
               </p>
             </div>
@@ -301,7 +301,7 @@ const MemberProfile = () => {
                         })}
                       </p>
                     </div>
-                    <span className="text-sm font-light text-stone-800 tabular-nums pt-0.5">
+                    <span className="text-sm font-normal text-stone-800 tabular-nums pt-0.5">
                       ${txn.amount?.toLocaleString()}
                     </span>
                   </div>
@@ -312,7 +312,7 @@ const MemberProfile = () => {
                   <span className="text-[10px] text-stone-500 uppercase tracking-widest font-mono">
                     Total
                   </span>
-                  <span className="text-sm font-light text-gold tabular-nums">
+                  <span className="text-sm font-normal text-gold tabular-nums">
                     ${totalSpent.toLocaleString()}
                   </span>
                 </div>

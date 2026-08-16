@@ -529,7 +529,7 @@ const Products = () => {
                       )}
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-secondary truncate">{item.name}</p>
-                        <p className="text-sm font-semibold text-secondary mt-0.5">
+                        <p className="text-sm font-bold text-secondary mt-0.5">
                           NT$ {item.price.toLocaleString()}
                         </p>
                         <div className="flex items-center gap-2 mt-1">
