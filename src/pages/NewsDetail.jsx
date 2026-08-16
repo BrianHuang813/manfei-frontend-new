@@ -15,6 +15,36 @@ function formatDate(dateStr) {
   return `${y}.${m}.${day}`
 }
 
+const SITE = 'https://www.manfeispa.com'
+
+// Body copy arrives as rich text from the editor, so strip the markup before
+// it goes anywhere a crawler reads it as plain text.
+function plainSummary(news) {
+  return (news.content || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 150)
+}
+
+function articleSchema(news) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: news.title,
+    description: plainSummary(news),
+    articleSection: news.category,
+    datePublished: news.date,
+    dateModified: news.updated_at || news.date,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE}/news/${news.id}` },
+    ...(news.cover_image
+      ? { image: news.cover_image.startsWith('http') ? news.cover_image : `${SITE}${news.cover_image}` }
+      : {}),
+    author: { '@type': 'Organization', name: '嫚霏美容 MANFEI BEAUTY' },
+    publisher: {
+      '@type': 'Organization',
+      name: '嫚霏美容 MANFEI BEAUTY',
+      logo: { '@type': 'ImageObject', url: `${SITE}/images/ManFei_Logo.png` },
+    },
+  }
+}
+
 export default function NewsDetail() {
   const { id } = useParams()
 
@@ -63,10 +93,8 @@ export default function NewsDetail() {
       <Helmet>
         <link rel="canonical" href={`https://www.manfeispa.com/news/${news.id}`} />
         <title>{`${news.title}｜嫚霏美容 SPA`}</title>
-        <meta
-          name="description"
-          content={(news.summary || news.content || '').replace(/<[^>]*>/g, '').slice(0, 120)}
-        />
+        <meta name="description" content={plainSummary(news)} />
+        <script type="application/ld+json">{JSON.stringify(articleSchema(news))}</script>
       </Helmet>
       <div className="max-w-3xl mx-auto px-6">
         {/* Breadcrumb */}

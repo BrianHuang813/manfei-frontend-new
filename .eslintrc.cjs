@@ -18,4 +18,11 @@ module.exports = {
     ],
     'react/prop-types': 'off',
   },
+  overrides: [
+    {
+      // Build config runs in Node, not the browser.
+      files: ['vite.config.js', 'postcss.config.js', 'tailwind.config.js'],
+      env: { node: true, browser: false },
+    },
+  ],
 }
