@@ -6,6 +6,47 @@ import { ArrowLeft, Package } from 'lucide-react'
 import { fetchProductById } from '../api/public'
 import { useSiteSettings } from '../contexts/SiteSettingsContext'
 
+const SITE = 'https://www.manfeispa.com'
+
+function plainDescription(product) {
+  const text = (product.description || `${product.name} —— 嫚霏美容 SPA 居家保養推薦。`)
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+  return text.slice(0, 150)
+}
+
+// Only fields the product record actually carries. No sku, no brand, and no
+// rating — the data does not exist, and inventing it in structured data is
+// exactly what earns a manual action.
+function productSchema(product) {
+  const url = `${SITE}/products/${product.id}`
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    description: plainDescription(product),
+    ...(product.category ? { category: product.category } : {}),
+    ...(product.spec ? { size: product.spec } : {}),
+    ...(product.image_url
+      ? { image: product.image_url.startsWith('http') ? product.image_url : `${SITE}${product.image_url}` }
+      : {}),
+    offers: {
+      '@type': 'Offer',
+      url,
+      price: String(product.price),
+      priceCurrency: 'TWD',
+      itemCondition: 'https://schema.org/NewCondition',
+      // The detail endpoint 404s on anything out of stock, so a rendered page
+      // is always an available one.
+      availability: product.is_stock === false
+        ? 'https://schema.org/OutOfStock'
+        : 'https://schema.org/InStock',
+      seller: { '@type': 'BeautySalon', name: '嫚霏美容 MANFEI BEAUTY' },
+    },
+  }
+}
+
 export default function ProductDetail() {
   const { id } = useParams()
   const settings = useSiteSettings()
@@ -67,12 +108,8 @@ export default function ProductDetail() {
       <Helmet>
         <link rel="canonical" href={`https://www.manfeispa.com/products/${product.id}`} />
         <title>{`${product.name}｜嫚霏美容 SPA`}</title>
-        <meta
-          name="description"
-          content={(product.description || `${product.name} —— 嫚霏美容 SPA 居家保養推薦。`)
-            .replace(/<[^>]*>/g, '')
-            .slice(0, 120)}
-        />
+        <meta name="description" content={plainDescription(product)} />
+        <script type="application/ld+json">{JSON.stringify(productSchema(product))}</script>
       </Helmet>
       <div className="container-custom">
         {/* Back link */}
